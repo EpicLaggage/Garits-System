@@ -13,7 +13,7 @@ public class Stock {
 	 * 
 	 * @param name
 	 */
-	public Part FindPartsByName(string name) {
+	public Part FindPartsByName(String name) {
 		// TODO - implement Stock.FindPartsByName
 		throw new UnsupportedOperationException();
 	}
