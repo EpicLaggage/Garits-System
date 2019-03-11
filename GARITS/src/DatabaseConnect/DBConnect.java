@@ -1,35 +1,66 @@
 package DatabaseConnect;
 
+import java.sql.*;
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 
 public class DBConnect implements DBConnectivity {
 
+    Connection dbConnect = null;
+    Statement sqlStatement = null;
+    PreparedStatement st = null;
+    ResultSet resultSet = null;
+    
 	/**
 	 * 
 	 * @param db
 	 */
-	public DBConnect DBConnect(String db) {
-		// TODO - implement DBConnect.DBConnect
-		throw new UnsupportedOperationException();
-	}
+	public void DBConnect() {
+	
+        }
 
 	/**
 	 * 
 	 * @param sql
 	 */
-	public Connection connect(String sql) {
-		// TODO - implement DBConnect.connect
-		throw new UnsupportedOperationException();
+	public Connection connect() {
+            try {
+                return dbConnect = DriverManager.getConnection("jdbc:mysql://localhost:3306/garitsdb", user, pass);
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return null;
 	}
 
 	/**
 	 * 
 	 * @param connect
 	 */
-	public ResultSet closeConnection(Connection connect) {
-		// TODO - implement DBConnect.closeConnection
-		throw new UnsupportedOperationException();
+	public void closeConnection() {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+
+                if (sqlStatement != null) {
+                    sqlStatement.close();
+                }
+
+                if (dbConnect != null) {
+                    dbConnect.close();
+                }
+                
+                if (st != null) {
+                    st.close();
+                }
+            }
+            catch (Exception exc) {
+                exc.printStackTrace();
+            }
+		
 	}
 
 	/**
@@ -37,8 +68,17 @@ public class DBConnect implements DBConnectivity {
 	 * @param sql
 	 */
 	public ResultSet read(String sql) {
-		// TODO - implement DBConnect.read
-		throw new UnsupportedOperationException();
+            try {
+                connect();
+                sqlStatement = dbConnect.createStatement();
+                resultSet = sqlStatement.executeQuery(sql);
+                return resultSet;
+            } catch (Exception exc) {
+                exc.printStackTrace();
+                closeConnection();
+            }
+            
+            return null;
 	}
 
 	/**
@@ -46,9 +86,21 @@ public class DBConnect implements DBConnectivity {
 	 * @param sql
 	 * @param conn
 	 */
-	public int write(String sql, Connection conn) {
-		// TODO - implement DBConnect.write
-		throw new UnsupportedOperationException();
+	public void write(String sql) {
+            try {
+                connect();
+                st = dbConnect.prepareStatement(sql);
+                int a = st.executeUpdate();
+                
+                if (a > 0) {
+                    System.out.println("Customer Updated");
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            } finally {
+                closeConnection();
+            }
+            
 	}
 
 	public void AddUser() {

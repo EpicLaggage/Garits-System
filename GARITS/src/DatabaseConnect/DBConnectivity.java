@@ -9,13 +9,13 @@ public interface DBConnectivity {
 	 * 
 	 * @param sql
 	 */
-	Connection connect(String sql);
+	Connection connect();
 
 	/**
 	 * 
 	 * @param connect
 	 */
-	ResultSet closeConnection(Connection connect);
+	void closeConnection();
 
 	/**
 	 * 
@@ -28,6 +28,9 @@ public interface DBConnectivity {
 	 * @param sql
 	 * @param conn
 	 */
-	int write(String sql, Connection conn);
+	void write(String sql);
+        
+        final String user = "root";
+        final String pass = "Password1";
 
 }
