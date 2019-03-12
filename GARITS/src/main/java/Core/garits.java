@@ -20,9 +20,9 @@ public class garits {
     public garits() {
         dbConnect = new DBConnect();
         ResultSet rs;
-        String sql = "SELECT * FROM Customer";
-        //String sql = "INSERT INTO Customer (customer_name,customer_address,customer_postcode,customer_tel,customer_email) VALUES ('Adam','79 Landon Yard, London','E6 3R2','02078957890','adamhills@outlook.com')";
-        try {
+        //String sql = "SELECT * FROM Customer";
+        String sql = "INSERT INTO Customer (customer_name,customer_address,customer_postcode,customer_tel,customer_email) VALUES ('Adam','79 Landon Yard, London','E6 3R2','02078957890','adamhills@outlook.com')";
+        /*try {
             rs = dbConnect.read(sql);
             
             while(rs.next()) {
@@ -31,7 +31,7 @@ public class garits {
         }
         catch (Exception exc) {
             exc.printStackTrace();
-        }
+        }*/
         
         try {
             dbConnect.write(sql);
@@ -47,7 +47,7 @@ public class garits {
      */
     public static void main(String[] args) throws SQLException {
         new garits();
-        Connection myConn = null;
+        /*Connection myConn = null;
         Statement myStmt = null;
         ResultSet myRs = null;
         
@@ -55,7 +55,7 @@ public class garits {
         String pass = "Password1";
         
         try {
-            myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/garitsdb", user, pass);
+            myConn = DriverManager.getConnection("jdbc:mysql://localhost:3306/mydb", user, pass);
             
             myStmt = myConn.createStatement();
             
@@ -82,7 +82,7 @@ public class garits {
             if (myConn != null) {
                 myConn.close();
             }
-        }
+        }*/
         
         try {
             
