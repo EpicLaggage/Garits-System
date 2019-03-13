@@ -7,13 +7,18 @@ package GUI;
 
 import Account.Account;
 import Account.Customer;
+import Account.Vehicle;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
+import static com.sun.xml.internal.fastinfoset.alphabet.BuiltInRestrictedAlphabets.table;
 import java.awt.List;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 /**
  *
@@ -56,7 +61,6 @@ public class CreateJobForm extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
-        jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -104,24 +108,28 @@ public class CreateJobForm extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null}
+
             },
             new String [] {
-                "Name", "Email", "Phone", "Address", "Account Holder"
+                "Name", "Email", "Phone", "Address", "Account Holder", "Customer ID"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, true, true, true, true
+                false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(2).setResizable(false);
-            jTable1.getColumnModel().getColumn(3).setHeaderValue("Address");
         }
 
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 22)); // NOI18N
@@ -159,8 +167,6 @@ public class CreateJobForm extends javax.swing.JFrame {
             jTable2.getColumnModel().getColumn(2).setResizable(false);
         }
 
-        jButton7.setText("Add Vehicle");
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -180,10 +186,7 @@ public class CreateJobForm extends javax.swing.JFrame {
                                     .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGap(42, 42, 42)
                                     .addComponent(jButton6))
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel8)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(jButton7))
+                                .addComponent(jLabel8)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                         .addComponent(jLabel10)
@@ -226,10 +229,8 @@ public class CreateJobForm extends javax.swing.JFrame {
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(38, 38, 38)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel8)
-                    .addComponent(jButton7))
-                .addGap(18, 18, 18)
+                .addComponent(jLabel8)
+                .addGap(20, 20, 20)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
                 .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -243,14 +244,15 @@ public class CreateJobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO On button search query db for customer name
-        // TODO Then query for all customer cars
+        
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        TableColumn idColumn = jTable1.getColumnModel().getColumn(5);
+        jTable1.getColumnModel().removeColumn(idColumn);
         model.setRowCount(0);
         String customerName = jTextField3.getText();
         ArrayList<Customer> matchingNames = new ArrayList<Customer>();
         String customerNameQuery = "SELECT customer_name, customer_email, "
-                + "customer_tel, customer_address, customer_account_holder FROM"
+                + "customer_tel, customer_address, customer_account_holder, customer_id FROM"
                 + " garitsdb.Customer WHERE customer_name"
                 + " LIKE '%" + customerName + "%'";
         
@@ -266,14 +268,16 @@ public class CreateJobForm extends javax.swing.JFrame {
                 customer.setEmail(rs.getString("customer_email"));
                 customer.setPhone(rs.getInt("customer_tel"));
                 customer.setAccountHolder(rs.getBoolean("customer_account_holder"));
+                customer.setCustomerId(rs.getInt("customer_id"));
                 matchingNames.add(customer);
                 String name = customer.getName();
                 String address = customer.getAddress();
                 String email = customer.getEmail();
                 int phone = customer.getPhone();
                 boolean accountHolder = customer.isAccountHolder();;
-
-                Object[] row = { name, address, email, phone, accountHolder };
+                
+                Object[] row = { name, address, email, phone,
+                    accountHolder, customer.getCustomerId() };
 
                 
 
@@ -288,6 +292,7 @@ public class CreateJobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
         String mechanicNamesQuery = "SELECT username FROM garitsdb.User "
                 + "WHERE user_role = 'Mechanic'";
         ResultSet rs;
@@ -308,6 +313,57 @@ public class CreateJobForm extends javax.swing.JFrame {
         // TODO Create the new job
         // TODO Add it to the DB
     }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        
+        // TODO Then query for all customer cars
+        DefaultTableModel carTable = (DefaultTableModel) jTable2.getModel();
+        Object cellData = null;
+        carTable.setRowCount(0);
+        if (evt.getClickCount() == 2) {
+            JTable target = (JTable)evt.getSource();
+            int row = target.getSelectedRow();
+            int column = target.getSelectedColumn();
+            // do some action if appropriate column
+            cellData = jTable1.getModel().getValueAt(row, 5);
+            System.out.println(cellData);
+        }
+        
+        String vehiclesQuery = "SELECT * FROM garitsdb.Vehicle "
+                + "WHERE customer_id = " + cellData;
+        ResultSet rs;
+        
+        try {
+            rs = dbConnect.read(vehiclesQuery);
+            
+            while(rs.next()) {
+                Vehicle car = new Vehicle();
+                car.setReg_num(rs.getString("reg_no"));
+                System.out.println(car.getReg_num());
+                car.setMake(rs.getString("car_make"));
+                car.setModel(rs.getString("car_model"));
+                car.setEngine_serial_no(rs.getString("engine_serial"));
+                car.setChassis_no(rs.getString("chassis_no"));
+                car.setColour(rs.getString("colour"));
+                
+                String regNum = car.getReg_num();
+                String carMake = car.getMake();
+                String carModel = car.getModel();
+                String engineSerial = car.getEngine_serial_no();
+                String chassisNumber = car.getChassis_no();
+                String colour = car.getColour();
+                
+                Object[] row = { regNum, carMake, carModel, engineSerial,
+                    chassisNumber, colour };
+
+                System.out.println(row);
+                carTable.addRow(row);
+            }
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
 
     /**
      * @param args the command line arguments
@@ -380,7 +436,6 @@ public class CreateJobForm extends javax.swing.JFrame {
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JComboBox<String> jComboBox2;
     private javax.swing.JLabel jLabel1;
