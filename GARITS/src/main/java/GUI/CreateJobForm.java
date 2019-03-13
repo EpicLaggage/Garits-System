@@ -5,17 +5,24 @@
  */
 package GUI;
 
+import java.sql.*;
+import DatabaseConnect.DBConnect;
+import java.sql.*;
+
 /**
  *
  * @author jly09
  */
 public class CreateJobForm extends javax.swing.JFrame {
+    
+    DBConnect dbConnect;
 
     /**
      * Creates new form MenuForm
      */
     public CreateJobForm() {
         initComponents();
+        dbConnect = new DBConnect();
     }
 
     /**
@@ -34,9 +41,9 @@ public class CreateJobForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<String>();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<String>();
         jButton6 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -46,6 +53,11 @@ public class CreateJobForm extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jButton3.setText("Logout");
 
@@ -53,6 +65,11 @@ public class CreateJobForm extends javax.swing.JFrame {
         jLabel1.setText("Create Job");
 
         jButton5.setText("Create");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Back");
 
@@ -62,14 +79,22 @@ public class CreateJobForm extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel10.setText("Type");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MOT" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MOT", "Annual Service", "Repair" }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         jLabel11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel11.setText("Mechanic");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Alex Mason" }));
-
         jButton6.setText("Search");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -207,6 +232,39 @@ public class CreateJobForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO On button search query db for customer name
+        // TODO Then query for all customer cars
+        System.out.println(jTextField3.getText());
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO Query db for mechanics and populate dropdown with their names
+        String mechanicNames = "SELECT username FROM garitsdb.User "
+                + "WHERE user_role = 'Mechanic'";
+        ResultSet rs;
+        
+        try {
+            rs = dbConnect.read(mechanicNames);
+            
+            while(rs.next()) {
+                jComboBox2.addItem(rs.getString("username"));
+            }
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO Create the new job
+        // TODO Add it to the DB
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
