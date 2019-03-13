@@ -5,9 +5,15 @@
  */
 package GUI;
 
+import Account.Account;
+import Account.Customer;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
+import java.awt.List;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -234,23 +240,60 @@ public class CreateJobForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO On button search query db for customer name
         // TODO Then query for all customer cars
-        System.out.println(jTextField3.getText());
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        String customerName = jTextField3.getText();
+        ArrayList<Customer> matchingNames = new ArrayList<Customer>();
+        String customerNameQuery = "SELECT customer_name, customer_email, "
+                + "customer_tel, customer_address, customer_account_holder FROM"
+                + " garitsdb.Customer WHERE customer_name"
+                + " LIKE '%" + customerName + "%'";
+        
+        ResultSet rs;
+        
+        try {
+            rs = dbConnect.read(customerNameQuery);
+            
+            while(rs.next()) {
+                Customer customer = new Customer();
+                customer.setName(rs.getString("customer_name"));
+                customer.setAddress(rs.getString("customer_address"));
+                customer.setEmail(rs.getString("customer_email"));
+                customer.setPhone(rs.getInt("customer_tel"));
+                customer.setAccountHolder(rs.getBoolean("customer_account_holder"));
+                matchingNames.add(customer);
+                String name = customer.getName();
+                String address = customer.getAddress();
+                String email = customer.getEmail();
+                int phone = customer.getPhone();
+                boolean accountHolder = customer.isAccountHolder();;
+
+                Object[] row = { name, address, email, phone, accountHolder };
+
+                
+
+                model.addRow(row);
+                
+            }
+
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }        
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO Query db for mechanics and populate dropdown with their names
-        String mechanicNames = "SELECT username FROM garitsdb.User "
+        String mechanicNamesQuery = "SELECT username FROM garitsdb.User "
                 + "WHERE user_role = 'Mechanic'";
         ResultSet rs;
         
         try {
-            rs = dbConnect.read(mechanicNames);
+            rs = dbConnect.read(mechanicNamesQuery);
             
             while(rs.next()) {
                 jComboBox2.addItem(rs.getString("username"));
