@@ -6,8 +6,8 @@ public class AccountHolder extends Customer {
 	private boolean pay_later;
        
 
-        public AccountHolder(boolean accountHolder, Vehicle[] vehicles, String name, String email, int phone, String address) {
-            super(accountHolder, vehicles, name, email, phone, address);
+        public AccountHolder(boolean accountHolder, int customerId, Vehicle[] vehicles, String name, String email, int phone, String address) {
+            super(accountHolder, customerId, vehicles, name, email, phone, address);
         }
         
         

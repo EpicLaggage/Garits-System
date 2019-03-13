@@ -3,6 +3,7 @@ package Account;
 public class Customer extends Account {
     
         private boolean accountHolder;
+        private int customerId;
 	private Vehicle[] vehicles;
         
         
@@ -18,9 +19,10 @@ public class Customer extends Account {
 	 * @param phone
 	 * @param address
 	 */
-        public Customer(boolean accountHolder, Vehicle[] vehicles, String name, String email, int phone, String address) {
+        public Customer(boolean accountHolder, int customerId, Vehicle[] vehicles, String name, String email, int phone, String address) {
             super(name, email, phone, address);
             this.accountHolder = accountHolder;
+            this.customerId = customerId;
             this.vehicles = vehicles;
         }
 
@@ -39,6 +41,15 @@ public class Customer extends Account {
         public void setVehicles(Vehicle[] vehicles) {
             this.vehicles = vehicles;
         }
+
+        public int getCustomerId() {
+            return customerId;
+        }
+
+        public void setCustomerId(int customerId) {
+            this.customerId = customerId;
+        }
         
+             
         
 }
