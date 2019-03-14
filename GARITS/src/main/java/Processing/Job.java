@@ -6,7 +6,8 @@ import StockControl.*;
 
 public class Job {
 
-	private int num;
+	private String registrationNum;
+        private int customerId;
 	private String status;
 	private String type;
 	private Mechanic mechanic;
@@ -17,6 +18,9 @@ public class Job {
 	private Date date_start;
 	private Date date_end;
 	private float total_cost;
+        private String workRequired;
+        private String workDone;
+          
 
 	/**
 	 * 
@@ -24,22 +28,26 @@ public class Job {
 	 * @param mech
 	 * @param desc
 	 */
-	public Job Job(String type, Mechanic mech, String desc) {
-		// TODO - implement Job.Job
-		throw new UnsupportedOperationException();
-	}
+	
+        
+        public Job() {}
+                
+        public String getRegistrationNum() {
+            return registrationNum;
+        }
 
-	public int getNum() {
-		return this.num;
-	}
+        public void setRegistrationNum(String registrationNum) {
+            this.registrationNum = registrationNum;
+        }
 
-	/**
-	 * 
-	 * @param num
-	 */
-	public void setNum(int num) {
-		this.num = num;
-	}
+        public int getCustomerId() {
+            return customerId;
+        }
+
+        public void setCustomerId(int customerId) {
+            this.customerId = customerId;
+        }
+        
 
 	public String getStatus() {
 		return this.status;
@@ -165,5 +173,23 @@ public class Job {
 		// TODO - implement Job.CreateJobSheet
 		throw new UnsupportedOperationException();
 	}
+
+        public String getWorkRequired() {
+            return workRequired;
+        }
+
+        public void setWorkRequired(String workRequired) {
+            this.workRequired = workRequired;
+        }
+
+        public String getWorkDone() {
+            return workDone;
+        }
+
+        public void setWorkDone(String workDone) {
+            this.workDone = workDone;
+        }
+        
+        
 
 }
