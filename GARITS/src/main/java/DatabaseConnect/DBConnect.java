@@ -103,16 +103,6 @@ public class DBConnect implements DBConnectivity {
             
 	}
 
-	public void AddUser() {
-		// TODO - implement DBConnect.AddUser
-		throw new UnsupportedOperationException();
-	}
-
-	public void RemoveUser() {
-		// TODO - implement DBConnect.RemoveUser
-		throw new UnsupportedOperationException();
-	}
-
 	public void Backup() {
 		// TODO - implement DBConnect.Backup
 		throw new UnsupportedOperationException();

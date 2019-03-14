@@ -1,41 +1,40 @@
 package Account;
 
-public class Staff extends Account {
+import Login.Hashing;
 
-	private String id;
-	private char password;
+public class Staff {
+
+	private String username;
+	private String password;
 	private String role;
-	private float hourly_rate;
+        private String name;
 
 	/**
 	 * 
 	 * @param id
 	 * @param pass
 	 * @param role
-	 * @param pay
-	 * @param n
-	 * @param email
-	 * @param phone
-	 * @param addr
 	 */
-	public Staff Staff(String id, char pass, String role, float pay, String n, String email, int phone, String addr) {
-		// TODO - implement Staff.Staff
-		throw new UnsupportedOperationException();
+	public Staff (String username, String password, String role, String name) {
+		this.username = username;
+                this.password = password;
+                this.role = role;
+                this.name = name;
 	}
 
-	public String getId() {
-		return this.id;
+	public String getUsername() {
+		return this.username;
 	}
 
 	/**
 	 * 
 	 * @param id
 	 */
-	public void setId(String id) {
-		this.id = id;
+	public void setUsername(String username) {
+		this.username = username;
 	}
 
-	public char getPassword() {
+	public String getPassword() {
 		return this.password;
 	}
 
@@ -43,9 +42,11 @@ public class Staff extends Account {
 	 * 
 	 * @param password
 	 */
-	public void setPassword(char password) {
-		this.password = password;
+	public void setPassword(String password) {
+                Hashing hashing = new Hashing(10);
+		this.password = hashing.hashPassword(password);
 	}
+        
 
 	public String getRole() {
 		return this.role;
@@ -59,23 +60,23 @@ public class Staff extends Account {
 		this.role = role;
 	}
 
-	public float getHourlyRate() {
-		// TODO - implement Staff.getHourlyRate
-		throw new UnsupportedOperationException();
-	}
+        public String getName() {
+            return name;
+        }
 
-	/**
-	 * 
-	 * @param hourly_rate
-	 */
-	public void setHourlyRate(float hourly_rate) {
-		// TODO - implement Staff.setHourlyRate
-		throw new UnsupportedOperationException();
-	}
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        
 
 	public void checkAlerts() {
 		// TODO - implement Staff.checkAlerts
 		throw new UnsupportedOperationException();
 	}
 
+        // Login stuff
+        
+        
+        
 }
