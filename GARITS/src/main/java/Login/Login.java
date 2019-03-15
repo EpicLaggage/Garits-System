@@ -11,6 +11,7 @@ import DatabaseConnect.DBConnect;
 import DatabaseConnect.DBConnectivity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
@@ -18,14 +19,38 @@ import java.sql.SQLException;
  * @author jorda
  */
 public class Login {
+    // objects for all methods to use
     Hashing hash = new Hashing(10);
+    DBConnectivity db = new DBConnect();
     
-    public void processLogin(Staff staff) {
-
+    public void processLogin(String username, String password) throws SQLException {
+        
+        try {
+            // check username exists
+            Connection conn = db.connect();
+            String sql = "SELECT COUNT(username) AS counter FROM User WHERE username = ?";
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.setString(1, username);
+            ResultSet rs = p.executeQuery();
+            
+            if (rs.next()) {
+                if (rs.getInt("counter") == 0) {
+                    System.out.println("Invalid username");
+                }
+            }
+            
+            db.closeConnection();
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        
+        
+        
     }
     
-    public void addUser(String username, String password, String role, String name) throws SQLException {
-        DBConnectivity db = new DBConnect();
+    public void addUser(String username, String password, String role, String name) throws SQLException {        
         Staff userToAdd = new Staff(username, hash.hashPassword(password), role, name);
         //TODO: hash password
         

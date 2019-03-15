@@ -5,6 +5,9 @@
  */
 package GUI;
 
+import Login.Login;
+import java.sql.SQLException;
+
 /**
  *
  * @author jly09
@@ -113,7 +116,22 @@ public class LoginForm extends javax.swing.JFrame {
     }//GEN-LAST:event_passwordFieldActionPerformed
 
     private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
-        // TODO add your handling code here:
+        
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+        
+        Login login = new Login();
+        
+        try {
+            login.processLogin(username, password);
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        
+        
+        
     }//GEN-LAST:event_loginButtonActionPerformed
 
     private void usernameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_usernameFieldActionPerformed
