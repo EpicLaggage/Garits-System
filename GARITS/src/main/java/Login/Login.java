@@ -21,7 +21,7 @@ public class Login {
     Hashing hash = new Hashing(10);
     
     public void processLogin(Staff staff) {
-        
+
     }
     
     public void addUser(String username, String password, String role, String name) throws SQLException {
@@ -42,7 +42,7 @@ public class Login {
         // add the user to the database
         try {
             Connection conn = db.connect();
-            String sql = "INSERT INTO user(username, password, user_role, user_name) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO User(username, password, user_role, user_name) VALUES (?, ?, ?, ?)";
             PreparedStatement p =conn.prepareStatement(sql);
             p.setString(1, userToAdd.getUsername());
             p.setString(2, userToAdd.getPassword());
@@ -50,7 +50,7 @@ public class Login {
             p.setString(4, userToAdd.getName());
             p.executeUpdate();
             System.out.println("Added " + userToAdd.getName() + " to the database");
-            System.out.println("Added" + userToAdd.getClass() + " to the database");
+            System.out.println("Added user of type class " + userToAdd.getClass() + " to the database");
             db.closeConnection();
         }
         catch (SQLException e) {

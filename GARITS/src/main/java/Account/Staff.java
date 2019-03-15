@@ -8,6 +8,8 @@ public class Staff {
 	private String password;
 	private String role;
         private String name;
+        // variable to determine whether a staff member is logged in or not
+        private boolean loggedIn;
 
 	/**
 	 * 
@@ -66,6 +68,14 @@ public class Staff {
 
         public void setName(String name) {
             this.name = name;
+        }
+
+        public boolean isLoggedIn() {
+            return loggedIn;
+        }
+
+        public void setLoggedIn(boolean loggedIn) {
+            this.loggedIn = loggedIn;
         }
 
         
