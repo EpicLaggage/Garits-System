@@ -21,7 +21,7 @@ public class Vehicle {
 	 * @param engine_serial_no
          * @param chassis_no
 	 */
-	public Vehicle(String model, String reg_num, String make, String colour, String engine_serial_no, String chassis_no) {
+	public Vehicle(String reg_num, String make, String model, String colour, String engine_serial_no, String chassis_no) {
             this.model = model;
             this.reg_num = reg_num;
             this.make = make;
