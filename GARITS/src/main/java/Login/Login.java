@@ -60,19 +60,21 @@ public class Login {
             case "Foreperson":
                 // 0 is default user pay
                 userToAdd = new Mechanic(username, hash.hashPassword(password), role, name, 0);
-                System.out.println(userToAdd.getClass());
                 
         }
         
         // add the user to the database
+        // name is now the login username, and username is the uers' full name
+        // (forename and surname)
+        // had to swap round for other code
         try {
             Connection conn = db.connect();
             String sql = "INSERT INTO User(username, password, user_role, user_name) VALUES (?, ?, ?, ?)";
             PreparedStatement p =conn.prepareStatement(sql);
-            p.setString(1, userToAdd.getUsername());
+            p.setString(1, userToAdd.getName()); // user_name
             p.setString(2, userToAdd.getPassword());
             p.setString(3, userToAdd.getRole());
-            p.setString(4, userToAdd.getName());
+            p.setString(4, userToAdd.getUsername()); // username
             p.executeUpdate();
             System.out.println("Added " + userToAdd.getName() + " to the database");
             System.out.println("Added user of type class " + userToAdd.getClass() + " to the database");
