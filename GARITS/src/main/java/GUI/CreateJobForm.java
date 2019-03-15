@@ -6,10 +6,15 @@
 package GUI;
 
 import Account.Customer;
+import Account.Mechanic;
 import Account.Vehicle;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
+import Processing.Job;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Vector;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -23,6 +28,8 @@ public class CreateJobForm extends javax.swing.JFrame {
     
     DBConnect dbConnect;
     ArrayList<Vehicle> selectedVehicles = new ArrayList<Vehicle>();
+    Customer selectedCustomer = new Customer();
+    ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
 
     /**
      * Creates new form MenuForm
@@ -338,7 +345,6 @@ public class CreateJobForm extends javax.swing.JFrame {
                 
 
                 model.addRow(row);
-                System.out.println(customer.getCustomerId());
             }
 
         }
@@ -349,9 +355,11 @@ public class CreateJobForm extends javax.swing.JFrame {
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
+        jComboBox1.getItemAt(0);
+        jComboBox2.getItemAt(0);
         TableColumn idColumn = jTable1.getColumnModel().getColumn(5);
         jTable1.getColumnModel().removeColumn(idColumn);
-        String mechanicNamesQuery = "SELECT username FROM garitsdb.User "
+        String mechanicNamesQuery = "SELECT username, user_id FROM garitsdb.User "
                 + "WHERE user_role = 'Mechanic'";
         ResultSet rs;
         
@@ -359,6 +367,10 @@ public class CreateJobForm extends javax.swing.JFrame {
             rs = dbConnect.read(mechanicNamesQuery);
             
             while(rs.next()) {
+                Mechanic mechanic = new Mechanic();
+                mechanic.setId(rs.getInt("user_id"));
+                mechanic.setName(rs.getString("username"));
+                mechanics.add(mechanic);
                 jComboBox2.addItem(rs.getString("username"));
             }
         }
@@ -368,27 +380,61 @@ public class CreateJobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO Create the new job
+
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	java.util.Date date = new java.util.Date();
+        Mechanic selectedMechanic = new Mechanic();
+        for(Mechanic mechanic : mechanics) {
+            if(mechanic.getName().equals(jComboBox2.getSelectedItem())){
+                selectedMechanic.setId(mechanic.getId());
+                selectedMechanic.setName(mechanic.getName());
+            }
+        }
         
-        // TODO Add it to the DB
+        Job job = new Job();
+        job.setCustomerId(selectedCustomer.getCustomerId());
+        job.setRegistrationNum(selectedVehicles.get(0).getReg_num());
+        job.setDate_start(dateFormat.format(date));
+        job.setMechanicId(selectedMechanic.getId());
+        job.setWorkRequired(jTextArea1.getText());
+        job.setEstimate_duration(Integer.valueOf(jTextField1.getText()));
+        job.setStatus("started");
+        job.setType(jComboBox1.getSelectedItem().toString());
+
+        String insertJobQuery = "INSERT INTO Job ("
+                + "job_date, reg_no, customer_id, mechanic_assigned, "
+                + "job_work_required, job_duration, job_status, "
+                + "job_type) VALUES ('"+job.getDate_start()+"', "
+                + "'"+job.getRegistrationNum()+"', '"+job.getCustomerId()+"', "
+                + "'"+job.getMechanicId()+"', '"+job.getWorkRequired()+"', "
+                + "'"+job.getEstimate_duration()+"', '"+job.getStatus()+"', "
+                + "'"+job.getType()+"');";
+        
+        try {
+            dbConnect.write(insertJobQuery);            
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
         
         DefaultTableModel carTable = (DefaultTableModel) jTable2.getModel();
-        Object cellData = null;
         carTable.setRowCount(0);
+        Object customerId = null;
         if (evt.getClickCount() == 1) {
             JTable target = (JTable)evt.getSource();
             int row = target.getSelectedRow();
             int column = target.getSelectedColumn();
-            // do some action if appropriate column
-            cellData = jTable1.getModel().getValueAt(row, 5);
-            System.out.println(cellData);
+            // On SELECTING CUSTOMER add necessary information for creating JOB 
+            customerId = jTable1.getModel().getValueAt(row, 5);
+            selectedCustomer.setCustomerId((int) customerId);
         }
         
         String vehiclesQuery = "SELECT * FROM garitsdb.Vehicle "
-                + "WHERE customer_id = " + cellData;
+                + "WHERE customer_id = " + customerId;
         ResultSet rs;
         
         try {
@@ -414,7 +460,7 @@ public class CreateJobForm extends javax.swing.JFrame {
                 Object[] row = { regNum, carMake, carModel, colour,
                     engineSerial, chassisNumber };
 
-                System.out.println(row);
+                System.out.println(regNum);
                 carTable.addRow(row);
             }
         }
@@ -445,7 +491,7 @@ public class CreateJobForm extends javax.swing.JFrame {
                     rowData.get(3).toString(), rowData.get(4).toString(),
                     rowData.get(5).toString());
             selectedVehicles.add(car);
-            System.out.println(selectedVehicles);
+            System.out.println(rowData.get(1).toString());
         } else if(col == 6 && carTable.getValueAt(row, 6).toString() == "false") {
             rowData = (Vector) carTable.getDataVector().elementAt(jTable2.getSelectedRow());
             Vehicle car = new Vehicle(rowData.get(0).toString(),
