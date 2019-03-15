@@ -27,8 +27,9 @@ import javax.swing.table.TableColumn;
 public class CreateJobForm extends javax.swing.JFrame {
     
     DBConnect dbConnect;
-    ArrayList<Vehicle> selectedVehicles = new ArrayList<Vehicle>();
+    Vehicle selectedVehicle;
     Customer selectedCustomer = new Customer();
+    int tickedRow = -1;
     ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
 
     /**
@@ -307,7 +308,7 @@ public class CreateJobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        selectedVehicles.clear();
+        selectedVehicle = null;
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         
@@ -393,7 +394,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         
         Job job = new Job();
         job.setCustomerId(selectedCustomer.getCustomerId());
-        job.setRegistrationNum(selectedVehicles.get(0).getReg_num());
+        job.setRegistrationNum(selectedVehicle.getReg_num());
         job.setDate_start(dateFormat.format(date));
         job.setMechanicId(selectedMechanic.getId());
         job.setWorkRequired(jTextArea1.getText());
@@ -428,6 +429,8 @@ public class CreateJobForm extends javax.swing.JFrame {
             JTable target = (JTable)evt.getSource();
             int row = target.getSelectedRow();
             int column = target.getSelectedColumn();
+            selectedVehicle = null;
+            tickedRow = -1;
             // On SELECTING CUSTOMER add necessary information for creating JOB 
             customerId = jTable1.getModel().getValueAt(row, 5);
             selectedCustomer.setCustomerId((int) customerId);
@@ -460,7 +463,6 @@ public class CreateJobForm extends javax.swing.JFrame {
                 Object[] row = { regNum, carMake, carModel, colour,
                     engineSerial, chassisNumber };
 
-                System.out.println(regNum);
                 carTable.addRow(row);
             }
         }
@@ -490,20 +492,14 @@ public class CreateJobForm extends javax.swing.JFrame {
                     rowData.get(1).toString(), rowData.get(2).toString(),
                     rowData.get(3).toString(), rowData.get(4).toString(),
                     rowData.get(5).toString());
-            selectedVehicles.add(car);
-            System.out.println(rowData.get(1).toString());
+            selectedVehicle = car;
+            System.out.println(selectedVehicle);
+            if(tickedRow != -1) {
+                carTable.setValueAt(false, tickedRow, 6);
+            } 
+            tickedRow = row;
         } else if(col == 6 && carTable.getValueAt(row, 6).toString() == "false") {
-            rowData = (Vector) carTable.getDataVector().elementAt(jTable2.getSelectedRow());
-            Vehicle car = new Vehicle(rowData.get(0).toString(),
-                    rowData.get(1).toString(), rowData.get(2).toString(),
-                    rowData.get(3).toString(), rowData.get(4).toString(),
-                    rowData.get(5).toString());
-            for (Vehicle vehicle : selectedVehicles) {
-                if(vehicle.getReg_num().equals(car.getReg_num())) {
-                    selectedVehicles.remove(vehicle);
-                }
-            }
-            System.out.println(selectedVehicles);
+            selectedVehicle = null;
         }
             
 
