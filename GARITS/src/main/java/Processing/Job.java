@@ -1,6 +1,6 @@
 package Processing;
 
-import java.util.Date;
+import java.util.Calendar;
 import Account.*;
 import StockControl.*;
 
@@ -10,13 +10,13 @@ public class Job {
         private int customerId;
 	private String status;
 	private String type;
-	private Mechanic mechanic;
+	private int mechanicId;
 	private Part[] parts;
 	private String[] description;
-	private Date estimate_duration;
-	private Date duration;
-	private Date date_start;
-	private Date date_end;
+	private int estimate_duration;
+	private int duration;
+	private String date_start;
+	private String date_end;
 	private float total_cost;
         private String workRequired;
         private String workDone;
@@ -73,16 +73,16 @@ public class Job {
 		this.type = type;
 	}
 
-	public Mechanic getMechanic() {
-		return this.mechanic;
+	public int getMechanicId() {
+		return this.mechanicId;
 	}
 
 	/**
 	 * 
 	 * @param mechanic
 	 */
-	public void setMechanic(Mechanic mechanic) {
-		this.mechanic = mechanic;
+	public void setMechanicId(int mechanicId) {
+		this.mechanicId = mechanicId;
 	}
 
 	public Part[] getParts() {
@@ -109,7 +109,7 @@ public class Job {
 		this.description = description;
 	}
 
-	public Date getEstimate_duration() {
+	public int getEstimate_duration() {
 		return this.estimate_duration;
 	}
 
@@ -117,11 +117,11 @@ public class Job {
 	 * 
 	 * @param estimate_duration
 	 */
-	public void setEstimate_duration(Date estimate_duration) {
+	public void setEstimate_duration(int estimate_duration) {
 		this.estimate_duration = estimate_duration;
 	}
 
-	public Date getDuration() {
+	public int getDuration() {
 		return this.duration;
 	}
 
@@ -129,11 +129,11 @@ public class Job {
 	 * 
 	 * @param duration
 	 */
-	public void setDuration(Date duration) {
+	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 
-	public Date getDate_start() {
+	public String getDate_start() {
 		return this.date_start;
 	}
 
@@ -141,11 +141,11 @@ public class Job {
 	 * 
 	 * @param date_start
 	 */
-	public void setDate_start(Date date_start) {
+	public void setDate_start(String date_start) {
 		this.date_start = date_start;
 	}
 
-	public Date getDate_end() {
+	public String getDate_end() {
 		return this.date_end;
 	}
 
@@ -153,7 +153,7 @@ public class Job {
 	 * 
 	 * @param date_end
 	 */
-	public void setDate_end(Date date_end) {
+	public void setDate_end(String date_end) {
 		this.date_end = date_end;
 	}
 
