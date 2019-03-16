@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Account.Staff;
 import Login.Login;
 import java.sql.SQLException;
 
@@ -122,8 +123,12 @@ public class LoginForm extends javax.swing.JFrame {
         
         Login login = new Login();
         
+        // add code here to go to main menu, allow access to methods for features etc
         try {
-            login.processLogin(username, password);
+            if (login.validateLogin(username, password)) {
+                Staff staff = login.createStaffObject(username);
+                System.out.println(staff.getClass()); // for testing
+            }
         }
         catch(SQLException e) {
             System.out.println(e.getMessage());

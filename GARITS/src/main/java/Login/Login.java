@@ -23,19 +23,20 @@ public class Login {
     Hashing hash = new Hashing(10);
     DBConnectivity db = new DBConnect();
     
-    public void processLogin(String username, String password) throws SQLException {
+    public boolean validateLogin(String user_name, String password) throws SQLException {
         
         try {
             // check username exists
             Connection conn = db.connect();
-            String sql = "SELECT COUNT(username) AS counter FROM User WHERE username = ?";
+            String sql = "SELECT COUNT(user_name) AS counter FROM User WHERE user_name = ?";
             PreparedStatement p = conn.prepareStatement(sql);
-            p.setString(1, username);
+            p.setString(1, user_name);
             ResultSet rs = p.executeQuery();
             
             if (rs.next()) {
                 if (rs.getInt("counter") == 0) {
-                    System.out.println("Invalid username");
+                    System.out.println("Invalid login username");
+                    return false;
                 }
             }
             
@@ -45,9 +46,70 @@ public class Login {
             System.out.println(e.getMessage());
         }
         
+        try {
+            Connection conn = db.connect();
+            String sql = "SELECT password FROM User WHERE user_name = ?";
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.setString(1, user_name);
+            ResultSet rs = p.executeQuery();
+            
+            if (rs.next()) {
+                String hashedPass = rs.getString("password");
+                if (hash.verifyPassword(password, hashedPass)) {
+                    System.out.println("Password matches");                                                           
+                    return true;
+                    
+                }
+                else {
+                    System.out.println("Incorrect password");
+                    return false;
+                }
+                
+            }
+            db.closeConnection();
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+               
+        return false;
         
         
         
+    }
+    
+    public Staff createStaffObject(String user_name) throws SQLException {
+        try {
+            Staff staff = null;
+            Connection conn = db.connect();
+            String sql = "SELECT * FROM User WHERE user_name = ?";
+            
+            PreparedStatement p = conn.prepareStatement(sql);
+            p.setString(1, user_name);
+            
+            ResultSet rs = p.executeQuery();
+            
+            if (rs.next()) {
+                String db_user_name = rs.getString("user_name"); // login username
+                String password = rs.getString("password");
+                String user_role = rs.getString("user_role");
+                String name = rs.getString("username");
+                
+                // default pay is 0
+                staff = new Mechanic(db_user_name, password, user_role, name, 0);
+                switch(user_role) {
+                    case "Receptionist":
+                        staff = new Staff(db_user_name, password, user_role, name);
+                }
+            }
+            return staff;
+        }
+        catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        // if null is returned, an error has occured
+        return null;
     }
     
     public void addUser(String username, String password, String role, String name) throws SQLException {        
