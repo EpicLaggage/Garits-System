@@ -5,17 +5,25 @@
  */
 package GUI;
 
+import java.sql.*;
+import DatabaseConnect.DBConnect;
+import Processing.Job;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jly09
  */
 public class JobForm extends javax.swing.JFrame {
+    
+    DBConnect dbConnect;
 
     /**
      * Creates new form MenuForm
      */
     public JobForm() {
         initComponents();
+        dbConnect = new DBConnect();
     }
 
     /**
@@ -38,7 +46,7 @@ public class JobForm extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton8 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<String>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -49,13 +57,24 @@ public class JobForm extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "No.", "Type", "Status", "Description", "Duration", "Start Date", "End Date", "Vehicle"
+                "Type", "Status", "Work Required", "Duration", "Start Date", "Vehicle"
             }
         ));
+        jTable1.setColumnSelectionAllowed(true);
+        jTable1.setRowHeight(32);
         jScrollPane1.setViewportView(jTable1);
+        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(20);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(200);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
+            jTable1.getColumnModel().getColumn(4).setPreferredWidth(20);
+            jTable1.getColumnModel().getColumn(5).setPreferredWidth(20);
+        }
 
         jButton5.setText("Create Job Sheet");
 
@@ -71,11 +90,16 @@ public class JobForm extends javax.swing.JFrame {
         jButton7.setText("Add Payment");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Filter");
+        jLabel2.setText("Search By");
 
         jButton8.setText("Search");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "By Status" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "reg_no" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -104,7 +128,7 @@ public class JobForm extends javax.swing.JFrame {
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
                         .addComponent(jButton8)
-                        .addGap(0, 509, Short.MAX_VALUE))
+                        .addGap(0, 483, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton4)
@@ -142,8 +166,49 @@ public class JobForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        // TODO update the rows changed
+        // TODO display a window confirming the change to the user
+        // TODO requery table to display rows changed
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        // TODO implement sorting by type and date
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        
+        
+        String searchText = jTextField1.getText();
+        String sortBy = jComboBox1.getSelectedItem().toString(); //Potentially convert options to kebab case
+
+        String jobsQuery = "SELECT * FROM garitsdb.Job WHERE " + sortBy
+                + " LIKE '%" + searchText + "%'";
+
+        ResultSet rs;
+        Job job = new Job();
+        try {
+            rs = dbConnect.read(jobsQuery);
+            
+            while(rs.next()) {
+                
+                job.setType(rs.getString("job_type"));
+                job.setStatus(rs.getString("job_status"));
+                job.setWorkRequired(rs.getString("job_work_required"));
+                job.setDuration(rs.getInt("job_duration"));
+                job.setDate_start(rs.getString("job_date"));
+                job.setRegistrationNum(rs.getString("reg_no"));
+                
+                
+                Object[] row = { job.getType(), job.getStatus(),
+                    job.getWorkRequired(), job.getDuration(),
+                    job.getDate_start(), job.getRegistrationNum()};
+
+                model.addRow(row);
+            } 
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+                
+    }//GEN-LAST:event_jButton8ActionPerformed
 
     /**
      * @param args the command line arguments
