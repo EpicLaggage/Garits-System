@@ -399,7 +399,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         job.setMechanicId(selectedMechanic.getId());
         job.setWorkRequired(jTextArea1.getText());
         job.setEstimate_duration(Integer.valueOf(jTextField1.getText()));
-        job.setStatus("started");
+        job.setStatus("pending");
         job.setType(jComboBox1.getSelectedItem().toString());
 
         String insertJobQuery = "INSERT INTO Job ("
