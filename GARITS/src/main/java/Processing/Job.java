@@ -12,7 +12,6 @@ public class Job {
 	private String type;
 	private int mechanicId;
 	private Part[] parts;
-	private String[] description;
 	private int estimate_duration;
 	private int duration;
 	private String date_start;
@@ -97,17 +96,6 @@ public class Job {
 		this.parts = parts;
 	}
 
-	public String[] getDescription() {
-		return this.description;
-	}
-
-	/**
-	 * 
-	 * @param description
-	 */
-	public void setDescription(String[] description) {
-		this.description = description;
-	}
 
 	public int getEstimate_duration() {
 		return this.estimate_duration;
