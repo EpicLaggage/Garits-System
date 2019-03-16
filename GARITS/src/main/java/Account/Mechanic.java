@@ -18,4 +18,7 @@ public class Mechanic extends Staff {
 		throw new UnsupportedOperationException();
 	}
 
+    public Mechanic() {}
+        
+
 }

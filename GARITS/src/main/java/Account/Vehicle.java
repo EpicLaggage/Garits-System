@@ -9,17 +9,26 @@ public class Vehicle {
 	private String engine_serial_no;
 	private String chassis_no;
 
+        
+        public Vehicle() {}
+
 	/**
 	 * 
-	 * @param model
-	 * @param reg
+         * @param model
+	 * @param reg_num
 	 * @param make
-	 * @param n
+         * @param colour
+	 * @param engine_serial_no
+         * @param chassis_no
 	 */
-	public Vehicle(String model, String reg, String make, String n) {
-		// TODO - implement Vehicle.Vehicle
-		throw new UnsupportedOperationException();
-	}
+	public Vehicle(String reg_num, String make, String model, String colour, String engine_serial_no, String chassis_no) {
+            this.model = model;
+            this.reg_num = reg_num;
+            this.make = make;
+            this.colour = colour;
+            this.engine_serial_no = engine_serial_no;
+            this.chassis_no = chassis_no;
+        }
 
 	public String getModel() {
 		return this.model;

@@ -2,7 +2,7 @@ package Account;
 
 public class Staff extends Account {
 
-	private String id;
+	private int id;
 	private char password;
 	private String role;
 	private float hourly_rate;
@@ -18,12 +18,12 @@ public class Staff extends Account {
 	 * @param phone
 	 * @param addr
 	 */
-	public Staff Staff(String id, char pass, String role, float pay, String n, String email, int phone, String addr) {
+	public Staff Staff(int id, char pass, String role, float pay, String n, String email, int phone, String addr) {
 		// TODO - implement Staff.Staff
 		throw new UnsupportedOperationException();
 	}
 
-	public String getId() {
+	public int getId() {
 		return this.id;
 	}
 
@@ -31,7 +31,7 @@ public class Staff extends Account {
 	 * 
 	 * @param id
 	 */
-	public void setId(String id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

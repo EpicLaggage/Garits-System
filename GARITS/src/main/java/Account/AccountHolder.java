@@ -4,10 +4,13 @@ public class AccountHolder extends Customer {
 
 	private DiscountPlan discount_plan;
 	private boolean pay_later;
-        
-        public AccountHolder(String name, String email, int phone, String address) {
-            super(name, email, phone, address);
+       
+
+        public AccountHolder(boolean accountHolder, int customerId, Vehicle[] vehicles, String name, String email, int phone, String address) {
+            super(accountHolder, customerId, vehicles, name, email, phone, address);
         }
+        
+        
 
 	public DiscountPlan getDiscount_plan() {
 		return this.discount_plan;
