@@ -11,6 +11,7 @@ public class Staff {
         private String name;
         // variable to determine whether a staff member is logged in or not
         private boolean loggedIn;
+        private int id;
 
 	/**
 	 * 
@@ -25,6 +26,9 @@ public class Staff {
                 this.name = name;
 	}
 
+        public Staff() {}    
+        
+        
 	public String getUsername() {
 		return this.username;
 
@@ -34,6 +38,14 @@ public class Staff {
 	 * 
 	 * @param id
 	 */
+        
+        public int getId() {
+            return id;
+        }
+
+        public void setId(int id) {
+            this.id = id;
+        }
 
 	public void setUsername(String username) {
 		this.username = username;

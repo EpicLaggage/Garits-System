@@ -16,10 +16,10 @@ public class Mechanic extends Staff {
     public void setHourly_rate(float hourly_rate) {
         this.hourly_rate = hourly_rate;
     }
-    
-    
 
     public Mechanic() {}
+    
+
         
 
 }
