@@ -1,22 +1,23 @@
 package Account;
 
 public class Mechanic extends Staff {
+    private float hourly_rate;
+    
+    // mechanic can either be a mechanic or foreperson
+    public Mechanic (String id, String password, String role, String name, float hourly_rate) {
+	super(id, password, role, name);
+        this.hourly_rate = hourly_rate;
+    }
 
-	/**
-	 * 
-	 * @param id
-	 * @param pass
-	 * @param role
-	 * @param pay
-	 * @param n
-	 * @param email
-	 * @param phone
-	 * @param addr
-	 */
-	public Mechanic Mechanic(String id, char pass, String role, float pay, String n, String email, int phone, String addr) {
-		// TODO - implement Mechanic.Mechanic
-		throw new UnsupportedOperationException();
-	}
+    public float getHourly_rate() {
+        return hourly_rate;
+    }
+
+    public void setHourly_rate(float hourly_rate) {
+        this.hourly_rate = hourly_rate;
+    }
+    
+    
 
     public Mechanic() {}
         
