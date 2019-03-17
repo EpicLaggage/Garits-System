@@ -25,6 +25,9 @@ public class JobForm extends javax.swing.JFrame {
         initComponents();
         dbConnect = new DBConnect();
     }
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return true;
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,6 +52,11 @@ public class JobForm extends javax.swing.JFrame {
         jComboBox1 = new javax.swing.JComboBox<String>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jButton3.setText("Logout");
 
@@ -63,10 +71,9 @@ public class JobForm extends javax.swing.JFrame {
                 "Type", "Status", "Work Required", "Duration", "Start Date", "Vehicle"
             }
         ));
-        jTable1.setColumnSelectionAllowed(true);
         jTable1.setRowHeight(32);
         jScrollPane1.setViewportView(jTable1);
-        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setPreferredWidth(20);
             jTable1.getColumnModel().getColumn(1).setPreferredWidth(30);
@@ -99,7 +106,7 @@ public class JobForm extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "reg_no" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "reg_no", "job_type", "job_status", "job_work_required", "job_duration", "job_date", " " }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -128,7 +135,7 @@ public class JobForm extends javax.swing.JFrame {
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
                         .addComponent(jButton8)
-                        .addGap(0, 483, Short.MAX_VALUE))
+                        .addGap(0, 409, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton4)
@@ -172,7 +179,6 @@ public class JobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO implement sorting by type and date
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         model.setRowCount(0);
         
@@ -209,6 +215,13 @@ public class JobForm extends javax.swing.JFrame {
         }
                 
     }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        jComboBox1.getItemAt(0);
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
