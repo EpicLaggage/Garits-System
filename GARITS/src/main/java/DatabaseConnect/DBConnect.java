@@ -28,7 +28,7 @@ public class DBConnect implements DBConnectivity {
 	 */
 	public Connection connect() {
             try {
-                return dbConnect = DriverManager.getConnection("jdbc:mysql://localhost:3306/garitsdb", user, pass);
+            	return dbConnect = DriverManager.getConnection("jdbc:mysql://localhost:3306/garitsdb", user, pass);
             } catch (SQLException ex) {
                 ex.printStackTrace();
             }
@@ -101,16 +101,6 @@ public class DBConnect implements DBConnectivity {
                 closeConnection();
             }
             
-	}
-
-	public void AddUser() {
-		// TODO - implement DBConnect.AddUser
-		throw new UnsupportedOperationException();
-	}
-
-	public void RemoveUser() {
-		// TODO - implement DBConnect.RemoveUser
-		throw new UnsupportedOperationException();
 	}
 
 	public void Backup() {
