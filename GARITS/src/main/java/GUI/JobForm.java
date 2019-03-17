@@ -8,7 +8,11 @@ package GUI;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
 import Processing.Job;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
 
 /**
  *
@@ -17,7 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class JobForm extends javax.swing.JFrame {
     
     DBConnect dbConnect;
-
+    
     /**
      * Creates new form MenuForm
      */
@@ -65,15 +69,23 @@ public class JobForm extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null}
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Type", "Status", "Work Required", "Duration", "Start Date", "Vehicle"
+                "Type", "Status", "Work Required", "Duration", "Start Date", "Vehicle", "job_id"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTable1.setRowHeight(32);
+        jTable1.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(jTable1);
-        jTable1.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setPreferredWidth(20);
             jTable1.getColumnModel().getColumn(1).setPreferredWidth(30);
@@ -173,9 +185,21 @@ public class JobForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO update the rows changed
-        // TODO display a window confirming the change to the user
+        
+        // TODO display UpdateJobForm window with current job values
+        // TODO update job values in DB
         // TODO requery table to display rows changed
+        DefaultTableModel jobTable = (DefaultTableModel) jTable1.getModel();
+        Object jobId = null;
+        int[] selectedRow = jTable1.getSelectedRows();
+        if(selectedRow.length == 0) {
+            //Display window requiring user to select a job to update first
+            System.out.println("It works");
+        }
+        jobId = jobTable.getValueAt(selectedRow[0], 6);
+        UpdateJobForm jobView = new UpdateJobForm((int) jobId);
+        jobView.setVisible(true);
+
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -202,11 +226,13 @@ public class JobForm extends javax.swing.JFrame {
                 job.setDuration(rs.getInt("job_duration"));
                 job.setDate_start(rs.getString("job_date"));
                 job.setRegistrationNum(rs.getString("reg_no"));
+                job.setJobId(rs.getInt("job_id"));
                 
                 
                 Object[] row = { job.getType(), job.getStatus(),
                     job.getWorkRequired(), job.getDuration(),
-                    job.getDate_start(), job.getRegistrationNum()};
+                    job.getDate_start(), job.getRegistrationNum(),
+                    job.getJobId()};
 
                 model.addRow(row);
             } 
@@ -219,8 +245,11 @@ public class JobForm extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         // TODO add your handling code here:
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         model.setRowCount(0);
         jComboBox1.getItemAt(0);
+        TableColumn jobIdColumn = jTable1.getColumnModel().getColumn(6);
+        jTable1.getColumnModel().removeColumn(jobIdColumn);
     }//GEN-LAST:event_formWindowOpened
 
     /**
