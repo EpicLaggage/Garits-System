@@ -2,6 +2,7 @@ package Account;
 
 import Login.Hashing;
 
+
 public class Staff {
 
 	private String username;
@@ -26,12 +27,14 @@ public class Staff {
 
 	public String getUsername() {
 		return this.username;
+
 	}
 
 	/**
 	 * 
 	 * @param id
 	 */
+
 	public void setUsername(String username) {
 		this.username = username;
 	}

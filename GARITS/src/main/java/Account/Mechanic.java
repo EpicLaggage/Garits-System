@@ -19,4 +19,7 @@ public class Mechanic extends Staff {
     
     
 
+    public Mechanic() {}
+        
+
 }

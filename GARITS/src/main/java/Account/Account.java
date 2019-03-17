@@ -7,17 +7,23 @@ public class Account {
 	private int phone;
 	private String address;
 
+        public Account() {
+        }
+
+    
 	/**
 	 * 
-	 * @param n
+	 * @param name
 	 * @param email
 	 * @param phone
-	 * @param addr
+	 * @param address
 	 */
-	public Account Account(String n, String email, int phone, String addr) {
-		// TODO - implement Account.Account
-		throw new UnsupportedOperationException();
-	}
+        public Account(String name, String email, int phone, String address) {
+            this.name = name;
+            this.email = email;
+            this.phone = phone;
+            this.address = address;
+        }	
 
 	public String getName() {
 		return this.name;
