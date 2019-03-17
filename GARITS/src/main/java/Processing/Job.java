@@ -19,6 +19,7 @@ public class Job {
 	private float total_cost;
         private String workRequired;
         private String workDone;
+        private int jobId;
           
 
 	/**
@@ -177,6 +178,16 @@ public class Job {
         public void setWorkDone(String workDone) {
             this.workDone = workDone;
         }
+
+        public int getJobId() {
+            return jobId;
+        }
+
+        public void setJobId(int jobId) {
+            this.jobId = jobId;
+        }
+        
+        
         
         
 
