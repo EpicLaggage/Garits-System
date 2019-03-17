@@ -9,3 +9,5 @@ nbdist/
 target/
 *.class
 .DS_Store
+GARITS/target/GARITS-1.0-SNAPSHOT.jar
+GARITS/target/maven-archiver/pom.properties
