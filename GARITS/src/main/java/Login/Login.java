@@ -5,6 +5,8 @@
  */
 package Login;
 
+import Account.Foreperson;
+import Account.Franchisee;
 import Account.Mechanic;
 import Account.Staff;
 import DatabaseConnect.DBConnect;
@@ -97,11 +99,24 @@ public class Login {
                 String name = rs.getString("username");
                 
                 // default pay is 0
-                staff = new Mechanic(db_user_name, password, user_role, name, 0);
+                
                 switch(user_role) {
                     case "Receptionist":
-                        staff = new Staff(db_user_name, password, user_role, name);
                 }
+                
+                if (user_role.equals("Receptionist")) {
+                    staff = new Staff(db_user_name, password, user_role, name);
+                }
+                else if (user_role.equals("Mechanic")) {
+                    staff = new Mechanic(db_user_name, password, user_role, name, 0);
+                }
+                else if (user_role.equals("Foreperson")) {
+                    staff = new Foreperson(db_user_name, password, user_role, name, 0);
+                }
+                else if (user_role.equals("Franchisee")) {
+                    staff = new Franchisee(db_user_name, password, user_role, name);
+                }
+                
             }
             return staff;
         }
@@ -114,16 +129,18 @@ public class Login {
     
     public void addUser(String username, String password, String role, String name) throws SQLException {        
         Staff userToAdd = new Staff(username, hash.hashPassword(password), role, name);
-        //TODO: hash password
         
-        
-        switch(role) {             
-            case "Mechanic":
-            case "Foreperson":
-                // 0 is default user pay
-                userToAdd = new Mechanic(username, hash.hashPassword(password), role, name, 0);
-                
+        // 0 is default user pay
+        if (role.equals("Mechanic")) {
+            userToAdd = new Mechanic(username, hash.hashPassword(password), role, name, 0);
         }
+        else if (role.equals("Foreperson")) {
+            userToAdd = new Foreperson(username, hash.hashPassword(password), role, name, 0);
+        }
+        else if (role.equals(("Franchisee"))) {
+            userToAdd = new Franchisee(username, hash.hashPassword(password), role, name);
+        }
+        
         
         // add the user to the database
         // name is now the login username, and username is the uers' full name
