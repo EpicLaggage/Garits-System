@@ -340,7 +340,7 @@ public class CreateJobForm extends javax.swing.JFrame {
                 int phone = customer.getPhone();
                 boolean accountHolder = customer.isAccountHolder();;
                 
-                Object[] row = { name, address, email, phone,
+                Object[] row = { name, email, phone, address,
                     accountHolder, customer.getCustomerId() };
 
                 

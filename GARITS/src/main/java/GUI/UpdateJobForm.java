@@ -5,23 +5,34 @@
  */
 package GUI;
 
+import Account.Mechanic;
+import DatabaseConnect.DBConnect;
 import Processing.Job;
+import java.sql.ResultSet;
+import java.util.ArrayList;
 
 /**
  *
  * @author jly09
  */
 public class UpdateJobForm extends javax.swing.JFrame {
-
+    
+    Job selectedJob;
+    DBConnect dbConnect;
+    ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
+    
     /**
      * Creates new form MenuForm
      */
     public UpdateJobForm() {
         initComponents();
+        dbConnect = new DBConnect();
     }
     
-    public UpdateJobForm(int jobId) {
+    public UpdateJobForm(Job selectedJob) {
         initComponents();
+        this.selectedJob = selectedJob;
+        dbConnect = new DBConnect();
     }
 
     /**
@@ -59,11 +70,21 @@ public class UpdateJobForm extends javax.swing.JFrame {
         jTextArea2 = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Update Job");
 
         jButton5.setText("Update");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setText("Status");
@@ -80,7 +101,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel8.setText("Work required");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pending" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pending", "Done" }));
 
         jButton6.setText("Add Parts");
 
@@ -246,6 +267,44 @@ public class UpdateJobForm extends javax.swing.JFrame {
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
 
     }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO update job values in DB
+        // TODO requery table to display rows changed
+        System.out.println(selectedJob);
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO display UpdateJobForm window with current job values
+        jComboBox2.setSelectedItem(selectedJob.getStatus());
+        jTextField3.setText(selectedJob.getDuration()+"");
+        jComboBox2.setSelectedItem(selectedJob.getType());
+         
+        jTextArea2.setText(selectedJob.getWorkRequired());
+        
+        //Getting all mechanics from db and selecting the correct one
+        String mechanicNamesQuery = "SELECT username, user_id FROM garitsdb.User "
+                + "WHERE user_role = 'Mechanic'";
+        ResultSet rs;
+        
+        try {
+            rs = dbConnect.read(mechanicNamesQuery);
+            
+            while(rs.next()) {
+                Mechanic mechanic = new Mechanic();
+                mechanic.setId(rs.getInt("user_id"));
+                mechanic.setName(rs.getString("username"));
+                mechanics.add(mechanic);
+                jComboBox6.addItem(rs.getString("username"));
+                if(mechanic.getId() == selectedJob.getMechanicId()) {
+                    jComboBox6.setSelectedItem(rs.getString("username"));
+                }
+            }
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
