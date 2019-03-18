@@ -269,16 +269,51 @@ public class UpdateJobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO update job values in DB
-        // TODO requery table to display rows changed
+        // Getting input values
+        Job updatedJob = new Job();
+        Mechanic selectedMechanic = new Mechanic();
+        for(Mechanic mechanic : mechanics) {
+            if(mechanic.getName().equals(jComboBox6.getSelectedItem())){
+                selectedMechanic.setId(mechanic.getId());
+                selectedMechanic.setName(mechanic.getName());
+            }
+        }
+        //Extremely convoluted way to update my Job object due to some string processing isues
+        int job_duration = Integer.parseInt(jTextField3.getText());
+        String job_status = (String) jComboBox2.getSelectedItem();         
+        String job_work_required = jTextArea2.getText();
+        String job_type = (String) jComboBox1.getSelectedItem();
+        String job_work_done = jTextArea1.getText();
+        updatedJob.setMechanicId(selectedMechanic.getId());
+        updatedJob.setDuration(job_duration);
+        updatedJob.setStatus(job_status);
+        updatedJob.setWorkRequired(job_work_required);
+        updatedJob.setType(job_type);
+        updatedJob.setWorkDone(job_work_done);
+        updatedJob.setJobId(selectedJob.getJobId());
+        
+        // Updating DB with new values
+        String insertJobQuery = "UPDATE garitsdb.Job SET"
+                + " mechanic_assigned = '" + updatedJob.getMechanicId()
+                + "', job_work_required = '" + updatedJob.getWorkRequired()
+                + "', job_duration = '" + updatedJob.getDuration() +"', job_status = '"
+                + updatedJob.getStatus() + "', job_type = '" + updatedJob.getType()
+                + "', job_work_done = '" + updatedJob.getWorkDone()
+                + "' WHERE (job_id = '" + updatedJob.getJobId() + "');";
+        
+        try {
+            dbConnect.write(insertJobQuery);            
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
         System.out.println(selectedJob);
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO display UpdateJobForm window with current job values
         jComboBox2.setSelectedItem(selectedJob.getStatus());
         jTextField3.setText(selectedJob.getDuration()+"");
-        jComboBox2.setSelectedItem(selectedJob.getType());
+        jComboBox1.setSelectedItem(selectedJob.getType());
          
         jTextArea2.setText(selectedJob.getWorkRequired());
         
