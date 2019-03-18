@@ -69,14 +69,14 @@ public class JobForm extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Type", "Status", "Work Required", "Duration", "Start Date", "Vehicle", "job_id"
+                "Type", "Status", "Work Required", "Duration", "Start Date", "Vehicle", "job_id", "mechanic_assigned"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -186,18 +186,23 @@ public class JobForm extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         
-        // TODO display UpdateJobForm window with current job values
-        // TODO update job values in DB
-        // TODO requery table to display rows changed
+        
         DefaultTableModel jobTable = (DefaultTableModel) jTable1.getModel();
-        Object jobId = null;
+        Job selectedJob = new Job();
         int[] selectedRow = jTable1.getSelectedRows();
         if(selectedRow.length == 0) {
             //Display window requiring user to select a job to update first
             System.out.println("It works");
         }
-        jobId = jobTable.getValueAt(selectedRow[0], 6);
-        UpdateJobForm jobView = new UpdateJobForm((int) jobId);
+        selectedJob.setType((String) jobTable.getValueAt(selectedRow[0], 0));
+        selectedJob.setStatus((String) jobTable.getValueAt(selectedRow[0], 1));
+        selectedJob.setWorkRequired((String) jobTable.getValueAt(selectedRow[0], 2));
+        selectedJob.setDuration((int) jobTable.getValueAt(selectedRow[0], 3));
+        selectedJob.setDate_start((String) jobTable.getValueAt(selectedRow[0], 4));
+        selectedJob.setRegistrationNum((String) jobTable.getValueAt(selectedRow[0], 5));
+        selectedJob.setJobId((int) jobTable.getValueAt(selectedRow[0], 6));
+        selectedJob.setMechanicId((int) jobTable.getValueAt(selectedRow[0], 7));
+        UpdateJobForm jobView = new UpdateJobForm(selectedJob);
         jobView.setVisible(true);
 
     }//GEN-LAST:event_jButton6ActionPerformed
@@ -227,12 +232,13 @@ public class JobForm extends javax.swing.JFrame {
                 job.setDate_start(rs.getString("job_date"));
                 job.setRegistrationNum(rs.getString("reg_no"));
                 job.setJobId(rs.getInt("job_id"));
+                job.setMechanicId(rs.getInt("mechanic_assigned"));
                 
                 
                 Object[] row = { job.getType(), job.getStatus(),
                     job.getWorkRequired(), job.getDuration(),
                     job.getDate_start(), job.getRegistrationNum(),
-                    job.getJobId()};
+                    job.getJobId(), job.getMechanicId()};
 
                 model.addRow(row);
             } 
@@ -249,7 +255,11 @@ public class JobForm extends javax.swing.JFrame {
         model.setRowCount(0);
         jComboBox1.getItemAt(0);
         TableColumn jobIdColumn = jTable1.getColumnModel().getColumn(6);
-        jTable1.getColumnModel().removeColumn(jobIdColumn);
+        TableColumn mechanicIdColumn = jTable1.getColumnModel().getColumn(7);
+        
+        
+        jTable1.getColumnModel().removeColumn(jobIdColumn);        
+        jTable1.getColumnModel().removeColumn(mechanicIdColumn);
     }//GEN-LAST:event_formWindowOpened
 
     /**
