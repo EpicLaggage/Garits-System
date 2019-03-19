@@ -292,7 +292,6 @@ public class UpdateJobForm extends javax.swing.JFrame {
         updatedJob.setWorkDone(job_work_done);
         updatedJob.setJobId(selectedJob.getJobId());
         
-        // Updating DB with new values
         String insertJobQuery = "UPDATE garitsdb.Job SET"
                 + " mechanic_assigned = '" + updatedJob.getMechanicId()
                 + "', job_work_required = '" + updatedJob.getWorkRequired()
@@ -307,7 +306,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         catch (Exception exc) {
             exc.printStackTrace();
         }
-        System.out.println(selectedJob);
+        // TODO display window with success message and requery JobForm
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
