@@ -355,6 +355,7 @@ public class CreateJobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        //TODO REWORK GUI FOR WORK REQUIRED
         DefaultTableModel model = (DefaultTableModel) jTable2.getModel();
         jComboBox1.getItemAt(0);
         jComboBox2.getItemAt(0);
