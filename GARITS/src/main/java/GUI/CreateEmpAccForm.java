@@ -71,7 +71,7 @@ public class CreateEmpAccForm extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel9.setText("Password");
 
-        roleField.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Franchisee", "Receptionist", "Mechanic", "Foreperson" }));
+        roleField.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Franchisee", "Receptionist", "Mechanic", "Foreperson", "Administrator" }));
         roleField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 roleFieldActionPerformed(evt);
