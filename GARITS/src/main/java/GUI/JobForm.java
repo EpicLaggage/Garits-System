@@ -69,14 +69,14 @@ public class JobForm extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null}
             },
             new String [] {
-                "Type", "Status", "Work Required", "Duration", "Start Date", "Vehicle", "job_id", "mechanic_assigned"
+                "Type", "Status", "Duration", "Start Date", "Vehicle", "job_id", "mechanic_assigned"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, true
+                false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -89,10 +89,9 @@ public class JobForm extends javax.swing.JFrame {
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setPreferredWidth(20);
             jTable1.getColumnModel().getColumn(1).setPreferredWidth(30);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(200);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(20);
             jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
             jTable1.getColumnModel().getColumn(4).setPreferredWidth(20);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(20);
         }
 
         jButton5.setText("Create Job Sheet");
@@ -194,12 +193,11 @@ public class JobForm extends javax.swing.JFrame {
         } else {
             selectedJob.setType((String) jobTable.getValueAt(selectedRow[0], 0));
             selectedJob.setStatus((String) jobTable.getValueAt(selectedRow[0], 1));
-            selectedJob.setWorkRequired((String) jobTable.getValueAt(selectedRow[0], 2));
-            selectedJob.setDuration((int) jobTable.getValueAt(selectedRow[0], 3));
-            selectedJob.setDate_start((String) jobTable.getValueAt(selectedRow[0], 4));
-            selectedJob.setRegistrationNum((String) jobTable.getValueAt(selectedRow[0], 5));
-            selectedJob.setJobId((int) jobTable.getValueAt(selectedRow[0], 6));
-            selectedJob.setMechanicId((int) jobTable.getValueAt(selectedRow[0], 7));
+            selectedJob.setDuration((int) jobTable.getValueAt(selectedRow[0], 2));
+            selectedJob.setDate_start((String) jobTable.getValueAt(selectedRow[0], 3));
+            selectedJob.setRegistrationNum((String) jobTable.getValueAt(selectedRow[0], 4));
+            selectedJob.setJobId((int) jobTable.getValueAt(selectedRow[0], 5));
+            selectedJob.setMechanicId((int) jobTable.getValueAt(selectedRow[0], 6));
             UpdateJobForm jobView = new UpdateJobForm(selectedJob,
                     searchedText, searchFilter);
             jobView.setVisible(true);
@@ -227,7 +225,6 @@ public class JobForm extends javax.swing.JFrame {
                 
                 job.setType(rs.getString("job_type"));
                 job.setStatus(rs.getString("job_status"));
-                job.setWorkRequired(rs.getString("job_work_required"));
                 job.setDuration(rs.getInt("job_duration"));
                 job.setDate_start(rs.getString("job_date"));
                 job.setRegistrationNum(rs.getString("reg_no"));
@@ -236,7 +233,7 @@ public class JobForm extends javax.swing.JFrame {
                 
                 
                 Object[] row = { job.getType(), job.getStatus(),
-                    job.getWorkRequired(), job.getDuration(),
+                    job.getDuration(),
                     job.getDate_start(), job.getRegistrationNum(),
                     job.getJobId(), job.getMechanicId()};
 
@@ -254,8 +251,8 @@ public class JobForm extends javax.swing.JFrame {
         jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         model.setRowCount(0);
         jComboBox1.getItemAt(0);
-        TableColumn jobIdColumn = jTable1.getColumnModel().getColumn(6);
-        TableColumn mechanicIdColumn = jTable1.getColumnModel().getColumn(7);
+        TableColumn jobIdColumn = jTable1.getColumnModel().getColumn(5);
+        TableColumn mechanicIdColumn = jTable1.getColumnModel().getColumn(6);
         
         
         jTable1.getColumnModel().removeColumn(jobIdColumn);        
