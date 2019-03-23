@@ -32,6 +32,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
     DBConnect dbConnect;
     ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
     DefaultTableModel modelUncompleted;
+    DefaultTableModel modelCompleted;
     
     /**
      * Creates new form MenuForm
@@ -245,7 +246,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class
+                java.lang.String.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -290,6 +291,11 @@ public class UpdateJobForm extends javax.swing.JFrame {
         jScrollPane6.setViewportView(jTable4);
 
         jButton1.setText("Apply changes");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         jButton2.setText("Apply changes");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -505,7 +511,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         }
         
         //GETTING COMPLETED TASKS
-        DefaultTableModel modelCompleted = (DefaultTableModel) jTable3.getModel();
+        modelCompleted = (DefaultTableModel) jTable3.getModel();
         String completedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
                 + " WHERE (task_completed = true AND job_id = "
                 + "" + selectedJob.getJobId() +");";
@@ -572,8 +578,11 @@ public class UpdateJobForm extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO Update database with changes FROM WORK REQUIRED
+        if(jTable4.getCellEditor() != null){
+            jTable4.getCellEditor().stopCellEditing();
+        }
         DefaultTableModel model = (DefaultTableModel)jTable4.getModel();
-        jTable4.getCellEditor().stopCellEditing();
+        
         for (int row = 0; row < jTable4.getRowCount(); row++){
             Task currentTask = new Task();
             currentTask.setTaskContent((String) model.getValueAt(row, 0));
@@ -625,7 +634,125 @@ public class UpdateJobForm extends javax.swing.JFrame {
         } catch (Exception exc) {
             exc.printStackTrace();
         }
+
+        //QUERY BOTH LIST AGAIN TO REFLECT CHANGES
+        modelCompleted.setRowCount(0);
+        //GETTING COMPLETED TASKS
+        modelCompleted = (DefaultTableModel) jTable3.getModel();
+        String completedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
+                + " WHERE (task_completed = true AND job_id = "
+                + "" + selectedJob.getJobId() +");";
+        try {
+            Connection conn = dbConnect.connect();
+            conn.setAutoCommit(false);
+            PreparedStatement statement = conn.prepareStatement(completedTasksQuery);
+            ResultSet rs = statement.executeQuery();
+            Task requiredTask = new Task();
+            while(rs.next()) {
+                requiredTask.setJobId(rs.getInt("job_id"));
+                requiredTask.setTaskId(rs.getInt("task_id"));
+                requiredTask.setTaskContent(rs.getString("task_content"));
+                requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
+                
+                Object[] row = { requiredTask.getTaskContent(), 
+                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                requiredTask.getJobId()};
+                modelCompleted.addRow(row);
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        
+        //TODO check if getCellEditor is null and don't stop cell editing otherwise null pointer exception
+        //do this for jbutton2 as well
+        if(jTable3.getCellEditor() != null){
+            jTable3.getCellEditor().stopCellEditing();
+        }
+        DefaultTableModel model = (DefaultTableModel)jTable3.getModel();
+        for (int row = 0; row < jTable3.getRowCount(); row++){
+            Task currentTask = new Task();
+            currentTask.setTaskContent((String) model.getValueAt(row, 0));
+            currentTask.setTaskCompleted((boolean) model.getValueAt(row, 1));
+            currentTask.setTaskId((int) model.getValueAt(row, 2));
+            currentTask.setJobId((int) model.getValueAt(row, 3));
+            int isCompleted = currentTask.isTaskCompleted() ? 1 : 0;
+            System.out.println(currentTask.getTaskContent() + "TASK");
+            String updateTask = "UPDATE `garitsdb`.`Job_Tasks` SET "
+                    + "`task_content` = '" + currentTask.getTaskContent() + "',"
+                    + "task_completed = '" + isCompleted
+                    + "' WHERE (`task_id` = '" + currentTask.getTaskId() + "');";
+            
+            try { 
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(updateTask);
+                statement.execute();
+                conn.commit();
+                conn.setAutoCommit(true);
+                
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+        
+        modelCompleted.setRowCount(0);
+        String completedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
+                + " WHERE (task_completed = true AND job_id = "
+                + "" + selectedJob.getJobId() +");";
+        
+        try {
+            Connection conn = dbConnect.connect();
+            conn.setAutoCommit(false);
+            PreparedStatement statement = conn.prepareStatement(completedTasksQuery);
+            ResultSet rs = statement.executeQuery();
+            Task requiredTask = new Task();
+            while(rs.next()) {
+                requiredTask.setJobId(rs.getInt("job_id"));
+                requiredTask.setTaskId(rs.getInt("task_id"));
+                requiredTask.setTaskContent(rs.getString("task_content"));
+                requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
+                
+                Object[] row = { requiredTask.getTaskContent(), 
+                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                requiredTask.getJobId()};
+                modelCompleted.addRow(row);
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        
+        
+        //QUERY LIST TO REFLECT CHANGES
+        modelUncompleted.setRowCount(0);
+        String uncompletedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
+                + " WHERE (task_completed = false AND job_id = "
+                + "" + selectedJob.getJobId() +");";
+        try {
+            Connection conn = dbConnect.connect();
+            conn.setAutoCommit(false);
+            PreparedStatement statement = conn.prepareStatement(uncompletedTasksQuery);
+            ResultSet rs = statement.executeQuery();
+            Task requiredTask = new Task();
+            while(rs.next()) {
+                requiredTask.setJobId(rs.getInt("job_id"));
+                requiredTask.setTaskId(rs.getInt("task_id"));
+                requiredTask.setTaskContent(rs.getString("task_content"));
+                requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
+                
+                Object[] row = { requiredTask.getTaskContent(), 
+                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                requiredTask.getJobId()};
+                modelUncompleted.addRow(row);
+            }
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+               
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
