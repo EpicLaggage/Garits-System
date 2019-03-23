@@ -98,6 +98,8 @@ public class UpdateJobForm extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         jTextField4 = new javax.swing.JTextField();
         jTextField5 = new javax.swing.JTextField();
+        jButton3 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -345,6 +347,20 @@ public class UpdateJobForm extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setText("Delete Task");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jButton4.setText("Delete Task");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -352,6 +368,22 @@ public class UpdateJobForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(47, 47, 47)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jButton3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton4))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(128, 128, 128)
+                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(51, 51, 51))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(3, 3, 3)
                         .addComponent(jLabel1)
@@ -410,18 +442,6 @@ public class UpdateJobForm extends javax.swing.JFrame {
                                 .addComponent(jButton2)
                                 .addGap(361, 361, 361)))
                         .addContainerGap(97, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(128, 128, 128)
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(51, 51, 51))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -453,7 +473,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
                     .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 63, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel8)
                     .addComponent(jLabel10)
@@ -463,14 +483,19 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jScrollPane5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 201, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(76, 76, 76)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton3)
+                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton4))))
                 .addGap(38, 38, 38))
         );
 
@@ -930,6 +955,110 @@ public class UpdateJobForm extends javax.swing.JFrame {
         jTextField5.setText("");
     }//GEN-LAST:event_jTextField5ActionPerformed
 
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO DELETE TASK
+        int[] selectedRow = jTable4.getSelectedRows();
+        if(selectedRow.length == 0) {
+            //Display window requiring user to select a job to update first
+            JOptionPane.showMessageDialog(UpdateJobForm.this,
+                    "Select a task to delete first");
+            
+        } else {
+            String deleteTaskQuery = "DELETE FROM `garitsdb`.`Job_Tasks` "
+                    + "WHERE (`task_id` = '" + modelUncompleted.getValueAt(selectedRow[0], 2)
+                    + "');";
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(deleteTaskQuery);
+                statement.execute();
+                conn.commit();
+                conn.setAutoCommit(true);
+            }catch (Exception exc) {
+                exc.printStackTrace();
+            }
+            
+            //REQUERY DB TO DISPLAY CHANGE
+            modelUncompleted.setRowCount(0);
+            String uncompletedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
+                + " WHERE (task_completed = false AND job_id = "
+                + "" + selectedJob.getJobId() +");";
+        
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(uncompletedTasksQuery);
+                ResultSet rs = statement.executeQuery();
+                Task requiredTask = new Task();
+                while(rs.next()) {
+                    requiredTask.setJobId(rs.getInt("job_id"));
+                    requiredTask.setTaskId(rs.getInt("task_id"));
+                    requiredTask.setTaskContent(rs.getString("task_content"));
+                    requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
+
+                    Object[] row = { requiredTask.getTaskContent(), 
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
+                    modelUncompleted.addRow(row);
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // TODO add your handling code here:
+        int[] selectedRow = jTable3.getSelectedRows();
+        if(selectedRow.length == 0) {
+            //Display window requiring user to select a job to update first
+            JOptionPane.showMessageDialog(UpdateJobForm.this,
+                    "Select a task to delete first");
+            
+        } else {
+            String deleteTaskQuery = "DELETE FROM `garitsdb`.`Job_Tasks` "
+                    + "WHERE (`task_id` = '" + modelCompleted.getValueAt(selectedRow[0], 2)
+                    + "');";
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(deleteTaskQuery);
+                statement.execute();
+                conn.commit();
+                conn.setAutoCommit(true);
+            }catch (Exception exc) {
+                exc.printStackTrace();
+            }
+            
+            //REQUERY DB TO DISPLAY CHANGE
+            modelCompleted.setRowCount(0);
+            String CompletedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
+                + " WHERE (task_completed = true AND job_id = "
+                + "" + selectedJob.getJobId() +");";
+        
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(CompletedTasksQuery);
+                ResultSet rs = statement.executeQuery();
+                Task requiredTask = new Task();
+                while(rs.next()) {
+                    requiredTask.setJobId(rs.getInt("job_id"));
+                    requiredTask.setTaskId(rs.getInt("task_id"));
+                    requiredTask.setTaskContent(rs.getString("task_content"));
+                    requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
+
+                    Object[] row = { requiredTask.getTaskContent(), 
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
+                    modelCompleted.addRow(row);
+                }
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButton4ActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -1031,6 +1160,8 @@ public class UpdateJobForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
