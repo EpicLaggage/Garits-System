@@ -603,6 +603,78 @@ public class UpdateJobForm extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+        int[] selectedRow = jTable6.getSelectedRows();
+        if(selectedRow.length == 0) {
+            //Display window requiring user to select a job to update first
+            JOptionPane.showMessageDialog(UpdateJobForm.this,
+                    "Select a part to delete first");
+            
+        } else {
+            int qtyUsed = (int) modelParts.getValueAt(selectedRow[0],1);
+            int partId = (int) modelParts.getValueAt(selectedRow[0],3);
+            String deletePartQuery = "DELETE FROM Part_Used WHERE "
+                    + "part_used_id=" + modelParts.getValueAt
+                    (selectedRow[0], 2);
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(deletePartQuery);
+                statement.execute();
+                conn.commit();
+                conn.setAutoCommit(true);
+            }catch (Exception exc) {
+                exc.printStackTrace();
+            }
+            
+            String updateQuantityQuery = "UPDATE Parts SET part_quantity="
+                    + "part_quantity+" + qtyUsed + " WHERE part_id=" + partId;   
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(updateQuantityQuery);
+                statement.execute();
+                conn.commit();
+                conn.setAutoCommit(true);
+            }catch (Exception exc) {
+                exc.printStackTrace();
+            }
+            
+            for (Part part : spareParts) {
+                if(part.getPartId() == partId) {
+                    int maxQty = part.getQty();
+                    part.setQty(maxQty+qtyUsed);
+                    jSlider1.setMaximum(part.getQty());
+                }
+            }
+            
+            //UPDATE QTY AND REQUERY
+            modelParts.setRowCount(0);
+            String partUsedQuery = "SELECT Part_Used.part_id, parts.part_name, Part_Used.part_used_id, Part_Used.quantity_used \n" +
+                    "FROM garitsdb.Parts, garitsdb.Part_Used " +
+                    "WHERE garitsdb.Part_Used.part_id = garitsdb.Parts.part_id " +
+                    "AND garitsdb.Part_Used.job_id = '" + selectedJob.getJobId() + "';";
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(partUsedQuery);
+                ResultSet rs = statement.executeQuery();
+                while(rs.next()) {
+                    Part part = new Part();
+                    part.setPartId(rs.getInt("part_id"));
+                    part.setPartUsedId(rs.getInt("part_used_id"));
+                    part.setQty(rs.getInt("quantity_used"));
+                    part.setName(rs.getString("part_name"));
+                    Object[] row = { part.getName(),
+                    part.getQty(), part.getPartUsedId(),
+                    part.getPartId()};
+                    modelParts.addRow(row);        
+                }
+                conn.commit();
+                conn.setAutoCommit(true);
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
@@ -788,7 +860,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 part.setName(partsResults.getString("part_name"));
                 spareParts.add(part);
                 jComboBox4.addItem(part.getName());
-                
+                //RESET PART LIST TO REFLECT NEW QTY's
             }
             conn.commit();
             conn.setAutoCommit(true);
@@ -1282,7 +1354,14 @@ public class UpdateJobForm extends javax.swing.JFrame {
             } catch (Exception exc) {
                exc.printStackTrace();
             }
-
+            
+            for (Part part : spareParts) {
+                if(part.getPartId() == selectedPart.getPartId()) {
+                    part.setQty(newQuantity);
+                    jSlider1.setMaximum(part.getQty());
+                }
+            }
+            
             //REQUERY PARTS TABLE
             modelParts.setRowCount(0);
             String partUsedQuery = "SELECT Part_Used.part_id, parts.part_name, Part_Used.part_used_id, Part_Used.quantity_used \n" +
