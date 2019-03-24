@@ -4,37 +4,39 @@ import Account.*;
 
 public class Part {
 
-	private int num;
+	private int partId;
 	private String name;
 	private String manufacturer;
 	private String description;
 	private float price;
 	private int qty;
-	private Supplier supplier;
+	private int supplierId;
+        private int partUsedId;
 
-	/**
-	 * 
-	 * @param no
-	 * @param name
-	 * @param manu
-	 * @param desc
-	 * @param sup
-	 */
-	public Part(int no, String name, String manu, String desc, Supplier sup) {
-		// TODO - implement Part.Part
-		throw new UnsupportedOperationException();
-	}
+    public Part() {
+    }
 
-	public int getNum() {
-		return this.num;
+    public Part(int partId, String name, String manufacturer, String description, float price, int qty, int supplierId) {
+        this.partId = partId;
+        this.name = name;
+        this.manufacturer = manufacturer;
+        this.description = description;
+        this.price = price;
+        this.qty = qty;
+        this.supplierId = supplierId;
+    }
+
+
+	public int getPartId() {
+		return this.partId;
 	}
 
 	/**
 	 * 
 	 * @param num
 	 */
-	public void setNum(int num) {
-		this.num = num;
+	public void setPartId(int partId) {
+		this.partId = partId;
 	}
 
 	public String getName() {
@@ -97,16 +99,16 @@ public class Part {
 		this.qty = qty;
 	}
 
-	public Supplier getSupplier() {
-		return this.supplier;
+	public int getSupplierId() {
+		return this.supplierId;
 	}
 
 	/**
 	 * 
-	 * @param supplier
+	 * @param supplierId
 	 */
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
+	public void setSupplierId(int supplierId) {
+		this.supplierId = supplierId;
 	}
 
 	/**
@@ -118,5 +120,15 @@ public class Part {
 	public Staff generateAlert(String name, int qty, String role) {
 		return null;
 	}
+
+    public int getPartUsedId() {
+        return partUsedId;
+    }
+
+    public void setPartUsedId(int partUsedId) {
+        this.partUsedId = partUsedId;
+    }
+        
+        
 
 }

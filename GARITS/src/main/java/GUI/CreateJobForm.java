@@ -493,7 +493,6 @@ public class CreateJobForm extends javax.swing.JFrame {
             while(rs.next()) {
                 Vehicle car = new Vehicle();
                 car.setReg_num(rs.getString("reg_no"));
-                System.out.println(car.getReg_num());
                 car.setMake(rs.getString("car_make"));
                 car.setModel(rs.getString("car_model"));
                 car.setEngine_serial_no(rs.getString("engine_serial"));
@@ -540,7 +539,6 @@ public class CreateJobForm extends javax.swing.JFrame {
                     rowData.get(3).toString(), rowData.get(4).toString(),
                     rowData.get(5).toString());
             selectedVehicle = car;
-            System.out.println(selectedVehicle);
             if(tickedRow != -1) {
                 carTable.setValueAt(false, tickedRow, 6);
             } 
