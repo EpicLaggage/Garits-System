@@ -4,7 +4,9 @@ import DatabaseConnect.DBConnect;
 import DatabaseConnect.DBConnectivity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Supplier {
 
@@ -12,7 +14,7 @@ public class Supplier {
 	private String address;
 	private int phone;
 	private String email;
-
+        private int supplierID;
 	/**
 	 * 
 	 * @param n
@@ -26,6 +28,9 @@ public class Supplier {
                 this.phone = phone;
                 this.email = email;
 	}
+        
+        public Supplier() {}
+
 
         DBConnectivity db = new DBConnect();
         
@@ -106,6 +111,66 @@ public class Supplier {
             }
             
             
+        }
+        
+        public int getSupplierID() throws SQLException {
+            Connection conn = db.connect();
+            try {
+                // use of transactions
+                conn.setAutoCommit(false);
+                String sql = "SELECT part_supplier_id FROM Supplier WHERE supplier_name = ?";
+                PreparedStatement p = conn.prepareStatement(sql);
+                p.setString(1, this.name);
+                ResultSet rs = p.executeQuery();
+                conn.commit();
+                conn.setAutoCommit(true);
+                
+                if (rs.next()) {
+                    this.supplierID = rs.getInt("part_supplier_id");
+                }
+                
+            }
+            catch (SQLException e) {
+                System.out.println(e.getMessage());
+                // if an error occurs, roll back the changes made to the db
+                conn.rollback();
+            }
+            finally {
+                db.closeConnection();
+            }
+            return this.supplierID;
+        }
+        
+        public ArrayList<Supplier> getAllSuppliers() {
+            ArrayList<Supplier> supplierList = new ArrayList<>();
+            Connection conn = db.connect();
+            try {
+                conn.setAutoCommit(false);
+                String sql = "SELECT * FROM Supplier";
+                PreparedStatement p = conn.prepareStatement(sql);
+                ResultSet rs = p.executeQuery();
+                conn.commit();
+                conn.setAutoCommit(true);
+                while (rs.next()) {
+                    Supplier supplier = new Supplier(rs.getString("supplier_name"), rs.getString("supplier_address"), rs.getInt("supplier_tel"), rs.getString("supplier_email"));
+                    supplierList.add(supplier);
+                }
+                
+            }
+            catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    conn.rollback();
+                }
+                catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+                
+            }
+            finally {
+                db.closeConnection();
+            }
+            return supplierList;
         }
         
         

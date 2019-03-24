@@ -192,6 +192,7 @@ public class AddSupplierForm extends javax.swing.JFrame {
                 supplierEmail.setText("");
                 supplierPhone.setText("");
                 supplierAddress.setText("");
+                System.out.println(supplier.getSupplierID());
             }
         }
         catch (SQLException e) {

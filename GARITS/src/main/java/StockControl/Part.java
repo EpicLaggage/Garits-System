@@ -1,40 +1,41 @@
 package StockControl;
 
 import Account.*;
+import DatabaseConnect.DBConnect;
+import DatabaseConnect.DBConnectivity;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 
 public class Part {
 
-	private int num;
+	private int partID;
 	private String name;
 	private String manufacturer;
-	private String description;
 	private float price;
+        private String vehicleType;
+        private int year;
 	private int qty;
 	private Supplier supplier;
+        
 
 	/**
 	 * 
-	 * @param no
+	 * @param partID
 	 * @param name
 	 * @param manu
 	 * @param desc
 	 * @param sup
 	 */
-	public Part(int no, String name, String manu, String desc, Supplier sup) {
-		// TODO - implement Part.Part
-		throw new UnsupportedOperationException();
-	}
-
-	public int getNum() {
-		return this.num;
-	}
-
-	/**
-	 * 
-	 * @param num
-	 */
-	public void setNum(int num) {
-		this.num = num;
+	public Part(String name, String manu, Supplier sup, float price, String vehicleType, int year, int qty) {
+		this.name = name;
+                this.manufacturer = manu;
+                this.supplier = sup;
+                this.vehicleType = vehicleType;
+                this.price = price;
+                this.year = year;
+                this.qty = qty;
+                
 	}
 
 	public String getName() {
@@ -61,17 +62,6 @@ public class Part {
 		this.manufacturer = manufacturer;
 	}
 
-	public String getDescription() {
-		return this.description;
-	}
-
-	/**
-	 * 
-	 * @param description
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
 
 	public float getPrice() {
 		return this.price;
@@ -108,6 +98,36 @@ public class Part {
 	public void setSupplier(Supplier supplier) {
 		this.supplier = supplier;
 	}
+        
+        public boolean addPart() throws SQLException {
+            DBConnectivity db = new DBConnect();
+            Connection conn = db.connect();
+            try {
+                conn.setAutoCommit(false);
+                String sql = "INSERT INTO Parts(part_name, part_manufacturer, part_supplier_id, vehicle_type, year, part_quantity) VALUES (?, ?, ?, ?, ?, ?)";
+                PreparedStatement p = conn.prepareStatement(sql);
+                p.setString(1, this.name);
+                p.setString(2, this.manufacturer);
+                p.setInt(3, this.supplier.getSupplierID());
+                p.setString(4, this.vehicleType);
+                p.setInt(5, this.year);
+                p.setInt(6, this.qty);
+                p.executeUpdate();
+                conn.commit();
+                conn.setAutoCommit(true);
+                return true;
+            }
+            catch (SQLException e) {
+                System.out.println(e.getMessage());
+                conn.rollback();
+                return false;
+            }
+            finally {
+                db.closeConnection();
+            }
+            
+        }
+        
 
 	/**
 	 * 
