@@ -115,7 +115,7 @@ public class JobForm extends javax.swing.JFrame {
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "reg_no", "job_type", "job_status", "job_work_required", "job_duration", "job_date", " " }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "reg_no", "job_type", "job_status", "job_duration", "job_date", " " }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -142,7 +142,7 @@ public class JobForm extends javax.swing.JFrame {
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
                         .addComponent(jButton8)
-                        .addGap(0, 409, Short.MAX_VALUE))
+                        .addGap(0, 446, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton4)
