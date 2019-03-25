@@ -5,16 +5,21 @@
  */
 package GUI;
 
+import Account.Customer;
 import Account.Mechanic;
 import DatabaseConnect.DBConnect;
+import Processing.Invoice;
 import Processing.Job;
 import Processing.Task;
 import StockControl.Part;
 import java.awt.Frame;
+import java.awt.event.ActionEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
@@ -597,7 +602,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                             .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                                             .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                            .addComponent(jButton9)))
                                     .addGroup(layout.createSequentialGroup()
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1411,8 +1416,50 @@ public class UpdateJobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO CHANGE job status to DONE,
+        // TODO CHANGE job status to DONE
+        selectedJob.setStatus("Done");
+        this.jButton5ActionPerformed(evt);
         // TODO create Invoice object with all necessary data
+        Invoice invoice = new Invoice();
+        invoice.setJobId(selectedJob.getJobId());
+        invoice.setJobStart(selectedJob.getDate_start());
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+	java.util.Date date = new java.util.Date();
+        invoice.setJobEnd(dateFormat.format(date));
+        //GETTING CUSTOMER INFORMATION
+        String customerNameQuery = "SELECT customer_name, customer_email, "
+                + "customer_tel, customer_address, customer_account_holder FROM"
+                + " garitsdb.Customer WHERE customer_id = " + selectedJob.getCustomerId();
+        ResultSet rs; 
+        try {
+            rs = dbConnect.read(customerNameQuery);
+            
+            while(rs.next()) {
+                Customer customer = new Customer();
+                customer.setName(rs.getString("customer_name"));
+                customer.setAddress(rs.getString("customer_address"));
+                customer.setEmail(rs.getString("customer_email"));
+                customer.setPhone(rs.getInt("customer_tel"));
+                customer.setAccountHolder(rs.getBoolean("customer_account_holder"));
+
+                invoice.setCustomerName(customer.getName());
+                invoice.setCustomerAddress(customer.getAddress());
+                invoice.setCustomerEmail(customer.getEmail());
+                invoice.setCustomerPhone(customer.getPhone());
+                invoice.setAccountHolder(customer.isAccountHolder());
+                
+            }
+
+        }
+        catch (Exception exc) {
+            exc.printStackTrace();
+        }
+        //Calculate amount due using helper functions
+        //ONE AT A TIME, spares, labour, VAT
+        invoice.setAmountDue(TOP_ALIGNMENT);
+        
+        //SET REMINDER TO FALSE
+        
         // TODO open display invoice form
 
     }//GEN-LAST:event_jButton9ActionPerformed
