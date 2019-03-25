@@ -231,7 +231,7 @@ public class JobForm extends javax.swing.JFrame {
                 Object[] row = { job.getType(), job.getStatus(),
                     job.getDuration(),
                     job.getDate_start(), job.getRegistrationNum(),
-                    job.getJobId(), job.getMechanicId()};
+                    job.getJobId(), job.getMechanicId(), job.getCustomerId()};
 
                 model.addRow(row);
             } 
