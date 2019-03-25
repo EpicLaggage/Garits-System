@@ -5,7 +5,9 @@ import DatabaseConnect.DBConnect;
 import DatabaseConnect.DBConnectivity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Part {
 
@@ -39,7 +41,11 @@ public class Part {
                 this.threshold = threshold;
                 
 	}
-
+        
+        public Part() {}
+        
+        
+        
 	public String getName() {
 		return this.name;
 	}
@@ -100,6 +106,49 @@ public class Part {
 	public void setSupplier(Supplier supplier) {
 		this.supplier = supplier;
 	}
+
+        public int getPartID() {
+            return partID;
+        }
+
+        public void setPartID(int partID) {
+            this.partID = partID;
+        }
+
+        public String getVehicleType() {
+            return vehicleType;
+        }
+
+        public void setVehicleType(String vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
+        public int getYear() {
+            return year;
+        }
+
+        public void setYear(int year) {
+            this.year = year;
+        }
+
+        public int getThreshold() {
+            return threshold;
+        }
+
+        public void setThreshold(int threshold) {
+            this.threshold = threshold;
+        }
+        
+        
+        
+        
+
+    @Override
+    public String toString() {
+        return "Part{" + "partID=" + partID + ", name=" + name + ", manufacturer=" + manufacturer + ", price=" + price + ", vehicleType=" + vehicleType + ", year=" + year + ", qty=" + qty + ", supplier=" + supplier.getName() + ", threshold=" + threshold + '}';
+    }
+        
+        
         
         public boolean addPart() throws SQLException {
             DBConnectivity db = new DBConnect();
@@ -130,6 +179,46 @@ public class Part {
                 db.closeConnection();
             }
             
+        }
+        
+        public ArrayList<Part> getAllParts() {
+            DBConnectivity db = new DBConnect();
+            ArrayList<Part> allParts = new ArrayList<>();
+            Connection conn = db.connect();
+            try {
+                conn.setAutoCommit(false);
+                String sql = "SELECT * FROM Parts";
+                PreparedStatement partQuery = conn.prepareStatement(sql);
+                ResultSet rs = partQuery.executeQuery();
+
+                conn.commit();
+                while (rs.next()) {
+                    Part partToAdd = new Part(rs.getString("part_name"), rs.getString("part_manufacturer"), new Supplier(rs.getInt("part_supplier_id")), rs.getString("vehicle_type"), rs.getFloat("part_price"), rs.getInt("year"), rs.getInt("part_quantity"), rs.getInt("part_threshold"));
+                    partToAdd.setPartID(rs.getInt("part_id"));
+                    allParts.add(partToAdd);
+                    
+                }
+                
+                conn.setAutoCommit(true);
+            }
+            catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    conn.rollback();
+                }
+                catch (SQLException e2) {
+                    System.out.println(e2.getMessage());
+                }
+                
+            }
+            finally {
+                
+                db.closeConnection();
+            }
+           
+            
+            
+            return allParts;
         }
         
 

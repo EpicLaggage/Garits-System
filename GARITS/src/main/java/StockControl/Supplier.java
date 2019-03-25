@@ -30,6 +30,42 @@ public class Supplier {
 	}
         
         public Supplier() {}
+        
+        // constructs a supplier from an id
+        public Supplier(int id) {
+            this.supplierID = id;
+            Connection conn = db.connect();
+            
+            try {
+                conn.setAutoCommit(false);
+                String sql = "SELECT supplier_name, supplier_address, supplier_tel, supplier_email FROM Supplier WHERE part_supplier_id = ?";
+                PreparedStatement p = conn.prepareStatement(sql);
+                p.setInt(1, this.supplierID);
+                ResultSet rs = p.executeQuery();
+                conn.commit();
+                if (rs.next()) {
+                    //Supplier newSupplier = new Supplier(rs.getString("supplier_name"), rs.getString("supplier_address"), rs.getInt("supplier_tel"), rs.getString("supplier_email"));
+                    this.name = rs.getString("supplier_name");
+                    this.address = rs.getString("supplier_address");
+                    this.phone = rs.getInt("supplier_tel");
+                    this.email = rs.getString("supplier_email");
+                }
+            }
+            catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    conn.rollback();
+                }
+               catch (SQLException e2) {
+                   System.out.println(e2.getMessage());
+               }
+                       
+               
+            }
+            finally {
+                db.closeConnection();
+            }
+        }
 
 
         DBConnectivity db = new DBConnect();
@@ -173,5 +209,42 @@ public class Supplier {
             return supplierList;
         }
         
+        
+        // not used for now
+        /*
+        // constructor for creating a supplier just from the ID
+        public Supplier createSupplierFromID(int id) {
+            this.supplierID = id;
+            Connection conn = db.connect();
+            
+            try {
+                conn.setAutoCommit(false);
+                String sql = "SELECT supplier_name, supplier_address, supplier_tel, supplier_email FROM Supplier WHERE part_supplier_id = ?";
+                PreparedStatement p = conn.prepareStatement(sql);
+                p.setInt(1, this.supplierID);
+                ResultSet rs = p.executeQuery();
+                conn.commit();
+                if (rs.next()) {
+                    Supplier newSupplier = new Supplier(rs.getString("supplier_name"), rs.getString("supplier_address"), rs.getInt("supplier_tel"), rs.getString("supplier_email"));
+                    return newSupplier;
+                }
+            }
+            catch (SQLException e) {
+                System.out.println(e.getMessage());
+                try {
+                    conn.rollback();
+                }
+               catch (SQLException e2) {
+                   System.out.println(e2.getMessage());
+               }
+                       
+               
+            }
+            finally {
+                db.closeConnection();
+            }
+            return null;
+        }
+        */
         
 }
