@@ -68,14 +68,14 @@ public class JobForm extends javax.swing.JFrame {
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Type", "Status", "Duration", "Start Date", "Vehicle", "job_id", "mechanic_assigned"
+                "Type", "Status", "Duration", "Start Date", "Vehicle", "job_id", "mechanic_assigned", "customer_id"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, true
+                false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -192,6 +192,7 @@ public class JobForm extends javax.swing.JFrame {
             selectedJob.setRegistrationNum((String) jobTable.getValueAt(selectedRow[0], 4));
             selectedJob.setJobId((int) jobTable.getValueAt(selectedRow[0], 5));
             selectedJob.setMechanicId((int) jobTable.getValueAt(selectedRow[0], 6));
+            selectedJob.setCustomerId((int) jobTable.getValueAt(selectedRow[0], 7));
             UpdateJobForm jobView = new UpdateJobForm(selectedJob,
                     searchedText, searchFilter);
             jobView.setVisible(true);
@@ -224,6 +225,7 @@ public class JobForm extends javax.swing.JFrame {
                 job.setRegistrationNum(rs.getString("reg_no"));
                 job.setJobId(rs.getInt("job_id"));
                 job.setMechanicId(rs.getInt("mechanic_assigned"));
+                job.setCustomerId(rs.getInt("customer_id"));
                 
                 
                 Object[] row = { job.getType(), job.getStatus(),
@@ -247,10 +249,12 @@ public class JobForm extends javax.swing.JFrame {
         jComboBox1.getItemAt(0);
         TableColumn jobIdColumn = jTable1.getColumnModel().getColumn(5);
         TableColumn mechanicIdColumn = jTable1.getColumnModel().getColumn(6);
+        TableColumn customerIdColumn = jTable1.getColumnModel().getColumn(7);
         
         
         jTable1.getColumnModel().removeColumn(jobIdColumn);        
         jTable1.getColumnModel().removeColumn(mechanicIdColumn);
+        jTable1.getColumnModel().removeColumn(customerIdColumn);
     }//GEN-LAST:event_formWindowOpened
 
     /**
