@@ -48,7 +48,7 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Job No.", "Job Start Date", "Job End Date", "Customer Name", "Customer Type", "Email", "Phone", "Address", "Payment Type", "Reminder"
+                "Job No.", "Job Start Date", "Job End Date", "Customer Name", "Customer Type", "Email", "Phone", "Address", "Payment Total", "Reminder"
             }
         ) {
             boolean[] canEdit = new boolean [] {
