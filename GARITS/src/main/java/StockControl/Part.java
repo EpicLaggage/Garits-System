@@ -17,6 +17,7 @@ public class Part {
         private int year;
 	private int qty;
 	private Supplier supplier;
+        private int threshold;
         
 
 	/**
@@ -27,7 +28,7 @@ public class Part {
 	 * @param desc
 	 * @param sup
 	 */
-	public Part(String name, String manu, Supplier sup, float price, String vehicleType, int year, int qty) {
+	public Part(String name, String manu, Supplier sup, String vehicleType, float price, int year, int qty, int threshold) {
 		this.name = name;
                 this.manufacturer = manu;
                 this.supplier = sup;
@@ -35,6 +36,7 @@ public class Part {
                 this.price = price;
                 this.year = year;
                 this.qty = qty;
+                this.threshold = threshold;
                 
 	}
 
@@ -104,7 +106,7 @@ public class Part {
             Connection conn = db.connect();
             try {
                 conn.setAutoCommit(false);
-                String sql = "INSERT INTO Parts(part_name, part_manufacturer, part_supplier_id, vehicle_type, year, part_quantity) VALUES (?, ?, ?, ?, ?, ?)";
+                String sql = "INSERT INTO Parts(part_name, part_manufacturer, part_supplier_id, vehicle_type, year, part_quantity, part_price, part_threshold) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
                 PreparedStatement p = conn.prepareStatement(sql);
                 p.setString(1, this.name);
                 p.setString(2, this.manufacturer);
@@ -112,6 +114,8 @@ public class Part {
                 p.setString(4, this.vehicleType);
                 p.setInt(5, this.year);
                 p.setInt(6, this.qty);
+                p.setFloat(7, this.price);
+                p.setInt(8, this.threshold);
                 p.executeUpdate();
                 conn.commit();
                 conn.setAutoCommit(true);
