@@ -8,6 +8,7 @@ package GUI;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
 import Processing.Job;
+import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -194,7 +195,7 @@ public class JobForm extends javax.swing.JFrame {
             selectedJob.setMechanicId((int) jobTable.getValueAt(selectedRow[0], 6));
             selectedJob.setCustomerId((int) jobTable.getValueAt(selectedRow[0], 7));
             UpdateJobForm jobView = new UpdateJobForm(selectedJob,
-                    searchedText, searchFilter);
+                    searchedText, searchFilter, this);
             jobView.setVisible(true);
         }
 

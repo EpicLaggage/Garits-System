@@ -20,7 +20,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -44,6 +46,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
     int clearTaskRequired = 0;
     int clearTaskDone = 0;
     int MAX_QUANTITY = 0;
+    JobForm allJobs;
     
     /**
      * Creates new form MenuForm
@@ -54,12 +57,13 @@ public class UpdateJobForm extends javax.swing.JFrame {
     }
     
     public UpdateJobForm(Job selectedJob, String searchText,
-            String searchFilter) {
+            String searchFilter, JobForm allJobs) {
         initComponents();
         this.selectedJob = selectedJob;
         dbConnect = new DBConnect();
         this.searchFilter = searchFilter;
         this.searchText = searchText;
+        this.allJobs = allJobs;
     }
 
     /**
@@ -438,7 +442,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.Object.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.Float.class, java.lang.Object.class, java.lang.Object.class, java.lang.Float.class
             };
             boolean[] canEdit = new boolean [] {
                 false, false, false, true, false
@@ -734,7 +738,13 @@ public class UpdateJobForm extends javax.swing.JFrame {
             exc.printStackTrace();
         }
         // TODO display window with success message and requery JobForm
-        JOptionPane.showMessageDialog(UpdateJobForm.this, "Job details updated!");
+        if(evt.getActionCommand().equals("Complete Job")) {
+            JOptionPane.showMessageDialog(UpdateJobForm.this,
+                    "Invoice Generated");
+            allJobs.dispose();
+        } else {
+            JOptionPane.showMessageDialog(UpdateJobForm.this, "Job details updated!");
+        }
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -1418,14 +1428,17 @@ public class UpdateJobForm extends javax.swing.JFrame {
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO CHANGE job status to DONE
         selectedJob.setStatus("Done");
+        jComboBox2.setSelectedItem("Done");
         this.jButton5ActionPerformed(evt);
-        // TODO create Invoice object with all necessary data
+        // create Invoice object with all necessary data
         Invoice invoice = new Invoice();
         invoice.setJobId(selectedJob.getJobId());
         invoice.setJobStart(selectedJob.getDate_start());
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
 	java.util.Date date = new java.util.Date();
         invoice.setJobEnd(dateFormat.format(date));
+        LocalDate futureDate = LocalDate.now().plusMonths(1);
+        invoice.setPaymentDueDate(futureDate.toString());
         //GETTING CUSTOMER INFORMATION
         String customerNameQuery = "SELECT customer_name, customer_email, "
                 + "customer_tel, customer_address, customer_account_holder FROM"
@@ -1435,18 +1448,11 @@ public class UpdateJobForm extends javax.swing.JFrame {
             rs = dbConnect.read(customerNameQuery);
             
             while(rs.next()) {
-                Customer customer = new Customer();
-                customer.setName(rs.getString("customer_name"));
-                customer.setAddress(rs.getString("customer_address"));
-                customer.setEmail(rs.getString("customer_email"));
-                customer.setPhone(rs.getInt("customer_tel"));
-                customer.setAccountHolder(rs.getBoolean("customer_account_holder"));
-
-                invoice.setCustomerName(customer.getName());
-                invoice.setCustomerAddress(customer.getAddress());
-                invoice.setCustomerEmail(customer.getEmail());
-                invoice.setCustomerPhone(customer.getPhone());
-                invoice.setAccountHolder(customer.isAccountHolder());
+                invoice.setCustomerName(rs.getString("customer_name"));
+                invoice.setCustomerAddress(rs.getString("customer_address"));
+                invoice.setCustomerEmail(rs.getString("customer_email"));
+                invoice.setCustomerPhone(rs.getInt("customer_tel"));
+                invoice.setAccountHolder(rs.getBoolean("customer_account_holder"));
                 
             }
 
@@ -1455,13 +1461,58 @@ public class UpdateJobForm extends javax.swing.JFrame {
             exc.printStackTrace();
         }
         //Calculate amount due using helper functions
+        float sparesCost = 0;
+        float labourCost = 0;
+        float amountDue = 0;
         //ONE AT A TIME, spares, labour, VAT
-        invoice.setAmountDue(TOP_ALIGNMENT);
+        float sparesTotal = 0;
+        for(int i = 0; i < jTable6.getRowCount(); i++) {
+            float qty = Float.parseFloat(modelParts.getValueAt(i, 1)+"");
+            float price = Float.parseFloat(modelParts.getValueAt(i, 4)+"");
+            sparesTotal += price * qty;            
+        }
+        sparesCost = invoice.calcMarkUpSpares(sparesTotal);
+        
+        //labour
+        Mechanic selectedMechanic = new Mechanic();
+        for(Mechanic mechanic : mechanics) {
+            if(mechanic.getName().equals(jComboBox6.getSelectedItem())){
+                selectedMechanic.setId(mechanic.getId());
+                selectedMechanic.setName(mechanic.getName());
+            }
+        }
+        String wageQuery = "SELECT hourly_rate FROM garitsdb.Mechanic"
+                + " WHERE user_id = " + selectedMechanic.getId();
+        try { 
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(wageQuery);
+                ResultSet resultWage = statement.executeQuery();
+                resultWage.next();
+                float hourlyRate = resultWage.getFloat("hourly_rate");
+                
+                labourCost = invoice.calcLabourCost(
+                        Float.parseFloat(jTextField3.getText()), hourlyRate);
+                conn.commit();
+                conn.setAutoCommit(true);
+
+            } catch (Exception exc) {
+               exc.printStackTrace();
+        }
+        amountDue = invoice.calcTotalWithVat(labourCost, sparesCost);
+        invoice.setAmountDue(amountDue);      
         
         //SET REMINDER TO FALSE
-        
+        invoice.setPaymentReminder(false);
+        // TODO ADD INVOICE TO DB
+        String insertInvoice = "INSERT INTO `garitsdb`.`Invoice` (`job_id`,"
+                + " `invoice_date`, `payment_due_date`, `invoice_total`)"
+                + " VALUES ('" + invoice.getJobId() + "', '" + invoice.getJobEnd()
+                + "', '" + invoice.getPaymentDueDate() + "', '"
+                + invoice.getAmountDue() + "');";
+        // TODO OPEN INVOICE IN PDF
         // TODO open display invoice form
-
+        
     }//GEN-LAST:event_jButton9ActionPerformed
 
     /**

@@ -16,6 +16,7 @@ public class Invoice {
         private int customerPhone;
         private String customerAddress;
         private boolean paymentReminder;
+        private String paymentDueDate;
         
 
 	/**
@@ -26,6 +27,24 @@ public class Invoice {
 		// TODO - implement Invoice.Invoice
 		throw new UnsupportedOperationException();
 	}
+
+    public String getPaymentDueDate() {
+        return paymentDueDate;
+    }
+
+    public void setPaymentDueDate(String paymentDueDate) {
+        this.paymentDueDate = paymentDueDate;
+    }
+
+    public int getInvoiceId() {
+        return invoiceId;
+    }
+
+    public boolean isIsPaid() {
+        return isPaid;
+    }
+        
+        
 
     public Invoice() {
     }
@@ -40,7 +59,7 @@ public class Invoice {
         }
         
         //Adds VAT to payment total
-        public float calcPaymentTotal(float labourCost, float sparePartsCost) {
+        public float calcTotalWithVat(float labourCost, float sparePartsCost) {
             return (float) ((labourCost+sparePartsCost) * 1.2);
         }
 
