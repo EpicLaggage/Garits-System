@@ -7,8 +7,11 @@ package GUI;
 
 import GUI.PartsTable.PartsTableModel;
 import StockControl.Part;
-import java.util.ArrayList;
-import javax.swing.JTable;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -17,6 +20,8 @@ import javax.swing.JTable;
 public class DisplayAllParts extends javax.swing.JFrame {
     private PartsTableModel tableModel;
     private Part part;
+
+    
     /**
      * Creates new form DisplayAllParts
      */
@@ -24,8 +29,52 @@ public class DisplayAllParts extends javax.swing.JFrame {
         initComponents();
         tableModel = new PartsTableModel(part);
         partsTable.setModel(tableModel);
-        partsTable.setAutoCreateRowSorter(true);
+        // to search through parts
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());
+        partsTable.setRowSorter(rowSorter);
+        
+        //code that allows for parts to be searched and updated in real time
+        searchField.getDocument().addDocumentListener(new DocumentListener(){
+            
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+                
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                }
+                else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+        }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+                
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                }
+                else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+            
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet");
+            }
+        
+        
+    });
+        
+        
+            
+        
     }
+        
+        
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -41,6 +90,8 @@ public class DisplayAllParts extends javax.swing.JFrame {
         partsTable = new javax.swing.JTable();
         updatePartButton = new javax.swing.JButton();
         backButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        searchField = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Display All Parts");
@@ -72,6 +123,15 @@ public class DisplayAllParts extends javax.swing.JFrame {
             }
         });
 
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel2.setText("Search");
+
+        searchField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                searchFieldActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -85,7 +145,10 @@ public class DisplayAllParts extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(backButton))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(updatePartButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -99,7 +162,10 @@ public class DisplayAllParts extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(updatePartButton, javax.swing.GroupLayout.DEFAULT_SIZE, 47, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(updatePartButton, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
 
@@ -116,7 +182,12 @@ public class DisplayAllParts extends javax.swing.JFrame {
 
     private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
         // TODO add your handling code here:
+        this.dispose();
     }//GEN-LAST:event_backButtonActionPerformed
+
+    private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_searchFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -156,8 +227,10 @@ public class DisplayAllParts extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backButton;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable partsTable;
+    private javax.swing.JTextField searchField;
     private javax.swing.JButton updatePartButton;
     // End of variables declaration//GEN-END:variables
 }

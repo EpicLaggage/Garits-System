@@ -14,7 +14,7 @@ import javax.swing.table.AbstractTableModel;
  * @author jorda
  */
 public class PartsTableModel extends AbstractTableModel {
-    private String[] columnNames = {"Part ID", "Part Name", "Part Manufacturer", "Part Supplier", "Vehicle Type"
+    private final String[] columnNames = {"Part ID", "Part Name", "Part Manufacturer", "Part Supplier", "Vehicle Type"
     , "Year", "Quantity", "Price", "Threshold"};
     private ArrayList<Part> parts;
     
