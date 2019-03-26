@@ -26,6 +26,16 @@ public class PartsTableModel extends AbstractTableModel {
     public int getColumnCount() {
         return columnNames.length;
     }
+
+    public ArrayList<Part> getParts() {
+        return parts;
+    }
+
+    public void setParts(ArrayList<Part> parts) {
+        this.parts = parts;
+    }
+    
+    
     
     public int getRowCount() {
         int size;

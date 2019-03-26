@@ -101,7 +101,7 @@ public class AddPartForm extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel9.setText("Year");
 
-        jButton6.setText("Cancel");
+        jButton6.setText("Close");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -224,16 +224,22 @@ public class AddPartForm extends javax.swing.JFrame {
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        this.dispose(); // closes the window
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void partAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_partAddButtonActionPerformed
         String name = partName.getText();
         String manufacturer = partManufacturer.getText();
-        float price = Float.parseFloat(partPrice.getText());
+        Float price = Float.parseFloat(partPrice.getText());
         String vehicleType = partVehicleType.getText();
         Supplier formSupplier = null;
         int quantity = Integer.parseInt(partQty.getText());
-        int year = Integer.parseInt(partYear.getText());
+        int year = 0000;  // default year if one is not specified
+        String yearInput = partYear.getText();
+        if (!yearInput.equals("")) {
+            year = Integer.parseInt(yearInput);
+        }
+
         int threshold = Integer.parseInt(partThreshold.getText());
         
         // gets the supplier selected
