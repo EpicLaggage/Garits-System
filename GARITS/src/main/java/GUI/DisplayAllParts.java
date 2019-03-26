@@ -7,6 +7,9 @@ package GUI;
 
 import GUI.PartsTable.PartsTableModel;
 import StockControl.Part;
+import java.awt.Dimension;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -160,8 +163,8 @@ public class DisplayAllParts extends javax.swing.JFrame {
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(backButton))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(updatePartButton, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
                     .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -177,6 +180,11 @@ public class DisplayAllParts extends javax.swing.JFrame {
         // gets the part object at the selected row
         Part selectedPart = tableModel.getParts().get(partsTable.convertRowIndexToModel(selectedRow));
         System.out.println(selectedPart.toString());
+        UpdatePartForm updatePartForm = new UpdatePartForm(selectedPart);
+        //updatePartForm.setPart(selectedPart);
+        updatePartForm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        updatePartForm.setVisible(true);
+        
         
     }//GEN-LAST:event_updatePartButtonActionPerformed
 
@@ -189,6 +197,7 @@ public class DisplayAllParts extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_searchFieldActionPerformed
 
+    
     /**
      * @param args the command line arguments
      */
