@@ -17,6 +17,11 @@ public class Invoice {
         private String customerAddress;
         private boolean paymentReminder;
         private String paymentDueDate;
+        private String customerPostCode;
+        private String vehicleMake;
+        private String vehicleModel;
+        private float mechanicWage;
+        private float hoursWorked;
         
 
 	/**
@@ -42,6 +47,46 @@ public class Invoice {
 
     public boolean isIsPaid() {
         return isPaid;
+    }
+
+    public String getCustomerPostCode() {
+        return customerPostCode;
+    }
+
+    public void setCustomerPostCode(String customerPostCode) {
+        this.customerPostCode = customerPostCode;
+    }
+
+    public String getVehicleMake() {
+        return vehicleMake;
+    }
+
+    public void setVehicleMake(String vehicleMake) {
+        this.vehicleMake = vehicleMake;
+    }
+
+    public String getVehicleModel() {
+        return vehicleModel;
+    }
+
+    public void setVehicleModel(String vehicleModel) {
+        this.vehicleModel = vehicleModel;
+    }
+
+    public float getMechanicWage() {
+        return mechanicWage;
+    }
+
+    public void setMechanicWage(float mechanicWage) {
+        this.mechanicWage = mechanicWage;
+    }
+
+    public float getHoursWorked() {
+        return hoursWorked;
+    }
+
+    public void setHoursWorked(float hoursWorked) {
+        this.hoursWorked = hoursWorked;
     }
         
         
