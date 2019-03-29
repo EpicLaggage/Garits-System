@@ -103,7 +103,7 @@
                 <Column editable="false" title="Email" type="java.lang.Object"/>
                 <Column editable="false" title="Phone" type="java.lang.Object"/>
                 <Column editable="false" title="Address" type="java.lang.Object"/>
-                <Column editable="false" title="Payment Type" type="java.lang.Object"/>
+                <Column editable="false" title="Payment Total" type="java.lang.Object"/>
                 <Column editable="false" title="Reminder" type="java.lang.Object"/>
               </Table>
             </Property>
@@ -145,7 +145,7 @@
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
+                  <Title value="Address"/>
                   <Editor/>
                   <Renderer/>
                 </Column>

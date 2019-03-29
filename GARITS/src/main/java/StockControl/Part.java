@@ -40,6 +40,34 @@ public class Part {
                 this.qty = qty;
                 this.threshold = threshold;
                 
+
+	private int supplierId;
+        private int partUsedId;
+
+    public Part() {
+    }
+
+    public Part(int partId, String name, String manufacturer, String description, float price, int qty, int supplierId) {
+        this.partId = partId;
+        this.name = name;
+        this.manufacturer = manufacturer;
+        this.description = description;
+        this.price = price;
+        this.qty = qty;
+        this.supplierId = supplierId;
+    }
+
+
+	public int getPartId() {
+		return this.partId;
+	}
+
+	/**
+	 * 
+	 * @param num
+	 */
+	public void setPartId(int partId) {
+		this.partId = partId;
 	}
         
         public Part() {}
@@ -95,16 +123,16 @@ public class Part {
 		this.qty = qty;
 	}
 
-	public Supplier getSupplier() {
-		return this.supplier;
+	public int getSupplierId() {
+		return this.supplierId;
 	}
 
 	/**
 	 * 
-	 * @param supplier
+	 * @param supplierId
 	 */
-	public void setSupplier(Supplier supplier) {
-		this.supplier = supplier;
+	public void setSupplierId(int supplierId) {
+		this.supplierId = supplierId;
 	}
 
         public int getPartId() {
@@ -302,5 +330,15 @@ public class Part {
 	public Staff generateAlert(String name, int qty, String role) {
 		return null;
 	}
+
+    public int getPartUsedId() {
+        return partUsedId;
+    }
+
+    public void setPartUsedId(int partUsedId) {
+        this.partUsedId = partUsedId;
+    }
+        
+        
 
 }

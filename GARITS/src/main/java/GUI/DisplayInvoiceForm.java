@@ -48,7 +48,7 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Job No.", "Job Start Date", "Job End Date", "Customer Name", "Customer Type", "Email", "Phone", "Address", "Payment Type", "Reminder"
+                "Job No.", "Job Start Date", "Job End Date", "Customer Name", "Customer Type", "Email", "Phone", "Address", "Payment Total", "Reminder"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -60,6 +60,9 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(7).setHeaderValue("Address");
+        }
 
         jButton5.setText("Print Invoice");
 

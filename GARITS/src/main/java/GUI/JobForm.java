@@ -5,17 +5,34 @@
  */
 package GUI;
 
+import java.sql.*;
+import DatabaseConnect.DBConnect;
+import Processing.Job;
+import java.awt.event.WindowEvent;
+import javax.swing.JOptionPane;
+import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+
+
 /**
  *
  * @author jly09
  */
 public class JobForm extends javax.swing.JFrame {
-
+    
+    DBConnect dbConnect;
+    
     /**
      * Creates new form MenuForm
      */
     public JobForm() {
         initComponents();
+        dbConnect = new DBConnect();
+    }
+    public boolean isCellEditable(int rowIndex, int columnIndex) {
+        return true;
     }
 
     /**
@@ -31,16 +48,19 @@ public class JobForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton5 = new javax.swing.JButton();
         jButton6 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jTextField1 = new javax.swing.JTextField();
         jButton8 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<String>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jButton3.setText("Logout");
 
@@ -52,12 +72,27 @@ public class JobForm extends javax.swing.JFrame {
                 {null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "No.", "Type", "Status", "Description", "Duration", "Start Date", "End Date", "Vehicle"
+                "Type", "Status", "Duration", "Start Date", "Vehicle", "job_id", "mechanic_assigned", "customer_id"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
 
-        jButton5.setText("Create Job Sheet");
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTable1.setRowHeight(32);
+        jTable1.getTableHeader().setReorderingAllowed(false);
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setPreferredWidth(20);
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(30);
+            jTable1.getColumnModel().getColumn(2).setPreferredWidth(20);
+            jTable1.getColumnModel().getColumn(3).setPreferredWidth(20);
+            jTable1.getColumnModel().getColumn(4).setPreferredWidth(20);
+        }
 
         jButton6.setText("Update");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -68,14 +103,17 @@ public class JobForm extends javax.swing.JFrame {
 
         jButton4.setText("Back");
 
-        jButton7.setText("Add Payment");
-
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Filter");
+        jLabel2.setText("Search By");
 
         jButton8.setText("Search");
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "By Status" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "reg_no", "job_type", "job_status", "job_duration", "job_date", " " }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -89,11 +127,8 @@ public class JobForm extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel1)
                                 .addContainerGap())
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton7)
-                                .addGap(18, 18, 18)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 846, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
@@ -104,7 +139,7 @@ public class JobForm extends javax.swing.JFrame {
                         .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(31, 31, 31)
                         .addComponent(jButton8)
-                        .addGap(0, 509, Short.MAX_VALUE))
+                        .addGap(0, 446, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton4)
@@ -131,10 +166,7 @@ public class JobForm extends javax.swing.JFrame {
                 .addGap(12, 12, 12)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(64, Short.MAX_VALUE))
         );
 
@@ -142,8 +174,89 @@ public class JobForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
+        
+        String searchedText = jTextField1.getText();
+        String searchFilter = (String) jComboBox1.getSelectedItem();
+        DefaultTableModel jobTable = (DefaultTableModel) jTable1.getModel();
+        Job selectedJob = new Job();
+        int[] selectedRow = jTable1.getSelectedRows();
+        if(selectedRow.length == 0) {
+            //Display window requiring user to select a job to update first
+            JOptionPane.showMessageDialog(JobForm.this,
+                    "Select a job to update first");
+            
+        } else {
+            selectedJob.setType((String) jobTable.getValueAt(selectedRow[0], 0));
+            selectedJob.setStatus((String) jobTable.getValueAt(selectedRow[0], 1));
+            selectedJob.setDuration((int) jobTable.getValueAt(selectedRow[0], 2));
+            selectedJob.setDate_start((String) jobTable.getValueAt(selectedRow[0], 3));
+            selectedJob.setRegistrationNum((String) jobTable.getValueAt(selectedRow[0], 4));
+            selectedJob.setJobId((int) jobTable.getValueAt(selectedRow[0], 5));
+            selectedJob.setMechanicId((int) jobTable.getValueAt(selectedRow[0], 6));
+            selectedJob.setCustomerId((int) jobTable.getValueAt(selectedRow[0], 7));
+            UpdateJobForm jobView = new UpdateJobForm(selectedJob,
+                    searchedText, searchFilter, this);
+            jobView.setVisible(true);
+        }
+
     }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        model.setRowCount(0);
+        
+        
+        String searchText = jTextField1.getText();
+        String sortBy = jComboBox1.getSelectedItem().toString(); //Potentially convert options to kebab case
+
+        String jobsQuery = "SELECT * FROM garitsdb.Job WHERE " + sortBy
+                + " LIKE '%" + searchText + "%'";
+
+        ResultSet rs;
+        Job job = new Job();
+        try {
+            rs = dbConnect.read(jobsQuery);
+            
+            while(rs.next()) {
+                
+                job.setType(rs.getString("job_type"));
+                job.setStatus(rs.getString("job_status"));
+                job.setDuration(rs.getInt("job_duration"));
+                job.setDate_start(rs.getString("job_date"));
+                job.setRegistrationNum(rs.getString("reg_no"));
+                job.setJobId(rs.getInt("job_id"));
+                job.setMechanicId(rs.getInt("mechanic_assigned"));
+                job.setCustomerId(rs.getInt("customer_id"));
+                
+                
+                Object[] row = { job.getType(), job.getStatus(),
+                    job.getDuration(),
+                    job.getDate_start(), job.getRegistrationNum(),
+                    job.getJobId(), job.getMechanicId(), job.getCustomerId()};
+
+                model.addRow(row);
+            } 
+        } catch (Exception exc) {
+            exc.printStackTrace();
+        }
+                
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        jTable1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        model.setRowCount(0);
+        jComboBox1.getItemAt(0);
+        TableColumn jobIdColumn = jTable1.getColumnModel().getColumn(5);
+        TableColumn mechanicIdColumn = jTable1.getColumnModel().getColumn(6);
+        TableColumn customerIdColumn = jTable1.getColumnModel().getColumn(7);
+        
+        
+        jTable1.getColumnModel().removeColumn(jobIdColumn);        
+        jTable1.getColumnModel().removeColumn(mechanicIdColumn);
+        jTable1.getColumnModel().removeColumn(customerIdColumn);
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -186,9 +299,7 @@ public class JobForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
