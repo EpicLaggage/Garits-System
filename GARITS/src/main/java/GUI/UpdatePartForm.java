@@ -324,7 +324,7 @@ public class UpdatePartForm extends javax.swing.JFrame {
             }
         }
         partNameLabel.setText(part.getName());
-        idLabel.setText(Integer.toString(part.getPartID()));
+        idLabel.setText(Integer.toString(part.getPartId()));
         partManufacturer.setText(part.getManufacturer());      
         partVehicleType.setText(part.getVehicleType()); 
         partYear.setText(Integer.toString(part.getYear()));

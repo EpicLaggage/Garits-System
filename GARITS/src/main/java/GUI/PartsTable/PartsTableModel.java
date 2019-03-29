@@ -51,7 +51,7 @@ public class PartsTableModel extends AbstractTableModel {
     public Object getValueAt(int row, int col) {
         Object temp = null;
         if (col == 0) {
-            temp = parts.get(row).getPartID();
+            temp = parts.get(row).getPartId();
         }
         else if (col == 1) {
             temp = parts.get(row).getName();

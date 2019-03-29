@@ -11,7 +11,7 @@ import java.util.ArrayList;
 
 public class Part {
 
-	private int partID;
+	private int partId;
 	private String name;
 	private String manufacturer;
 	private float price;
@@ -107,12 +107,12 @@ public class Part {
 		this.supplier = supplier;
 	}
 
-        public int getPartID() {
-            return partID;
+        public int getPartId() {
+            return partId;
         }
 
-        public void setPartID(int partID) {
-            this.partID = partID;
+        public void setPartId(int partID) {
+            this.partId = partID;
         }
 
         public String getVehicleType() {
@@ -145,7 +145,7 @@ public class Part {
 
     @Override
     public String toString() {
-        return "Part{" + "partID=" + partID + ", name=" + name + ", manufacturer=" + manufacturer + ", price=" + price + ", vehicleType=" + vehicleType + ", year=" + year + ", qty=" + qty + ", supplier=" + supplier.getName() + ", threshold=" + threshold + '}';
+        return "Part{" + "partId=" + partId + ", name=" + name + ", manufacturer=" + manufacturer + ", price=" + price + ", vehicleType=" + vehicleType + ", year=" + year + ", qty=" + qty + ", supplier=" + supplier.getName() + ", threshold=" + threshold + '}';
     }
         
         
@@ -194,7 +194,7 @@ public class Part {
                 conn.commit();
                 while (rs.next()) {
                     Part partToAdd = new Part(rs.getString("part_name"), rs.getString("part_manufacturer"), new Supplier(rs.getInt("part_supplier_id")), rs.getString("vehicle_type"), rs.getFloat("part_price"), rs.getInt("year"), rs.getInt("part_quantity"), rs.getInt("part_threshold"));
-                    partToAdd.setPartID(rs.getInt("part_id"));
+                    partToAdd.setPartId(rs.getInt("part_id"));
                     allParts.add(partToAdd);
                     
                 }
@@ -227,7 +227,7 @@ public class Part {
             Connection conn = db.connect();
             try {
                 conn.setAutoCommit(false);
-                String sql = "UPDATE Parts SET " + columnName + " = ? WHERE part_id = " + this.getPartID();
+                String sql = "UPDATE Parts SET " + columnName + " = ? WHERE part_id = " + this.getPartId();
                 PreparedStatement p = conn.prepareStatement(sql);
                 if (updatedField instanceof String) {
                     p.setString(1, (String)updatedField);
@@ -267,7 +267,7 @@ public class Part {
             try {
                 allSuppliers = supplier.getAllSuppliers();
                 conn.setAutoCommit(false);
-                String sql = "UPDATE Parts SET part_supplier_id = ? WHERE part_id = " + this.getPartID();
+                String sql = "UPDATE Parts SET part_supplier_id = ? WHERE part_id = " + this.getPartId();
                 PreparedStatement p = conn.prepareStatement(sql);
                 for (Supplier supplier : allSuppliers) {
                     if (supplier.getName().equals(supplierName)) {
