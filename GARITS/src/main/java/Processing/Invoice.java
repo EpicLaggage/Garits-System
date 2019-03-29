@@ -21,10 +21,9 @@ public class Invoice {
         private String vehicleMake;
         private String vehicleModel;
         private float mechanicWage;
-        private float hoursWorked;
         private String regNum;
         private int mechanicAssigned;
-        private int jobDuration;
+        private float jobDuration;
         private boolean reminderSent;
         
 
@@ -85,14 +84,6 @@ public class Invoice {
         this.mechanicWage = mechanicWage;
     }
 
-    public float getHoursWorked() {
-        return hoursWorked;
-    }
-
-    public void setHoursWorked(float hoursWorked) {
-        this.hoursWorked = hoursWorked;
-    }
-
     public String getRegNum() {
         return regNum;
     }
@@ -109,11 +100,11 @@ public class Invoice {
         this.mechanicAssigned = mechanicAssigned;
     }
 
-    public int getJobDuration() {
+    public float getJobDuration() {
         return jobDuration;
     }
 
-    public void setJobDuration(int jobDuration) {
+    public void setJobDuration(float jobDuration) {
         this.jobDuration = jobDuration;
     }
 
@@ -137,8 +128,8 @@ public class Invoice {
             return markUp;
         }
         
-        public float calcLabourCost(float hoursWorked, float wage) {
-            return hoursWorked*wage;
+        public float calcLabourCost(float jobDuration, float wage) {
+            return jobDuration*wage;
         }
         
         //Adds VAT to payment total

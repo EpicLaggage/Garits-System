@@ -1517,9 +1517,8 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 resultWage.next();
                 float hourlyRate = resultWage.getFloat("hourly_rate");
                 invoice.setMechanicWage(hourlyRate);
-                invoice.setHoursWorked(Float.parseFloat(jTextField3.getText()));
                 labourCost = invoice.calcLabourCost(
-                        Float.parseFloat(jTextField3.getText()), hourlyRate);
+                        invoice.getJobDuration(), hourlyRate);
                 conn.commit();
                 conn.setAutoCommit(true);
 

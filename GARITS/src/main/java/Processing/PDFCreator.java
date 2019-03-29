@@ -77,7 +77,7 @@ public class PDFCreator {
             table.addHeaderCell(createCell("Qty:", bold));
             table.addHeaderCell(createCell("Cost:", bold));
             float totalDue = invoice.calcLabourCost(
-                    invoice.getHoursWorked(), invoice.getMechanicWage());
+                    invoice.getJobDuration(), invoice.getMechanicWage());
             float vatValue = 0;
             for(Part part : partsUsed) {
                 table.addCell(createCell(part.getName()));
@@ -98,9 +98,9 @@ public class PDFCreator {
             table.addCell(createCell("Labour"));
             table.addCell(createCell(""));
             table.addCell(createCell(invoice.getMechanicWage()+""));
-            table.addCell(createCell(invoice.getHoursWorked()+""));
+            table.addCell(createCell(invoice.getJobDuration()+""));
             table.addCell(createCell(invoice.calcLabourCost(
-                    invoice.getHoursWorked(), invoice.getMechanicWage())+""));
+                    invoice.getJobDuration(), invoice.getMechanicWage())+""));
             
             table.addCell(createCell(""));
             table.addCell(createCell(""));
