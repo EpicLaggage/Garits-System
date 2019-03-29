@@ -6,15 +6,27 @@
 package GUI;
 
 import DatabaseConnect.DBConnect;
+import static GUI.UpdateJobForm.BOLD;
 import Processing.Invoice;
+import static Processing.PDFCreator.getAddressTable;
+import static Processing.PDFCreator.getLineItemTable;
 import StockControl.Part;
+import com.itextpdf.kernel.font.PdfFont;
+import com.itextpdf.kernel.font.PdfFontFactory;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+import com.itextpdf.layout.element.Text;
+import com.itextpdf.layout.property.TextAlignment;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
@@ -216,7 +228,8 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             }
         }
         
-        //TODO Display invoice overview inside table
+        //TODO Implement payment reminders 
+        //TODO Hide invoice column
         invoiceModel = (DefaultTableModel) jTable1.getModel();
         invoiceModel.setRowCount(0);
         for(Invoice invoice : invoiceList) {
@@ -224,7 +237,7 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             invoice.getJobEnd(), invoice.getCustomerName(), 
             invoice.isAccountHolder(), invoice.getCustomerEmail(), 
             invoice.getCustomerPhone(), invoice.getCustomerAddress(),
-            invoice.getAmountDue()};
+            invoice.getAmountDue(), invoice};
             invoiceModel.addRow(row);
         }
     }//GEN-LAST:event_formWindowOpened
@@ -238,8 +251,176 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
                     "Select an invoice to print first");
             
         } else {
+            Invoice invoice = (Invoice) jTable1.getValueAt(selectedRow[0], 9);
+            //GETTING MISSING INVOICE DATA
             
+            //VEHICLE DATA
+            String vehicleQuery = "SELECT car_make, car_model FROM garitsdb.Vehicle"
+                    + " WHERE reg_no = '" + invoice.getRegNum() + "';"; 
+            ResultSet results;
+            try {
+                results = dbConnect.read(vehicleQuery);
+
+                while(results.next()) {
+                    invoice.setVehicleMake(results.getString("car_make"));
+                    invoice.setVehicleModel(results.getString("car_model"));
+                }
+
+            }
+            catch (Exception exc) {
+                exc.printStackTrace();
+            }
+            
+            //WORK DONE
+            ArrayList<String> tasksCompleted = new ArrayList<>();
+            String workDoneQuery = "SELECT task_content FROM garitsdb.Job_Tasks"
+                    + " WHERE task_completed = '1' AND job_id ='"
+                    + invoice.getJobId() + "';";
+            ResultSet rs;
+            try {
+                rs = dbConnect.read(workDoneQuery);
+
+                while(rs.next()) {
+                    tasksCompleted.add(rs.getString("task_content"));
+                }
+
+            }
+            catch (Exception exc) {
+                exc.printStackTrace();
+            }
+            
+            //Mechanic WAGE
+            String wageQuery = "SELECT hourly_rate FROM garitsdb.Mechanic"
+                + " WHERE user_id = " + invoice.getMechanicAssigned();
+            try { 
+                    Connection conn = dbConnect.connect();
+                    conn.setAutoCommit(false);
+                    PreparedStatement statement = conn.prepareStatement(wageQuery);
+                    ResultSet resultWage = statement.executeQuery();
+                    resultWage.next();
+                    float hourlyRate = resultWage.getFloat("hourly_rate");
+                    invoice.setMechanicWage(hourlyRate);
+                    conn.commit();
+                    conn.setAutoCommit(true);
+
+                } catch (Exception exc) {
+                   exc.printStackTrace();
+            }
+            
+            //SPARE PARTS USED
+            ArrayList<Part> sparesUsed = new ArrayList<Part>();
+            String partUsedQuery = "SELECT parts.part_price, Part_Used.part_id,"
+                    + " parts.part_name, Part_Used.quantity_used \n" +
+                    "FROM garitsdb.Parts, garitsdb.Part_Used " +
+                    "WHERE garitsdb.Part_Used.part_id = garitsdb.Parts.part_id " +
+                    "AND garitsdb.Part_Used.job_id = '" + invoice.getJobId() + "';";
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(partUsedQuery);
+                ResultSet partsUsed = statement.executeQuery();
+                while(partsUsed.next()) {
+                    Part part = new Part();
+                    part.setPartId(partsUsed.getInt("part_id"));
+                    part.setQty(partsUsed.getInt("quantity_used"));
+                    part.setName(partsUsed.getString("part_name"));
+                    part.setPrice(partsUsed.getFloat("part_price"));
+                    sparesUsed.add(part);
+                }
+                conn.commit();
+                conn.setAutoCommit(true);
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+            
+            // TODO OPEN INVOICE IN PDF
+            String dest = "/Users/paul/Uni/GARITS/software/Garits/GARITS"
+                    + "/resources/InvoiceNo" + invoice.getInvoiceId() + ".pdf";       
+            PdfWriter writer = null; 
+            try {
+                writer = new PdfWriter(dest);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(UpdateJobForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // Creating a PdfDocument       
+            PdfDocument pdfDoc = new PdfDocument(writer); 
+
+            PdfFont bold = null;
+            try {
+                bold = PdfFontFactory.createFont(BOLD, true);
+            } catch (IOException ex) {
+                Logger.getLogger(UpdateJobForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // Adding a new page 
+            pdfDoc.addNewPage();               
+
+            // Creating a Document
+            Document document = new Document(pdfDoc);
+            //Adding INvoice number
+            document.add(
+                    new Paragraph()
+                            .setTextAlignment(TextAlignment.RIGHT)
+                            .setMultipliedLeading(1)
+                            .add(new Text(String.format("INVOICE NO.: %s\n",
+                                    invoice.getInvoiceId())).setFontSize(14))
+                            .add(invoice.getJobEnd()));    
+            //Adding adresses
+            document.add(getAddressTable(invoice.getCustomerName(),
+                    invoice.getCustomerAddress(), invoice.getCustomerPostCode(),
+                    bold));
+            document.add(new Paragraph().add("\n"));
+            //Adding Vehicle details
+            document.add(
+                    new Paragraph()
+                            .setTextAlignment(TextAlignment.LEFT)
+                            .setMultipliedLeading(1)
+                            .add(new Text(String.format("Dear %s,\n", invoice.getCustomerName())))
+                            .add(new Text("\n"))
+                            .add(new Text(String.format("Vehicle Registraion No:"
+                                    + "%s\n", invoice.getRegNum())))
+                            .add(new Text(String.format("Make: %s\n", 
+                                    invoice.getVehicleMake())))
+                            .add(new Text(String.format("Model: %s\n", 
+                                    invoice.getVehicleModel())))
+
+            );
+            document.add(new Paragraph().add("\n"));
+            //Adding Work done
+            document.add(
+                    new Paragraph()
+                            .setTextAlignment(TextAlignment.LEFT)
+                            .setMultipliedLeading(1)
+                            .add(new Text("Description of work: \n"))                       
+            );
+            for(int row = 0; row < tasksCompleted.size(); row++) {
+                document.add(new Paragraph().add(
+                        row+1+")"+ tasksCompleted.get(row))
+                        .setMultipliedLeading(1));
+            }
+            document.add(new Paragraph().add("\n"));
+
+            //Adding Items and calculating costs
+            //USED PARTS
+            document.add(getLineItemTable(invoice, sparesUsed, bold));
+
+            //Ending
+            document.add(new Paragraph()
+                    .add(new Text("Thank you for your valued custom."
+                            + "We look forward to receiving your payment"
+                            + "in due course.\n"))
+                    .add(new Text("\n"))
+                    .add(new Text("Yours sincerely,\n"))
+                    .add(new Text("\n"))
+                    .add(new Text("G. Lancaster"))
+            );
+            // Closing the document
+            document.close();
+
+            System.out.println("PDF Created");
         }
+        
     }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
