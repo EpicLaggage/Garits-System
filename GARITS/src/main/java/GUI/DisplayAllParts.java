@@ -7,9 +7,8 @@ package GUI;
 
 import GUI.PartsTable.PartsTableModel;
 import StockControl.Part;
-import java.awt.Dimension;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.RowFilter;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -72,8 +71,47 @@ public class DisplayAllParts extends javax.swing.JFrame {
     });
         
         
-            
+    }
+    // refreshes the table with the updated part fields
+    private void populateTable() {
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());
+        partsTable.setRowSorter(rowSorter);
         
+
+        //code that allows for parts to be searched and updated in real time
+        searchField.getDocument().addDocumentListener(new DocumentListener(){
+            
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+                
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                }
+                else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+        }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+                
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                }
+                else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+            
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet");
+            }
+        
+        
+    });
     }
         
         
@@ -184,6 +222,12 @@ public class DisplayAllParts extends javax.swing.JFrame {
         //updatePartForm.setPart(selectedPart);
         updatePartForm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         updatePartForm.setVisible(true);
+        updatePartForm.addWindowListener(new WindowAdapter() {
+                public void windowClosing(WindowEvent e) {
+                    populateTable();
+                    
+                }
+            });
         
         
     }//GEN-LAST:event_updatePartButtonActionPerformed

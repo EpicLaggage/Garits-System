@@ -221,6 +221,77 @@ public class Part {
             return allParts;
         }
         
+        // returns the updated part
+        public void updatePart(String columnName, Object updatedField) {
+            DBConnectivity db = new DBConnect();
+            Connection conn = db.connect();
+            try {
+                conn.setAutoCommit(false);
+                String sql = "UPDATE Parts SET " + columnName + " = ? WHERE part_id = " + this.getPartID();
+                PreparedStatement p = conn.prepareStatement(sql);
+                if (updatedField instanceof String) {
+                    p.setString(1, (String)updatedField);
+                }
+                else if (updatedField instanceof Float) {
+                    p.setFloat(1, (Float)updatedField);
+                }
+                else {
+                    p.setInt(1, (Integer)updatedField);
+                }
+                
+                p.executeUpdate();
+                conn.commit();
+                //System.out.println("Part " + this.name + " updated successfully");
+
+                
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+                try {
+                    conn.rollback();
+                }
+                catch (SQLException e2) {
+                    e2.printStackTrace();
+                }
+                
+            }
+            finally {
+                db.closeConnection();
+            }
+        }
+        
+        public void updateSupplier(String supplierName) {
+            DBConnectivity db = new DBConnect();
+            Connection conn = db.connect();
+            ArrayList<Supplier> allSuppliers = new ArrayList<>();
+            try {
+                allSuppliers = supplier.getAllSuppliers();
+                conn.setAutoCommit(false);
+                String sql = "UPDATE Parts SET part_supplier_id = ? WHERE part_id = " + this.getPartID();
+                PreparedStatement p = conn.prepareStatement(sql);
+                for (Supplier supplier : allSuppliers) {
+                    if (supplier.getName().equals(supplierName)) {
+                        this.setSupplier(supplier);
+                    }
+                }
+                
+                
+                p.setInt(1, this.getSupplier().getSupplierID());
+                p.executeUpdate();
+                conn.commit();
+                
+            }
+            catch (SQLException e) {
+                e.printStackTrace();
+                try {
+                    conn.rollback();
+                }
+                catch (SQLException e2) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        
 
 	/**
 	 * 

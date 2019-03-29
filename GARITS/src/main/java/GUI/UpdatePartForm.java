@@ -8,6 +8,7 @@ package GUI;
 import StockControl.Part;
 import StockControl.Supplier;
 import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,6 +23,7 @@ public class UpdatePartForm extends javax.swing.JFrame {
     public UpdatePartForm(Part part) {
         this.part = part;
         initComponents();
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         populateFields();
     }
 
@@ -45,7 +47,7 @@ public class UpdatePartForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
+        updateButton = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         partSupplier = new javax.swing.JComboBox<>();
         partManufacturer = new javax.swing.JTextField();
@@ -53,7 +55,6 @@ public class UpdatePartForm extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         partPrice = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
         partQuantity = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         partVehicleType = new javax.swing.JTextField();
@@ -71,7 +72,12 @@ public class UpdatePartForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Update Part");
 
-        jButton5.setText("Update");
+        updateButton.setText("Update");
+        updateButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                updateButtonActionPerformed(evt);
+            }
+        });
 
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel5.setText("Supplier");
@@ -85,9 +91,6 @@ public class UpdatePartForm extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel9.setText("Qty");
 
-        jButton6.setText("Cancel");
-
-        partQuantity.setPreferredSize(new java.awt.Dimension(4, 19));
         partQuantity.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 partQuantityActionPerformed(evt);
@@ -153,12 +156,8 @@ public class UpdatePartForm extends javax.swing.JFrame {
                                         .addComponent(partYear, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(partQuantity, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(partPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addComponent(partThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(39, 39, 39)
-                                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                    .addGap(2, 2, 2))))
+                                        .addComponent(partThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(95, 95, 95))))
                         .addGap(0, 68, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel1)
@@ -173,6 +172,10 @@ public class UpdatePartForm extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(idLabel)))))
                 .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(200, 200, 200))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -221,11 +224,9 @@ public class UpdatePartForm extends javax.swing.JFrame {
                         .addComponent(partPrice, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(partThreshold, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(45, 45, 45))))
+                        .addGap(42, 42, 42)
+                        .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(56, Short.MAX_VALUE))))
         );
 
         pack();
@@ -238,6 +239,77 @@ public class UpdatePartForm extends javax.swing.JFrame {
     private void partQuantityActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_partQuantityActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_partQuantityActionPerformed
+
+    private void updateButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_updateButtonActionPerformed
+        String manufacturer = partManufacturer.getText();
+        String supplierName = (String)partSupplier.getSelectedItem();
+        String vehicleType = partVehicleType.getText();
+        int year = Integer.parseInt(partYear.getText());
+        int qty = Integer.parseInt(partQuantity.getText());
+        float price = Float.parseFloat(partPrice.getText());
+        int threshold = Integer.parseInt(partThreshold.getText());
+        
+        String columnName = "";
+        String fieldToUpdate = "";
+        int intToUpdate = 0;
+        float floatToUpdate = 0.00f;
+        boolean fieldUpdated = false;
+        
+        // if the value is different to the existing value, update it
+        if (!manufacturer.equals(part.getManufacturer())) {
+            columnName = "part_manufacturer";
+            fieldToUpdate = manufacturer;
+            part.updatePart(columnName, fieldToUpdate);
+            part.setManufacturer(fieldToUpdate);
+            fieldUpdated = true;
+        }
+        // needs work
+        if (!supplierName.equals(part.getSupplier().getName())) {
+            part.updateSupplier(supplierName);
+            fieldUpdated = true;  
+        }
+        if (!vehicleType.equals(part.getVehicleType())) {
+            columnName = "vehicle_type";
+            fieldToUpdate = vehicleType;
+            part.updatePart(columnName, fieldToUpdate);
+            part.setVehicleType(fieldToUpdate);
+            fieldUpdated = true;
+        }
+        if (year != part.getYear()) {
+            columnName = "year";
+            intToUpdate = year;
+            part.updatePart(columnName, intToUpdate);
+            part.setYear(intToUpdate);
+            fieldUpdated = true;
+        }
+        if (qty != part.getQty()) {
+            columnName = "part_quantity";
+            intToUpdate = qty;
+            part.updatePart(columnName, intToUpdate);
+            part.setQty(qty);
+            fieldUpdated = true;
+        }
+        if (price != part.getPrice()) {
+            columnName = "part_price";
+            floatToUpdate = price;
+            part.updatePart(columnName, floatToUpdate);
+            part.setPrice(price);
+            fieldUpdated = true;
+        }
+        if (threshold != part.getThreshold()) {
+            columnName = "part_threshold";
+            intToUpdate = threshold;
+            part.updatePart(columnName, intToUpdate);
+            part.setThreshold(threshold);
+            fieldUpdated = true;
+        }
+        
+        if (fieldUpdated) {
+            JOptionPane.showMessageDialog(this, "Part: " + part.getName() + " successfully updated");
+            populateFields();
+        }
+        
+    }//GEN-LAST:event_updateButtonActionPerformed
     
     // code to populate fields with existing data
     private void populateFields() {
@@ -262,6 +334,7 @@ public class UpdatePartForm extends javax.swing.JFrame {
         
         
     }
+    
     
     
     
@@ -304,8 +377,6 @@ public class UpdatePartForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel idLabel;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -324,5 +395,6 @@ public class UpdatePartForm extends javax.swing.JFrame {
     private javax.swing.JTextField partThreshold;
     private javax.swing.JTextField partVehicleType;
     private javax.swing.JTextField partYear;
+    private javax.swing.JButton updateButton;
     // End of variables declaration//GEN-END:variables
 }
