@@ -22,6 +22,10 @@ public class Invoice {
         private String vehicleModel;
         private float mechanicWage;
         private float hoursWorked;
+        private String regNum;
+        private int mechanicAssigned;
+        private int jobDuration;
+        private boolean reminderSent;
         
 
 	/**
@@ -88,6 +92,40 @@ public class Invoice {
     public void setHoursWorked(float hoursWorked) {
         this.hoursWorked = hoursWorked;
     }
+
+    public String getRegNum() {
+        return regNum;
+    }
+
+    public void setRegNum(String regNum) {
+        this.regNum = regNum;
+    }
+
+    public int getMechanicAssigned() {
+        return mechanicAssigned;
+    }
+
+    public void setMechanicAssigned(int mechanicAssigned) {
+        this.mechanicAssigned = mechanicAssigned;
+    }
+
+    public int getJobDuration() {
+        return jobDuration;
+    }
+
+    public void setJobDuration(int jobDuration) {
+        this.jobDuration = jobDuration;
+    }
+
+    public boolean isReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
+    }
+    
+    
         
         
 

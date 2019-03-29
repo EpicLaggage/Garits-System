@@ -1649,7 +1649,8 @@ public class UpdateJobForm extends javax.swing.JFrame {
                          
         System.out.println("PDF Created");
         // TODO open display invoice form
-        
+        DisplayInvoiceForm allInvoices = new DisplayInvoiceForm();
+            allInvoices.setVisible(true);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     /**
