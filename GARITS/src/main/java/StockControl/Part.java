@@ -20,6 +20,8 @@ public class Part {
 	private int qty;
 	private Supplier supplier;
         private int threshold;
+        private int supplierId;
+        private int partUsedId;
         
 
 	/**
@@ -39,19 +41,17 @@ public class Part {
                 this.year = year;
                 this.qty = qty;
                 this.threshold = threshold;
-                
+        }       
 
-	private int supplierId;
-        private int partUsedId;
+	
 
-    public Part() {
-    }
+        public Part() {
+        }
 
     public Part(int partId, String name, String manufacturer, String description, float price, int qty, int supplierId) {
         this.partId = partId;
         this.name = name;
         this.manufacturer = manufacturer;
-        this.description = description;
         this.price = price;
         this.qty = qty;
         this.supplierId = supplierId;
@@ -69,8 +69,7 @@ public class Part {
 	public void setPartId(int partId) {
 		this.partId = partId;
 	}
-        
-        public Part() {}
+
         
         
         
@@ -127,6 +126,19 @@ public class Part {
 		return this.supplierId;
 	}
 
+        public Supplier getSupplier() {
+            return supplier;
+        }
+
+        public void setSupplier(Supplier supplier) {
+            this.supplier = supplier;
+        }
+
+        
+        
+        
+        
+        
 	/**
 	 * 
 	 * @param supplierId
@@ -134,14 +146,6 @@ public class Part {
 	public void setSupplierId(int supplierId) {
 		this.supplierId = supplierId;
 	}
-
-        public int getPartId() {
-            return partId;
-        }
-
-        public void setPartId(int partID) {
-            this.partId = partID;
-        }
 
         public String getVehicleType() {
             return vehicleType;

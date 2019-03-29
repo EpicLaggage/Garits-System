@@ -217,7 +217,7 @@ public class DisplayAllParts extends javax.swing.JFrame {
         int selectedRow = partsTable.getSelectedRow();
         // gets the part object at the selected row
         Part selectedPart = tableModel.getParts().get(partsTable.convertRowIndexToModel(selectedRow));
-        System.out.println(selectedPart.toString());
+        //System.out.println(selectedPart.toString());
         UpdatePartForm updatePartForm = new UpdatePartForm(selectedPart);
         //updatePartForm.setPart(selectedPart);
         updatePartForm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
