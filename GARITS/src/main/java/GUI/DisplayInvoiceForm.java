@@ -5,17 +5,34 @@
  */
 package GUI;
 
+import DatabaseConnect.DBConnect;
+import Processing.Invoice;
+import StockControl.Part;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jly09
  */
 public class DisplayInvoiceForm extends javax.swing.JFrame {
+    ArrayList<Invoice> invoiceList = new ArrayList<Invoice>();
+    DBConnect dbConnect;
+    DefaultTableModel invoiceModel;
 
     /**
      * Creates new form MenuForm
      */
     public DisplayInvoiceForm() {
         initComponents();
+        dbConnect = new DBConnect();
     }
 
     /**
@@ -37,6 +54,11 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jButton3.setText("Logout");
 
@@ -60,11 +82,13 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(7).setHeaderValue("Address");
-        }
 
         jButton5.setText("Print Invoice");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Back");
 
@@ -117,6 +141,106 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO Create list of invoice objects with all necessary data 
+        // to create a pdf
+        String invoiceQuery = "SELECT * FROM garitsdb.Invoice;";
+        try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(invoiceQuery);
+                ResultSet rs = statement.executeQuery();
+                while(rs.next()) {
+                    Invoice invoice = new Invoice();
+                    invoice.setInvoiceId(rs.getInt("invoice_id"));
+                    invoice.setJobId(rs.getInt("job_id"));
+                    invoice.setJobEnd(rs.getString("invoice_date"));
+                    invoice.setPaymentDueDate(rs.getString("payment_due_date"));
+                    invoice.setAmountDue(rs.getFloat("invoice_total"));
+                    invoice.setIsPaid(rs.getBoolean("invoice_paid"));
+                    invoiceList.add(invoice);
+                }
+                conn.commit();
+                conn.setAutoCommit(true);
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        
+        
+        //Query Job table
+        for(Invoice invoice : invoiceList) {
+            String jobQuery = "SELECT * FROM garitsdb.Job WHERE job_id = '"
+                    + invoice.getJobId() +"';";
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(jobQuery);
+                ResultSet rs = statement.executeQuery();
+                while(rs.next()) {
+                    invoice.setJobStart(rs.getString("job_date"));
+                    invoice.setRegNum(rs.getString("reg_no"));
+                    invoice.setCustomerId(rs.getInt("customer_id"));
+                    invoice.setMechanicAssigned(rs.getInt("mechanic_assigned"));
+                    invoice.setJobDuration(rs.getInt("job_duration"));
+                }
+                conn.commit();
+                conn.setAutoCommit(true);
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+        
+        //Query Customer table
+        for(Invoice invoice : invoiceList) {
+            String customerQuery = "SELECT * FROM garitsdb.Customer WHERE "
+                    + "customer_id = '" + invoice.getCustomerId() + "';";
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(customerQuery);
+                ResultSet rs = statement.executeQuery();
+                while(rs.next()) {
+                    invoice.setCustomerName(rs.getString("customer_name"));
+                    invoice.setCustomerAddress(rs.getString("customer_address"));
+                    invoice.setCustomerPostCode(rs.getString("customer_postcode"));
+                    invoice.setCustomerPhone(rs.getInt("customer_tel"));
+                    invoice.setCustomerEmail(rs.getString("customer_email"));
+                    invoice.setAccountHolder(rs.getBoolean(
+                            "customer_account_holder"));
+                }
+                conn.commit();
+                conn.setAutoCommit(true);
+            } catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+        
+        //TODO Display invoice overview inside table
+        invoiceModel = (DefaultTableModel) jTable1.getModel();
+        invoiceModel.setRowCount(0);
+        for(Invoice invoice : invoiceList) {
+            Object[] row = { invoice.getJobId(), invoice.getJobStart(),
+            invoice.getJobEnd(), invoice.getCustomerName(), 
+            invoice.isAccountHolder(), invoice.getCustomerEmail(), 
+            invoice.getCustomerPhone(), invoice.getCustomerAddress(),
+            invoice.getAmountDue()};
+            invoiceModel.addRow(row);
+        }
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        // TODO create invoice pdf and open it
+        int[] selectedRow = jTable1.getSelectedRows();
+        if(selectedRow.length == 0) {
+            //Display window requiring user to select a job to update first
+            JOptionPane.showMessageDialog(DisplayInvoiceForm.this,
+                    "Select an invoice to print first");
+            
+        } else {
+            
+        }
+    }//GEN-LAST:event_jButton5ActionPerformed
 
     /**
      * @param args the command line arguments
