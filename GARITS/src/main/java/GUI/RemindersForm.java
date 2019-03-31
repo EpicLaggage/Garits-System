@@ -5,16 +5,25 @@
  */
 package GUI;
 
+import Processing.Invoice;
+import java.util.ArrayList;
+
 /**
  *
  * @author jly09
  */
 public class RemindersForm extends javax.swing.JFrame {
+    ArrayList<Invoice> unpaidInvoices;
 
     /**
      * Creates new form MenuForm
      */
-    public RemindersForm() {
+    public RemindersForm(ArrayList<Invoice> unpaidInvoices) {
+        initComponents();
+        this.unpaidInvoices = unpaidInvoices;
+    }
+
+    private RemindersForm() {
         initComponents();
     }
 
@@ -38,6 +47,11 @@ public class RemindersForm extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jButton3.setText("Logout");
 
@@ -124,6 +138,13 @@ public class RemindersForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        for(Invoice invoice : unpaidInvoices) {
+            System.out.println(invoice.getInvoiceId());
+        }
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
