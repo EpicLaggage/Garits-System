@@ -24,7 +24,7 @@ public class Invoice {
         private String regNum;
         private int mechanicAssigned;
         private float jobDuration;
-        private boolean reminderSent;
+        private int reminderSent;
         
 
 	/**
@@ -108,11 +108,11 @@ public class Invoice {
         this.jobDuration = jobDuration;
     }
 
-    public boolean isReminderSent() {
+    public int isReminderSent() {
         return reminderSent;
     }
 
-    public void setReminderSent(boolean reminderSent) {
+    public void setReminderSent(int reminderSent) {
         this.reminderSent = reminderSent;
     }
     

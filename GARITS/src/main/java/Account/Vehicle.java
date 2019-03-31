@@ -8,7 +8,7 @@ public class Vehicle {
 	private String colour;
 	private String engine_serial_no;
 	private String chassis_no;
-
+        private String purchase_date;
         
         public Vehicle() {}
 
@@ -102,4 +102,13 @@ public class Vehicle {
 		this.chassis_no = chassis_no;
 	}
 
+        public String getPurchase_date() {
+            return purchase_date;
+        }
+
+        public void setPurchase_date(String purchase_date) {
+            this.purchase_date = purchase_date;
+        }
+
+        
 }
