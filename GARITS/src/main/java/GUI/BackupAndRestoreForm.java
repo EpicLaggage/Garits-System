@@ -5,6 +5,10 @@
  */
 package GUI;
 
+import Core.Backup;
+import java.io.File;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jly09
@@ -16,8 +20,23 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
      */
     public BackupAndRestoreForm() {
         initComponents();
+        populateTable();
     }
 
+    private void populateTable() {
+        File dir = new File("backups/");
+        File[] dirListing = dir.listFiles();
+        DefaultTableModel model = (DefaultTableModel) backupTable.getModel();
+        if (dirListing != null) {
+            for (File child : dirListing) {
+                model.addRow(new Object[] {child.getName()});
+            }
+        }
+        
+    }
+    
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,9 +49,9 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton5 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
+        backupTable = new javax.swing.JTable();
+        backupButton = new javax.swing.JButton();
+        restoreButton = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -42,30 +61,35 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Backup And Restore");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        backupTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null}
+
             },
             new String [] {
-                "Backup Name", "Date"
+                "Date"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false
+                false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
                 return canEdit [columnIndex];
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setMinWidth(300);
+        jScrollPane1.setViewportView(backupTable);
+        if (backupTable.getColumnModel().getColumnCount() > 0) {
+            backupTable.getColumnModel().getColumn(0).setMinWidth(300);
         }
 
-        jButton5.setText("Backup");
+        backupButton.setText("Backup");
+        backupButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backupButtonActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("Restore");
+        restoreButton.setText("Restore");
 
         jButton4.setText("Back");
 
@@ -83,9 +107,9 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
                 .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(backupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(restoreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel1)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -108,13 +132,20 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(backupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(restoreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(84, 84, 84))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void backupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backupButtonActionPerformed
+        Backup backup = new Backup();
+        if (backup.createBackup()) {
+            System.out.println("Successfully created backup");
+        }
+    }//GEN-LAST:event_backupButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -153,12 +184,12 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton backupButton;
+    private javax.swing.JTable backupTable;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton restoreButton;
     // End of variables declaration//GEN-END:variables
 }
