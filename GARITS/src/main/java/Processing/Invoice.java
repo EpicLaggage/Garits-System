@@ -17,6 +17,14 @@ public class Invoice {
         private String customerAddress;
         private boolean paymentReminder;
         private String paymentDueDate;
+        private String customerPostCode;
+        private String vehicleMake;
+        private String vehicleModel;
+        private float mechanicWage;
+        private String regNum;
+        private int mechanicAssigned;
+        private float jobDuration;
+        private boolean reminderSent;
         
 
 	/**
@@ -43,6 +51,72 @@ public class Invoice {
     public boolean isIsPaid() {
         return isPaid;
     }
+
+    public String getCustomerPostCode() {
+        return customerPostCode;
+    }
+
+    public void setCustomerPostCode(String customerPostCode) {
+        this.customerPostCode = customerPostCode;
+    }
+
+    public String getVehicleMake() {
+        return vehicleMake;
+    }
+
+    public void setVehicleMake(String vehicleMake) {
+        this.vehicleMake = vehicleMake;
+    }
+
+    public String getVehicleModel() {
+        return vehicleModel;
+    }
+
+    public void setVehicleModel(String vehicleModel) {
+        this.vehicleModel = vehicleModel;
+    }
+
+    public float getMechanicWage() {
+        return mechanicWage;
+    }
+
+    public void setMechanicWage(float mechanicWage) {
+        this.mechanicWage = mechanicWage;
+    }
+
+    public String getRegNum() {
+        return regNum;
+    }
+
+    public void setRegNum(String regNum) {
+        this.regNum = regNum;
+    }
+
+    public int getMechanicAssigned() {
+        return mechanicAssigned;
+    }
+
+    public void setMechanicAssigned(int mechanicAssigned) {
+        this.mechanicAssigned = mechanicAssigned;
+    }
+
+    public float getJobDuration() {
+        return jobDuration;
+    }
+
+    public void setJobDuration(float jobDuration) {
+        this.jobDuration = jobDuration;
+    }
+
+    public boolean isReminderSent() {
+        return reminderSent;
+    }
+
+    public void setReminderSent(boolean reminderSent) {
+        this.reminderSent = reminderSent;
+    }
+    
+    
         
         
 
@@ -54,8 +128,8 @@ public class Invoice {
             return markUp;
         }
         
-        public float calcLabourCost(float hoursWorked, float wage) {
-            return hoursWorked*wage;
+        public float calcLabourCost(float jobDuration, float wage) {
+            return jobDuration*wage;
         }
         
         //Adds VAT to payment total
