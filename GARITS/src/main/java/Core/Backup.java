@@ -82,12 +82,20 @@ public class Backup {
     }
     
     public boolean restoreFromBackup(File backup) {
+        String os = getOS();
         Process p = null;
         try {
             //System.out.println(backup.getName());
             File dir = new File("backups/");
             Runtime runtime = Runtime.getRuntime();
-            p = runtime.exec("cmd /C mysql -u garitsuser -pgaritsdb garitsdb < " + backup.getName(), null, dir);
+            
+            if (os.equals("win")) {
+                p = runtime.exec("cmd /C mysql -u garitsuser -pgaritsdb garitsdb < " + backup.getName(), null, dir);
+            }
+            else if (os.equals("mac") || os.equals("unix")) {
+                p = runtime.exec("-sh -c mysql -u garitsuser -pgaritsdb garitsdb < " + backup.getName(), null, dir);
+            }
+            
             return true;
         }
         catch (IOException e) {
@@ -95,12 +103,6 @@ public class Backup {
             return false;
         }
         
-    }
-    
-    
-    // for testing
-    public static void main(String[] args) {
-        //restoreFromBackup();
     }
     
 }
