@@ -9,8 +9,6 @@ import DatabaseConnect.DBConnect;
 import static GUI.UpdateJobForm.BOLD;
 import Processing.Invoice;
 import static Processing.PDFCreator.getAddressTable;
-import static Processing.PDFCreator.getLineItemTable;
-import StockControl.Part;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
 import com.itextpdf.kernel.pdf.PdfDocument;
@@ -28,7 +26,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -268,7 +269,7 @@ public class RemindersForm extends javax.swing.JFrame {
                             .setTextAlignment(TextAlignment.RIGHT)
                             .setMultipliedLeading(1)
                             .add(new Text(String.format("REMINDER " + 
-                                    invoice.isReminderSent()+
+                                    invoice.isReminderSent()+1+
                                     "- INVOICE NO.: %s\n",
                                     invoice.getInvoiceId())).setFontSize(14))
                             .add(currDate));    
@@ -294,7 +295,7 @@ public class RemindersForm extends javax.swing.JFrame {
             document.add(new Paragraph().add(new Text("According to our "
                     + "records, it appears that we have not yet received "
                     + "payment of the above invoice, which was posted "
-                    + "to you on " + currDate + " for workd done on the "
+                    + "to you on " + invoice.getJobEnd() + " for workd done on the "
                     + "vehicle listed above.")));
             
             document.add(new Paragraph().add("We would appreaciate payment "
@@ -334,6 +335,27 @@ public class RemindersForm extends javax.swing.JFrame {
 
             } catch (Exception ex) {
                   ex.printStackTrace();
+            }
+            //UPDATING PAYMENT DUE DATE AND REMINDER COUNT
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate paymentDueDate = LocalDate.parse(
+                    invoice.getPaymentDueDate(), formatter);
+            
+            String reminderUpdate = "UPDATE Invoice SET "
+                    + "payment_due_date = '" + paymentDueDate.plusMonths(1) + "', "
+                    + "invoice_reminder=invoice_reminder+1 " + "WHERE "
+                    + "(`invoice_id` = '" + invoice.getInvoiceId() + "');"; 
+            try {
+                System.out.println("TEST");
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(reminderUpdate);
+                statement.execute();
+                conn.commit();
+                conn.setAutoCommit(true);
+            }
+            catch (Exception exc) {
+                exc.printStackTrace();
             }
         }
     }//GEN-LAST:event_jButton7ActionPerformed

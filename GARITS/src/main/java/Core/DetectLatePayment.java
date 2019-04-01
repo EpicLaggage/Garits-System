@@ -37,7 +37,6 @@ public class DetectLatePayment extends Thread {
                 DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
                 java.util.Date date = new java.util.Date();
                 String currDate = dateFormat.format(date);
-                System.out.println(currDate);
                 String latePaymentsQuery = "SELECT * FROM garitsdb.Invoice WHERE"
                         + " invoice_paid = '0' AND payment_due_date <= '" 
                         + currDate + "';";
