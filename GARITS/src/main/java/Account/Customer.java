@@ -19,7 +19,7 @@ public class Customer extends Account {
 	 * @param phone
 	 * @param address
 	 */
-        public Customer(boolean accountHolder, int customerId, Vehicle[] vehicles, String name, String email, int phone, String address) {
+        public Customer(boolean accountHolder, int customerId, Vehicle[] vehicles, String name, String email, String phone, String address) {
             super(name, email, phone, address);
             this.accountHolder = accountHolder;
             this.customerId = customerId;
