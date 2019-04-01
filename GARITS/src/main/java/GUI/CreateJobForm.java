@@ -30,6 +30,7 @@ import javax.swing.table.TableColumn;
  */
 public class CreateJobForm extends javax.swing.JFrame {
     Control control;
+    
     DBConnectivity dbConnect;
     Vehicle selectedVehicle;
     Customer selectedCustomer = new Customer();
@@ -54,7 +55,6 @@ public class CreateJobForm extends javax.swing.JFrame {
         control = c;
         dbConnect = new DBConnect();
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -669,3 +669,4 @@ public class CreateJobForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }
+
