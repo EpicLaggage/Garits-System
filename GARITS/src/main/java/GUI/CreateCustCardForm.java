@@ -394,7 +394,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
                 || email_txt.getText() == ""
                 || !phone_txt.getText().matches("[0-9]{11}")
                 || address_txt.getText() == ""
-                || !postcode_txt.getText().matches("^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$")) {
+                || !postcode_txt.getText().matches("^[A-Z]{1,2}[0-9R][0-9A-Z]?[ ]{0,1}[0-9][A-Z]{2}$")) {
             JOptionPane.showMessageDialog(new JFrame("Error"), "Incorrect format for text fields.");
         } else {
             try {

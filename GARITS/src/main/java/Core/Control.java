@@ -74,7 +74,8 @@ public class Control {
 
         staff = new Staff("Jack", "1", "Franchisee", "Jack");
 
-        OpenMenu();
+        loginForm.setVisible(true);
+        //OpenMenu();
 
     }
 

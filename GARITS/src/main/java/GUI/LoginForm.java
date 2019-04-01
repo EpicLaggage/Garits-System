@@ -124,8 +124,9 @@ public class LoginForm extends javax.swing.JFrame {
         try {
             if (login.validateLogin(username, password)) {
                 // returns the staff member that logged in for access to the appropriate methods
-                Staff staff = login.createStaffObject(username);
-                System.out.println(staff.getClass()); // for testing
+                control.setStaff(login.createStaffObject(username));
+                control.OpenMenu();
+                
             }
         }
         catch(SQLException e) {
