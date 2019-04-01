@@ -15,7 +15,7 @@ import javax.swing.text.PlainDocument;
  *
  * @author jly09
  */
-public class AddVehicleForm extends javax.swing.JFrame {
+public class UpdateVehicleForm extends javax.swing.JFrame {
 
     Control control = null;
     Vehicle vehicle = null;
@@ -25,7 +25,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
     /**
      * Creates new form MenuForm
      */
-    public AddVehicleForm() {
+    public UpdateVehicleForm() {
         initComponents();
         
         regNum_txt.setDocument(new LengthRestrictedDocument(8));
@@ -35,7 +35,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public AddVehicleForm(Control c) {
+    public UpdateVehicleForm(Control c) {
         initComponents();
 
         control = c;
@@ -46,13 +46,13 @@ public class AddVehicleForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public AddVehicleForm(CreateCustCardForm cForm) {
+    public UpdateVehicleForm(CreateCustCardForm cForm) {
         initComponents();
 
         custForm = cForm;
     }
 
-    public AddVehicleForm(Control c, CreateCustCardForm cForm) {
+    public UpdateVehicleForm(Control c, CreateCustCardForm cForm) {
         initComponents();
 
         control = c;
@@ -66,7 +66,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
     }
 
-    public AddVehicleForm(Control c, UpdateCustomerForm cForm) {
+    public UpdateVehicleForm(Control c, UpdateCustomerForm cForm) {
         initComponents();
 
         control = c;
@@ -98,7 +98,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
     private void initComponents() {
 
         addVehicle_lbl = new javax.swing.JLabel();
-        add_btn = new javax.swing.JButton();
+        update_btn = new javax.swing.JButton();
         regNum_lbl = new javax.swing.JLabel();
         make_lbl = new javax.swing.JLabel();
         model_lbl = new javax.swing.JLabel();
@@ -109,19 +109,19 @@ public class AddVehicleForm extends javax.swing.JFrame {
         colour_lbl = new javax.swing.JLabel();
         engine_serial_no_txt = new javax.swing.JTextField();
         engine_serial_no_lbl = new javax.swing.JLabel();
-        chassisNo_txt = new javax.swing.JTextField();
         chassisNo_lbl = new javax.swing.JLabel();
         back_btn = new javax.swing.JButton();
+        chassisNo_txt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         addVehicle_lbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        addVehicle_lbl.setText("Add Vehicle");
+        addVehicle_lbl.setText("Update Vehicle");
 
-        add_btn.setText("Add");
-        add_btn.addActionListener(new java.awt.event.ActionListener() {
+        update_btn.setText("Update");
+        update_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                add_btnActionPerformed(evt);
+                update_btnActionPerformed(evt);
             }
         });
 
@@ -150,13 +150,19 @@ public class AddVehicleForm extends javax.swing.JFrame {
             }
         });
 
+        chassisNo_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                chassisNo_txtActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(add_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(update_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -230,14 +236,14 @@ public class AddVehicleForm extends javax.swing.JFrame {
                     .addComponent(chassisNo_lbl)
                     .addComponent(chassisNo_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                .addComponent(add_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(update_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(55, 55, 55))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_btnActionPerformed
+    private void update_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_btnActionPerformed
         vehicle = new Vehicle();
         if (regNum_txt.getText() != ""
                 || make_txt.getText() != ""
@@ -260,26 +266,36 @@ public class AddVehicleForm extends javax.swing.JFrame {
             }
 
             if (updateCustForm != null && vehicle != null) {
-                updateCustForm.getVehicleList().add(vehicle);
-                updateCustForm.getVehicleComboBox().addItem(vehicle.getReg_num() + "," + vehicle.getMake() + "," + vehicle.getModel());
+                updateCustForm.updateVehicle(vehicle);
                 this.setVisible(false);
             }
         }
 
-    }//GEN-LAST:event_add_btnActionPerformed
+    }//GEN-LAST:event_update_btnActionPerformed
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
         this.setVisible(false);
         vehicle = null;
     }//GEN-LAST:event_back_btnActionPerformed
 
+    private void chassisNo_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chassisNo_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_chassisNo_txtActionPerformed
+
+    public void setValues(Vehicle v) {
+        //resetText();
+        vehicle = v;
+        regNum_txt.setText(v.getReg_num());
+        make_txt.setText(v.getMake());
+        model_txt.setText(v.getModel());
+        engine_serial_no_txt.setText(v.getEngine_serial_no());
+        chassisNo_txt.setText(v.getChassis_no());
+        colour_txt.setText(v.getColour());
+    }
+    
     @Override
     public void setVisible(boolean visible) {
         super.setVisible(visible);
-
-        if (visible) {
-            resetText();
-        }
     }
 
     public Vehicle getVehicle() {
@@ -315,14 +331,46 @@ public class AddVehicleForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateVehicleForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateVehicleForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateVehicleForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddVehicleForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateVehicleForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -359,14 +407,13 @@ public class AddVehicleForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddVehicleForm().setVisible(true);
+                new UpdateVehicleForm().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel addVehicle_lbl;
-    private javax.swing.JButton add_btn;
     private javax.swing.JButton back_btn;
     private javax.swing.JLabel chassisNo_lbl;
     private javax.swing.JTextField chassisNo_txt;
@@ -380,6 +427,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
     private javax.swing.JTextField model_txt;
     private javax.swing.JLabel regNum_lbl;
     private javax.swing.JTextField regNum_txt;
+    private javax.swing.JButton update_btn;
     // End of variables declaration//GEN-END:variables
 
     public final class LengthRestrictedDocument extends PlainDocument {

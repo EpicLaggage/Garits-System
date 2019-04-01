@@ -5,17 +5,92 @@
  */
 package GUI;
 
+import Account.AccountHolder;
+import Account.Customer;
+import Account.FixedDiscount;
+import Account.FlexibleDiscount;
+import Account.VariableDiscount;
+import Account.Vehicle;
+import Core.*;
+import java.awt.Dimension;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.ComboBoxModel;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+
 /**
  *
  * @author jly09
  */
 public class UpdateCustomerForm extends javax.swing.JFrame {
 
+    Control control;
+    CustomerForm customerForm = null;
+    AddVehicleForm addVehicleForm = null;
+    UpdateVehicleForm updateVehicleForm = null;
+    List<Vehicle> vehicleList = null;
+    AccountHolder accHolder;
+
     /**
      * Creates new form MenuForm
      */
     public UpdateCustomerForm() {
         initComponents();
+        this.setSize(new Dimension(780, 730));
+        this.setPreferredSize(new Dimension(780, 730));
+
+        addVehicleForm = new AddVehicleForm(control, this);
+        updateVehicleForm = new UpdateVehicleForm(control, this);
+        customerType_cmbo.addItemListener(new CustomerTypeItemListener());
+        discountType_cmbo.addItemListener(new DiscountTypeItemListener());
+
+        phone_txt.setDocument(new LengthRestrictedDocument(11));
+        postcode_txt.setDocument(new LengthRestrictedDocument(8));
+
+        this.setLocationRelativeTo(null);
+    }
+
+    public UpdateCustomerForm(Control c, CustomerForm cf) {
+        initComponents();
+        this.setSize(new Dimension(780, 730));
+        this.setPreferredSize(new Dimension(780, 730));
+
+        customerType_cmbo.addItemListener(new CustomerTypeItemListener());
+        discountType_cmbo.addItemListener(new DiscountTypeItemListener());
+
+        control = c;
+        customerForm = cf;
+        addVehicleForm = new AddVehicleForm(control, this);
+        updateVehicleForm = new UpdateVehicleForm(control, this);
+        vehicleList = new ArrayList<Vehicle>();
+
+        phone_txt.setDocument(new LengthRestrictedDocument(11));
+        postcode_txt.setDocument(new LengthRestrictedDocument(8));
+
+        this.setLocationRelativeTo(null);
+    }
+
+    public void setControl(Control c) {
+        control = c;
+    }
+
+    public void setCustomerForm(CustomerForm cf) {
+        customerForm = cf;
+    }
+
+    public List<Vehicle> getVehicleList() {
+        return vehicleList;
+    }
+
+    public JComboBox<String> getVehicleComboBox() {
+        return vehicle_cmbo;
     }
 
     /**
@@ -27,230 +102,464 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel11 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jLabel14 = new javax.swing.JLabel();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        updateCustomer_lbl = new javax.swing.JLabel();
+        update_btn = new javax.swing.JButton();
+        email_lbl = new javax.swing.JLabel();
+        phone_lbl = new javax.swing.JLabel();
+        address_lbl = new javax.swing.JLabel();
+        email_txt = new javax.swing.JTextField();
+        phone_txt = new javax.swing.JTextField();
+        address_txt = new javax.swing.JTextField();
+        customerType_lbl = new javax.swing.JLabel();
+        customerType_cmbo = new javax.swing.JComboBox<>();
+        discountType_lbl = new javax.swing.JLabel();
+        discountType_cmbo = new javax.swing.JComboBox<>();
+        discount_lbl = new javax.swing.JLabel();
+        discountPercent_lbl = new javax.swing.JLabel();
+        discountPercent_txt = new javax.swing.JTextField();
+        vehicle_lbl = new javax.swing.JLabel();
+        vehicleAdd_btn = new javax.swing.JButton();
+        vehicleUpdate_btn = new javax.swing.JButton();
+        vehicle_cmbo = new javax.swing.JComboBox<>();
+        payLater_lbl = new javax.swing.JLabel();
+        payLater_cmbo = new javax.swing.JComboBox<>();
+        cancel_btn = new javax.swing.JButton();
+        postcode_lbl = new javax.swing.JLabel();
+        postcode_txt = new javax.swing.JTextField();
+        motPercent_lbl = new javax.swing.JLabel();
+        motPercent_txt = new javax.swing.JTextField();
+        spareParts_txt = new javax.swing.JTextField();
+        spareParts_lbl = new javax.swing.JLabel();
+        individualTask_txt = new javax.swing.JTextField();
+        individualTask_lbl = new javax.swing.JLabel();
+        vehicleDelete_btn = new javax.swing.JButton();
+        name_txt = new javax.swing.JTextField();
+        name_lbl = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Update Customer");
+        updateCustomer_lbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        updateCustomer_lbl.setText("Update Customer");
+        getContentPane().add(updateCustomer_lbl);
+        updateCustomer_lbl.setBounds(52, 78, 185, 29);
 
-        jButton5.setText("Update");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setText("Email");
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel5.setText("Phone");
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel6.setText("Address");
-
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        update_btn.setText("Update");
+        update_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                update_btnActionPerformed(evt);
             }
         });
+        getContentPane().add(update_btn);
+        update_btn.setBounds(510, 579, 102, 44);
 
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        email_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        email_lbl.setText("Email");
+        getContentPane().add(email_lbl);
+        email_lbl.setBounds(52, 253, 42, 22);
+
+        phone_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        phone_lbl.setText("Phone");
+        getContentPane().add(phone_lbl);
+        phone_lbl.setBounds(52, 294, 49, 22);
+
+        address_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        address_lbl.setText("Address");
+        getContentPane().add(address_lbl);
+        address_lbl.setBounds(52, 341, 62, 22);
+
+        email_txt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                email_txtActionPerformed(evt);
             }
         });
+        getContentPane().add(email_txt);
+        email_txt.setBounds(167, 246, 150, 29);
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        phone_txt.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                phone_txtActionPerformed(evt);
             }
         });
+        getContentPane().add(phone_txt);
+        phone_txt.setBounds(167, 293, 150, 29);
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel10.setText("Type");
+        address_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                address_txtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(address_txt);
+        address_txt.setBounds(167, 340, 150, 29);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Account Holder", "Other Customer" }));
+        customerType_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        customerType_lbl.setText("Type");
+        getContentPane().add(customerType_lbl);
+        customerType_lbl.setBounds(52, 163, 39, 22);
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel11.setText("Type");
+        customerType_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Account Holder", "Casual" }));
+        getContentPane().add(customerType_cmbo);
+        customerType_cmbo.setBounds(167, 163, 150, 27);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fixed Discount", "Variable Discount", "Flexible Discount" }));
+        discountType_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        discountType_lbl.setText("Type");
+        getContentPane().add(discountType_lbl);
+        discountType_lbl.setBounds(395, 163, 39, 22);
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel12.setText("Discount Plan");
+        discountType_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fixed Discount", "Variable Discount", "Flexible Discount" }));
+        getContentPane().add(discountType_cmbo);
+        discountType_cmbo.setBounds(532, 163, 150, 27);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel7.setText("Percentage");
+        discount_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        discount_lbl.setText("Discount Plan");
+        getContentPane().add(discount_lbl);
+        discount_lbl.setBounds(395, 112, 107, 22);
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel13.setText("Vehicle");
+        discountPercent_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        discountPercent_lbl.setText("Percentage");
+        getContentPane().add(discountPercent_lbl);
+        discountPercent_lbl.setBounds(395, 209, 86, 22);
+        getContentPane().add(discountPercent_txt);
+        discountPercent_txt.setBounds(532, 208, 150, 29);
 
-        jButton6.setText("Add");
+        vehicle_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        vehicle_lbl.setText("Vehicle");
+        getContentPane().add(vehicle_lbl);
+        vehicle_lbl.setBounds(52, 464, 55, 22);
 
-        jButton7.setText("Delete");
+        vehicleAdd_btn.setText("Add");
+        vehicleAdd_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vehicleAdd_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(vehicleAdd_btn);
+        vehicleAdd_btn.setBounds(167, 465, 55, 25);
 
-        jLabel14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel14.setText("Pay Later");
+        vehicleUpdate_btn.setText("Update");
+        vehicleUpdate_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vehicleUpdate_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(vehicleUpdate_btn);
+        vehicleUpdate_btn.setBounds(230, 550, 80, 25);
 
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Yes", "No" }));
+        getContentPane().add(vehicle_cmbo);
+        vehicle_cmbo.setBounds(52, 508, 265, 27);
 
-        jButton1.setText("Cancel");
+        payLater_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        payLater_lbl.setText("Pay Later");
+        getContentPane().add(payLater_lbl);
+        payLater_lbl.setBounds(395, 253, 73, 22);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(395, 395, 395)
-                        .addComponent(jLabel12))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel10)
-                        .addGap(76, 76, 76)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78)
-                        .addComponent(jLabel11)
-                        .addGap(98, 98, 98)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(395, 395, 395)
-                        .addComponent(jLabel7)
-                        .addGap(51, 51, 51)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel4)
-                        .addGap(73, 73, 73)
-                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78)
-                        .addComponent(jLabel14)
-                        .addGap(64, 64, 64)
-                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel5)
-                        .addGap(66, 66, 66)
-                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel6)
-                        .addGap(53, 53, 53)
-                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel13)
-                        .addGap(60, 60, 60)
-                        .addComponent(jButton6)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton7))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(77, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(78, 78, 78)
-                .addComponent(jLabel1)
-                .addGap(5, 5, 5)
-                .addComponent(jLabel12)
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel10)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel11)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel7))
-                    .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel4))
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel14))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel5))
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel6))
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(57, 57, 57)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel13)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton6)
-                            .addComponent(jButton7))))
-                .addGap(18, 18, 18)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 33, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE))
-                .addGap(59, 59, 59))
-        );
+        payLater_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Yes", "No" }));
+        getContentPane().add(payLater_cmbo);
+        payLater_cmbo.setBounds(532, 250, 150, 27);
+
+        cancel_btn.setText("Cancel");
+        cancel_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancel_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(cancel_btn);
+        cancel_btn.setBounds(624, 579, 99, 44);
+
+        postcode_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        postcode_lbl.setText("Postcode");
+        getContentPane().add(postcode_lbl);
+        postcode_lbl.setBounds(52, 388, 71, 22);
+
+        postcode_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                postcode_txtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(postcode_txt);
+        postcode_txt.setBounds(167, 387, 150, 29);
+
+        motPercent_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        motPercent_lbl.setText("MOT Percent");
+        getContentPane().add(motPercent_lbl);
+        motPercent_lbl.setBounds(395, 253, 102, 22);
+
+        motPercent_txt.setToolTipText("Only applies to Variable Discount. The discount percentage for Jobs involving MoT checks.");
+        getContentPane().add(motPercent_txt);
+        motPercent_txt.setBounds(532, 252, 150, 29);
+
+        spareParts_txt.setToolTipText("Only applies to Variable Discount. This applies to Jobs involving Spare Part purchases.");
+        getContentPane().add(spareParts_txt);
+        spareParts_txt.setBounds(532, 352, 150, 29);
+
+        spareParts_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        spareParts_lbl.setText("Spare Parts");
+        getContentPane().add(spareParts_lbl);
+        spareParts_lbl.setBounds(395, 353, 89, 22);
+
+        individualTask_txt.setToolTipText("Only applies to Variable Discount. This percentage is applied to Jobs involving service types (individual tasks).");
+        individualTask_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                individualTask_txtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(individualTask_txt);
+        individualTask_txt.setBounds(532, 302, 150, 29);
+
+        individualTask_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        individualTask_lbl.setText("Individual Tasks");
+        getContentPane().add(individualTask_lbl);
+        individualTask_lbl.setBounds(395, 304, 128, 22);
+
+        vehicleDelete_btn.setText("Delete");
+        vehicleDelete_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vehicleDelete_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(vehicleDelete_btn);
+        vehicleDelete_btn.setBounds(240, 465, 69, 25);
+
+        name_txt.setToolTipText("Customer Name");
+        getContentPane().add(name_txt);
+        name_txt.setBounds(167, 208, 150, 29);
+
+        name_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        name_lbl.setText("Name");
+        getContentPane().add(name_lbl);
+        name_lbl.setBounds(52, 209, 45, 22);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void email_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_email_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_email_txtActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void phone_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phone_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_phone_txtActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void address_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_address_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_address_txtActionPerformed
+
+    private void postcode_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postcode_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_postcode_txtActionPerformed
+
+    private void vehicleAdd_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleAdd_btnActionPerformed
+        if (addVehicleForm != null) {
+            addVehicleForm.setVisible(true);
+        }
+    }//GEN-LAST:event_vehicleAdd_btnActionPerformed
+
+    private void vehicleUpdate_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleUpdate_btnActionPerformed
+        if (vehicle_cmbo.getSelectedItem() != null) {
+            String[] vehicleString = String.valueOf(vehicle_cmbo.getSelectedItem()).split(",");
+            Vehicle v = null;
+            if (vehicle_cmbo.getSelectedItem() != null) {
+                for (int i = 0; i < vehicleList.size(); i++) {
+                    if (vehicleString[0].equals(vehicleList.get(i).getReg_num())) {
+                        v = vehicleList.get(i);
+                    }
+                }
+
+                if (updateVehicleForm != null) {
+                    if (v != null) {
+                        updateVehicleForm.setValues(v);
+                    }
+                    updateVehicleForm.setVisible(true);
+                }
+            }
+        }
+    }//GEN-LAST:event_vehicleUpdate_btnActionPerformed
+
+    private void update_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_btnActionPerformed
+        if (name_txt.getText() == ""
+                || email_txt.getText() == ""
+                || !phone_txt.getText().matches("[0-9]{11}")
+                || address_txt.getText() == ""
+                || !postcode_txt.getText().matches("^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$")) {
+            JOptionPane.showMessageDialog(new JFrame("Error"), "Incorrect format for text fields.");
+        } else {
+            if (accHolder != null) {
+                accHolder.setName(name_txt.getText());
+                accHolder.setEmail(email_txt.getText());
+                accHolder.setPhone(phone_txt.getText());
+                accHolder.setAddress(address_txt.getText());
+                accHolder.setPostcode(postcode_txt.getText());
+
+                if (customerType_cmbo.getSelectedItem().equals("Account Holder")) {
+
+                    if (discountType_cmbo.getSelectedItem().equals("Fixed Discount")) {
+                        accHolder.setDiscount_plan(new FixedDiscount(Float.parseFloat(discountPercent_txt.getText())));
+                    }
+                    if (discountType_cmbo.getSelectedItem().equals("Variable Discount")) {
+                        VariableDiscount vd = new VariableDiscount(Float.parseFloat(discountPercent_txt.getText()), Float.parseFloat(motPercent_txt.getText())
+                        , Float.parseFloat(individualTask_txt.getText()), Float.parseFloat(spareParts_txt.getText()));
+                        accHolder.setDiscount_plan(vd);
+                        
+                    }
+                    if (discountType_cmbo.getSelectedItem().equals("Flexible Discount")) {
+                        accHolder.setDiscount_plan(new FlexibleDiscount());
+                    }
+
+                    if (payLater_cmbo.getSelectedItem() == "Yes") {
+                        accHolder.setPay_later(true);
+                    } else {
+                        accHolder.setPay_later(false);
+                    }
+
+                }
+
+                accHolder.setVehicles(vehicleList);
+
+                try {
+                    control.UpdateCustomer(accHolder);
+                    this.setVisible(false);
+                    customerForm.updateTable();
+                    JOptionPane.showMessageDialog(new JFrame("Updated Customer"), "Customer successfully updated.");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    JOptionPane.showMessageDialog(new JFrame("Updating Customer"), "Update failed.");
+                }
+
+                reset();
+            }
+
+        }
+    }//GEN-LAST:event_update_btnActionPerformed
+
+    private void cancel_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_btnActionPerformed
+        this.setVisible(false);
+    }//GEN-LAST:event_cancel_btnActionPerformed
+
+    private void vehicleDelete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleDelete_btnActionPerformed
+        if (vehicle_cmbo.getSelectedItem() != null) {
+            vehicle_cmbo.removeItem(vehicle_cmbo.getSelectedItem());
+
+            if (vehicleList != null) {
+                for (int i = 0; i < vehicleList.size(); i++) {
+                    if (vehicleList.get(i).getModel() == vehicle_cmbo.getSelectedItem()) {
+                        vehicleList.remove(i);
+                    }
+                }
+            }
+
+        }
+    }//GEN-LAST:event_vehicleDelete_btnActionPerformed
+
+    private void individualTask_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_individualTask_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_individualTask_txtActionPerformed
+
+    public void reset() {
+        name_txt.setText("");
+        email_txt.setText("");
+        phone_txt.setText("");
+        address_txt.setText("");
+        postcode_txt.setText("");
+
+        discountPercent_txt.setText("");
+
+        vehicle_cmbo.removeAllItems();
+
+        customerType_cmbo.setSelectedItem("Casual");
+
+        //vehicleList.clear();
+        vehicleList = new ArrayList<>();
+        accHolder = null;
+    }
+
+    @Override
+    public void setVisible(boolean v) {
+        super.setVisible(v);
+
+        if (v) {
+
+        } else {
+            addVehicleForm.setVisible(false);
+            updateVehicleForm.setVisible(false);
+        }
+    }
+
+    public void setValues(AccountHolder acc) {
+        accHolder = acc;
+
+        vehicleList = accHolder.getVehicles();
+
+        if (acc.getDiscount_plan() == null) {
+            customerType_cmbo.setSelectedItem("Casual");
+
+            payLater_lbl.setVisible(false);
+            payLater_cmbo.setVisible(false);
+        } else {
+            customerType_cmbo.setSelectedItem("Account Holder");
+
+            if (acc.getDiscount_plan() instanceof FixedDiscount) {
+                FixedDiscount fd = (FixedDiscount) acc.getDiscount_plan();
+                discountType_cmbo.setSelectedItem("Variable Discount");
+                discountType_cmbo.setSelectedItem("Fixed Discount");
+                discountPercent_txt.setText(String.valueOf(fd.getPercentage()));
+
+            }
+
+            if (acc.getDiscount_plan() instanceof FlexibleDiscount) {
+                FlexibleDiscount fd = (FlexibleDiscount) acc.getDiscount_plan();
+                discountType_cmbo.setSelectedItem("Flexible Discount");
+                discountPercent_txt.setText(String.valueOf(fd.getPercentage()));
+            }
+
+            if (acc.getDiscount_plan() instanceof VariableDiscount) {
+                VariableDiscount vd = (VariableDiscount) acc.getDiscount_plan();
+                discountType_cmbo.setSelectedItem("Variable Discount");
+                discountPercent_txt.setText(String.valueOf(vd.getPercentage()));
+                motPercent_txt.setText(String.valueOf(vd.getMOTPercentage()));
+                individualTask_txt.setText(String.valueOf(vd.getIndividualPercentage()));
+                spareParts_txt.setText(String.valueOf(vd.getSparePartsPercentage()));
+            }
+
+            if (acc.getPay_later()) {
+                payLater_cmbo.setSelectedItem("Yes");
+            } else {
+                payLater_cmbo.setSelectedItem("No");
+            }
+        }
+
+        name_txt.setText(acc.getName());
+        email_txt.setText(acc.getEmail());
+        phone_txt.setText(String.valueOf(acc.getPhone()));
+        address_txt.setText(acc.getAddress());
+        postcode_txt.setText(acc.getPostcode());
+
+        if (vehicleList != null) {
+
+            for (int i = 0; i < vehicleList.size(); i++) {
+                vehicle_cmbo.addItem(vehicleList.get(i).getReg_num() + "," + vehicleList.get(i).getMake() + "," + vehicleList.get(i).getModel());
+            }
+        }
+
+    }
+
+    public void updateVehicle(Vehicle v) {
+        for (int i = 0; i < vehicleList.size(); i++) {
+            if (v.getReg_num().equals(vehicleList.get(i).getReg_num())) {
+                vehicleList.get(i).setMake(v.getMake());
+                vehicleList.get(i).setModel(v.getModel());
+                vehicleList.get(i).setEngine_serial_no(v.getEngine_serial_no());
+                vehicleList.get(i).setChassis_no(v.getChassis_no());
+                vehicleList.get(i).setColour(v.getColour());
+            }
+        }
+
+        vehicle_cmbo.removeAllItems();
+
+        for (int i = 0; i < vehicleList.size(); i++) {
+            vehicle_cmbo.addItem(vehicleList.get(i).getReg_num() + "," + vehicleList.get(i).getMake() + "," + vehicleList.get(i).getModel());
+        }
+
+    }
 
     /**
      * @param args the command line arguments
@@ -319,27 +628,143 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JLabel address_lbl;
+    private javax.swing.JTextField address_txt;
+    private javax.swing.JButton cancel_btn;
+    private javax.swing.JComboBox<String> customerType_cmbo;
+    private javax.swing.JLabel customerType_lbl;
+    private javax.swing.JLabel discountPercent_lbl;
+    private javax.swing.JTextField discountPercent_txt;
+    private javax.swing.JComboBox<String> discountType_cmbo;
+    private javax.swing.JLabel discountType_lbl;
+    private javax.swing.JLabel discount_lbl;
+    private javax.swing.JLabel email_lbl;
+    private javax.swing.JTextField email_txt;
+    private javax.swing.JLabel individualTask_lbl;
+    private javax.swing.JTextField individualTask_txt;
+    private javax.swing.JLabel motPercent_lbl;
+    private javax.swing.JTextField motPercent_txt;
+    private javax.swing.JLabel name_lbl;
+    private javax.swing.JTextField name_txt;
+    private javax.swing.JComboBox<String> payLater_cmbo;
+    private javax.swing.JLabel payLater_lbl;
+    private javax.swing.JLabel phone_lbl;
+    private javax.swing.JTextField phone_txt;
+    private javax.swing.JLabel postcode_lbl;
+    private javax.swing.JTextField postcode_txt;
+    private javax.swing.JLabel spareParts_lbl;
+    private javax.swing.JTextField spareParts_txt;
+    private javax.swing.JLabel updateCustomer_lbl;
+    private javax.swing.JButton update_btn;
+    private javax.swing.JButton vehicleAdd_btn;
+    private javax.swing.JButton vehicleDelete_btn;
+    private javax.swing.JButton vehicleUpdate_btn;
+    private javax.swing.JComboBox<String> vehicle_cmbo;
+    private javax.swing.JLabel vehicle_lbl;
     // End of variables declaration//GEN-END:variables
+
+    class CustomerTypeItemListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Object item = e.getItem();
+                if (item == "Account Holder") {
+                    discount_lbl.setVisible(true);
+                    discountType_lbl.setVisible(true);
+                    discountPercent_lbl.setVisible(true);
+
+                    discountType_cmbo.setVisible(true);
+                    discountPercent_txt.setVisible(true);
+
+                    if (control.CheckRole() == "Franchisee") {
+                        payLater_lbl.setVisible(true);
+                        payLater_cmbo.setVisible(true);
+                    } else {
+                        payLater_lbl.setVisible(false);
+                        payLater_cmbo.setVisible(false);
+                    }
+
+                } else {
+                    discount_lbl.setVisible(false);
+                    discountType_lbl.setVisible(false);
+                    discountPercent_lbl.setVisible(false);
+                    motPercent_lbl.setVisible(false);
+                    individualTask_lbl.setVisible(false);
+                    spareParts_lbl.setVisible(false);
+                    payLater_lbl.setVisible(false);
+
+                    discountType_cmbo.setVisible(false);
+                    discountPercent_txt.setVisible(false);
+                    motPercent_txt.setVisible(false);
+                    individualTask_txt.setVisible(false);
+                    spareParts_txt.setVisible(false);
+                    payLater_cmbo.setVisible(false);
+                }
+            }
+        }
+    }
+
+    class DiscountTypeItemListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Object item = e.getItem();
+                if (item == "Fixed Discount" || item == "Variable Discount") {
+                    discountPercent_lbl.setVisible(true);
+                    discountPercent_txt.setVisible(true);
+                } else {
+                    discountPercent_lbl.setVisible(false);
+                    discountPercent_txt.setVisible(false);
+                }
+
+                if (item == "Variable Discount") {
+                    motPercent_lbl.setVisible(true);
+                    individualTask_lbl.setVisible(true);
+                    spareParts_lbl.setVisible(true);
+                    motPercent_txt.setVisible(true);
+                    individualTask_txt.setVisible(true);
+                    spareParts_txt.setVisible(true);
+
+                    payLater_lbl.setLocation(395, 403);
+                    payLater_cmbo.setLocation(532, 402);
+                }
+
+                if (item.equals("Fixed Discount")) {
+                    motPercent_lbl.setVisible(false);
+                    individualTask_lbl.setVisible(false);
+                    spareParts_lbl.setVisible(false);
+                    motPercent_txt.setVisible(false);
+                    individualTask_txt.setVisible(false);
+                    spareParts_txt.setVisible(false);
+
+                    payLater_lbl.setLocation(395, 253);
+                    payLater_cmbo.setLocation(532, 250);
+                }
+            }
+
+        }
+    }
+
+    public final class LengthRestrictedDocument extends PlainDocument {
+
+        private final int limit;
+
+        public LengthRestrictedDocument(int limit) {
+            this.limit = limit;
+        }
+
+        @Override
+        public void insertString(int offs, String str, AttributeSet a)
+                throws BadLocationException {
+            if (str == null) {
+                return;
+            }
+
+            if ((getLength() + str.length()) <= limit) {
+                super.insertString(offs, str, a);
+            }
+        }
+    }
 }

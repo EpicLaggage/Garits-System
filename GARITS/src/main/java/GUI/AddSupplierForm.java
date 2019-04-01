@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import StockControl.Supplier;
 import java.sql.SQLException;
 import javax.swing.JDialog;
@@ -14,12 +15,18 @@ import javax.swing.JDialog;
  * @author jly09
  */
 public class AddSupplierForm extends javax.swing.JFrame {
-
+    Control control;
+    
     /**
      * Creates new form MenuForm
      */
     public AddSupplierForm() {
         initComponents();
+    }
+    
+    public AddSupplierForm(Control c) {
+        initComponents();
+        control = c;
     }
 
     /**

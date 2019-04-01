@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import DatabaseConnect.DBConnect;
 import static GUI.UpdateJobForm.BOLD;
 import Processing.Invoice;
@@ -29,7 +30,6 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
@@ -40,6 +40,7 @@ import javax.swing.table.DefaultTableModel;
  * @author jly09
  */
 public class RemindersForm extends javax.swing.JFrame {
+    Control control;
     ArrayList<Invoice> unpaidInvoices = new ArrayList<Invoice>();
     DBConnect dbConnect;
     DefaultTableModel invoiceModel;
@@ -52,9 +53,15 @@ public class RemindersForm extends javax.swing.JFrame {
         this.unpaidInvoices.addAll(unpaidInvoices);
         dbConnect = new DBConnect();
     }
+    
 
-    private RemindersForm() {
+    public RemindersForm() {
         initComponents();
+    }
+    
+    public RemindersForm(Control c) {
+        initComponents();
+        control = c;
     }
 
     /**

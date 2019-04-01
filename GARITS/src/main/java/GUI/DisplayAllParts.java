@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import GUI.PartsTable.PartsTableModel;
 import StockControl.Part;
 import java.awt.event.WindowAdapter;
@@ -20,6 +21,7 @@ import javax.swing.table.TableRowSorter;
  * @author jorda
  */
 public class DisplayAllParts extends javax.swing.JFrame {
+    Control control;
     private PartsTableModel tableModel;
     private Part part;
 
@@ -72,6 +74,54 @@ public class DisplayAllParts extends javax.swing.JFrame {
         
         
     }
+    
+    public DisplayAllParts(Control c) {
+        initComponents();
+        control = c;
+        tableModel = new PartsTableModel(part);
+        partsTable.setModel(tableModel);
+        // to search through parts
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());
+        partsTable.setRowSorter(rowSorter);
+        
+        //code that allows for parts to be searched and updated in real time
+        searchField.getDocument().addDocumentListener(new DocumentListener(){
+            
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+                
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                }
+                else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+        }
+            
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+                
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                }
+                else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+            
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet");
+            }
+        
+        
+    });
+        
+        
+    }
+    
     // refreshes the table with the updated part fields
     private void populateTable() {
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());

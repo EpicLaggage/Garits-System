@@ -5,17 +5,85 @@
  */
 package GUI;
 
+import Account.AccountHolder;
+import Account.Customer;
+import Account.FixedDiscount;
+import Account.FlexibleDiscount;
+import Account.VariableDiscount;
+import Account.Vehicle;
+import Core.*;
+import java.awt.Dimension;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.UIManager;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.PlainDocument;
+
 /**
  *
  * @author jly09
  */
 public class CreateCustCardForm extends javax.swing.JFrame {
 
+    Control control = null;
+    FranchiseeMenuForm franchiseeMenuForm = null;
+    AddVehicleForm addVehicleForm = null;
+    List<Vehicle> vehicleList = null;
+    Customer cust = null;
+    AccountHolder accHolder = null;
+
     /**
      * Creates new form MenuForm
      */
     public CreateCustCardForm() {
         initComponents();
+        this.setSize(new Dimension(770, 685));
+        this.setPreferredSize(new Dimension(770, 685));
+        customerType_cmbo.addItemListener(new CustomerTypeItemListener());
+        discountType_cmbo.addItemListener(new DiscountTypeItemListener());
+
+        addVehicleForm = new AddVehicleForm(this);
+        vehicleList = new ArrayList<Vehicle>();
+        phone_txt.setDocument(new LengthRestrictedDocument(11));
+        postcode_txt.setDocument(new LengthRestrictedDocument(8));
+
+        customerType_cmbo.setSelectedItem("Casual");
+    }
+
+    public CreateCustCardForm(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+        this.setSize(new Dimension(770, 685));
+        this.setPreferredSize(new Dimension(770, 685));
+        customerType_cmbo.addItemListener(new CustomerTypeItemListener());
+        discountType_cmbo.addItemListener(new DiscountTypeItemListener());
+
+        control = c;
+        franchiseeMenuForm = fmf;
+        addVehicleForm = new AddVehicleForm(control, this);
+        vehicleList = new ArrayList<Vehicle>();
+        phone_txt.setDocument(new LengthRestrictedDocument(11));
+        postcode_txt.setDocument(new LengthRestrictedDocument(8));
+
+        customerType_cmbo.setSelectedItem("Casual");
+        this.setLocationRelativeTo(null);
+    }
+
+    public void setControl(Control c) {
+        control = c;
+    }
+
+    public List<Vehicle> getVehicleList() {
+        return vehicleList;
+    }
+
+    public JComboBox<String> getVehicleComboBox() {
+        return vehicle_cmbo;
     }
 
     /**
@@ -27,233 +95,412 @@ public class CreateCustCardForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jLabel10 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jLabel11 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jLabel12 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jComboBox3 = new javax.swing.JComboBox<>();
+        logout_btn = new javax.swing.JButton();
+        createCustomer_lbl = new javax.swing.JLabel();
+        create_btn = new javax.swing.JButton();
+        back_btn = new javax.swing.JButton();
+        name_lbl = new javax.swing.JLabel();
+        email_lbl = new javax.swing.JLabel();
+        phone_lbl = new javax.swing.JLabel();
+        address_lbl = new javax.swing.JLabel();
+        name_txt = new javax.swing.JTextField();
+        email_txt = new javax.swing.JTextField();
+        phone_txt = new javax.swing.JTextField();
+        address_txt = new javax.swing.JTextField();
+        customerType_lbl = new javax.swing.JLabel();
+        customerType_cmbo = new javax.swing.JComboBox<>();
+        discountType_lbl = new javax.swing.JLabel();
+        discountType_cmbo = new javax.swing.JComboBox<>();
+        discount_lbl = new javax.swing.JLabel();
+        discountPercent_lbl = new javax.swing.JLabel();
+        discountPercent_txt = new javax.swing.JTextField();
+        vehicle_lbl = new javax.swing.JLabel();
+        vehicle_add_btn = new javax.swing.JButton();
+        vehicle_delete_btn = new javax.swing.JButton();
+        vehicle_cmbo = new javax.swing.JComboBox<>();
+        postcode_lbl = new javax.swing.JLabel();
+        postcode_txt = new javax.swing.JTextField();
+        motPercent_lbl = new javax.swing.JLabel();
+        motPercent_txt = new javax.swing.JTextField();
+        spareParts_txt = new javax.swing.JTextField();
+        spareParts_lbl = new javax.swing.JLabel();
+        individualTask_txt = new javax.swing.JTextField();
+        individualTask_lbl = new javax.swing.JLabel();
+        payLater_lbl = new javax.swing.JLabel();
+        payLater_cmbo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Create Customer");
+        setMinimumSize(new java.awt.Dimension(742, 720));
+        setResizable(false);
+        setSize(new java.awt.Dimension(742, 720));
+        getContentPane().setLayout(null);
 
-        jButton3.setText("Logout");
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Create Customer");
-
-        jButton5.setText("Create");
-
-        jButton4.setText("Back");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setText("Name");
-
-        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel4.setText("Email");
-
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel5.setText("Phone");
-
-        jLabel6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel6.setText("Address");
-
-        jTextField4.addActionListener(new java.awt.event.ActionListener() {
+        logout_btn.setText("Logout");
+        logout_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField4ActionPerformed(evt);
+                logout_btnActionPerformed(evt);
             }
         });
+        getContentPane().add(logout_btn);
+        logout_btn.setBounds(670, 13, 71, 25);
 
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        createCustomer_lbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        createCustomer_lbl.setText("Create Customer");
+        getContentPane().add(createCustomer_lbl);
+        createCustomer_lbl.setBounds(52, 78, 179, 29);
+
+        create_btn.setBackground(new java.awt.Color(255, 0, 51));
+        create_btn.setText("Create");
+        create_btn.setOpaque(false);
+        create_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                create_btnActionPerformed(evt);
             }
         });
+        getContentPane().add(create_btn);
+        create_btn.setBounds(580, 594, 102, 44);
 
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        back_btn.setText("Back");
+        back_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                back_btnActionPerformed(evt);
             }
         });
+        getContentPane().add(back_btn);
+        back_btn.setBounds(593, 13, 70, 25);
 
-        jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel10.setText("Type");
+        name_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        name_lbl.setText("Name");
+        getContentPane().add(name_lbl);
+        name_lbl.setBounds(52, 209, 45, 22);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Account Holder", "Other Customer" }));
+        email_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        email_lbl.setText("Email");
+        getContentPane().add(email_lbl);
+        email_lbl.setBounds(52, 262, 42, 22);
 
-        jLabel11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel11.setText("Type");
+        phone_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        phone_lbl.setText("Phone");
+        getContentPane().add(phone_lbl);
+        phone_lbl.setBounds(52, 307, 49, 22);
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fixed Discount", "Variable Discount", "Flexible Discount" }));
+        address_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        address_lbl.setText("Address");
+        getContentPane().add(address_lbl);
+        address_lbl.setBounds(52, 353, 62, 22);
 
-        jLabel12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel12.setText("Discount Plan");
+        name_txt.setToolTipText("Customer Name");
+        getContentPane().add(name_txt);
+        name_txt.setBounds(167, 208, 150, 29);
 
-        jLabel7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel7.setText("Percentage");
+        email_txt.setToolTipText("Customer Email");
+        email_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                email_txtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(email_txt);
+        email_txt.setBounds(167, 259, 150, 29);
 
-        jLabel13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel13.setText("Vehicle");
+        phone_txt.setToolTipText("Customer Telephone number");
+        phone_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                phone_txtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(phone_txt);
+        phone_txt.setBounds(167, 306, 150, 29);
 
-        jButton6.setText("Add");
+        address_txt.setToolTipText("Customer Address");
+        address_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                address_txtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(address_txt);
+        address_txt.setBounds(167, 353, 150, 29);
 
-        jButton7.setText("Delete");
+        customerType_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        customerType_lbl.setText("Type");
+        getContentPane().add(customerType_lbl);
+        customerType_lbl.setBounds(52, 163, 39, 22);
 
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "BMW M5" }));
+        customerType_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Account Holder", "Casual" }));
+        customerType_cmbo.setToolTipText("Type of Customer Account. Either Account Holder or Casual."); // NOI18N
+        customerType_cmbo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                customerType_cmboItemStateChanged(evt);
+            }
+        });
+        getContentPane().add(customerType_cmbo);
+        customerType_cmbo.setBounds(167, 163, 150, 27);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(604, 604, 604)
-                        .addComponent(jButton4)
-                        .addGap(7, 7, 7)
-                        .addComponent(jButton3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(jLabel10)
-                        .addGap(76, 76, 76)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(78, 78, 78)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel12)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel11)
-                                    .addGap(98, 98, 98)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jComboBox3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jLabel13)
-                                    .addGap(60, 60, 60)
-                                    .addComponent(jButton6)
-                                    .addGap(18, 18, 18)
-                                    .addComponent(jButton7)
-                                    .addGap(8, 8, 8)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addGap(70, 70, 70)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(78, 78, 78)
-                                .addComponent(jLabel7)
-                                .addGap(51, 51, 51)
-                                .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel4)
-                                        .addGap(73, 73, 73)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addGap(66, 66, 66)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addGap(53, 53, 53)
-                                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(365, 365, 365)))
-                        .addGap(59, 59, 59)))
-                .addGap(12, 12, 12))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(13, 13, 13)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3))
-                .addGap(40, 40, 40)
-                .addComponent(jLabel1)
-                .addGap(5, 5, 5)
-                .addComponent(jLabel12)
-                .addGap(29, 29, 29)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel10)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel11))
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel3))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLabel7)
-                        .addComponent(jTextField7, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(22, 22, 22)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(7, 7, 7)
-                        .addComponent(jLabel4))
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel5))
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(jLabel6))
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(44, 44, 44)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel13)
-                    .addComponent(jButton6)
-                    .addComponent(jButton7))
-                .addGap(18, 18, 18)
-                .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(65, 65, 65))
-        );
+        discountType_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        discountType_lbl.setText("Type");
+        getContentPane().add(discountType_lbl);
+        discountType_lbl.setBounds(395, 163, 39, 22);
+
+        discountType_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Fixed Discount", "Variable Discount", "Flexible Discount" }));
+        discountType_cmbo.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                discountType_cmboItemStateChanged(evt);
+            }
+        });
+        getContentPane().add(discountType_cmbo);
+        discountType_cmbo.setBounds(532, 163, 150, 27);
+
+        discount_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        discount_lbl.setText("Discount Plan");
+        getContentPane().add(discount_lbl);
+        discount_lbl.setBounds(395, 112, 107, 22);
+
+        discountPercent_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        discountPercent_lbl.setText("Percentage");
+        discountPercent_lbl.setToolTipText("");
+        getContentPane().add(discountPercent_lbl);
+        discountPercent_lbl.setBounds(395, 209, 86, 22);
+
+        discountPercent_txt.setToolTipText("The standard percentage for any applicable discount. Acts as a default percentage for Variable Discount plans.");
+        getContentPane().add(discountPercent_txt);
+        discountPercent_txt.setBounds(532, 208, 150, 29);
+
+        vehicle_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        vehicle_lbl.setText("Vehicle");
+        getContentPane().add(vehicle_lbl);
+        vehicle_lbl.setBounds(52, 488, 55, 22);
+
+        vehicle_add_btn.setText("Add");
+        vehicle_add_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vehicle_add_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(vehicle_add_btn);
+        vehicle_add_btn.setBounds(167, 484, 60, 30);
+
+        vehicle_delete_btn.setText("Delete");
+        vehicle_delete_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                vehicle_delete_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(vehicle_delete_btn);
+        vehicle_delete_btn.setBounds(239, 484, 70, 30);
+
+        getContentPane().add(vehicle_cmbo);
+        vehicle_cmbo.setBounds(52, 532, 265, 27);
+
+        postcode_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        postcode_lbl.setText("Postcode");
+        getContentPane().add(postcode_lbl);
+        postcode_lbl.setBounds(52, 401, 71, 22);
+
+        postcode_txt.setToolTipText("Customer postcode");
+        postcode_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                postcode_txtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(postcode_txt);
+        postcode_txt.setBounds(167, 400, 150, 29);
+
+        motPercent_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        motPercent_lbl.setText("MOT Percent");
+        getContentPane().add(motPercent_lbl);
+        motPercent_lbl.setBounds(395, 254, 102, 22);
+
+        motPercent_txt.setToolTipText("Only applies to Variable Discount. The discount percentage for Jobs involving MoT checks.");
+        getContentPane().add(motPercent_txt);
+        motPercent_txt.setBounds(532, 252, 150, 29);
+
+        spareParts_txt.setToolTipText("Only applies to Variable Discount. This applies to Jobs involving Spare Part purchases.");
+        getContentPane().add(spareParts_txt);
+        spareParts_txt.setBounds(532, 352, 150, 29);
+
+        spareParts_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        spareParts_lbl.setText("Spare Parts");
+        getContentPane().add(spareParts_lbl);
+        spareParts_lbl.setBounds(395, 353, 89, 22);
+
+        individualTask_txt.setToolTipText("Only applies to Variable Discount. This percentage is applied to Jobs involving service types (individual tasks).");
+        getContentPane().add(individualTask_txt);
+        individualTask_txt.setBounds(532, 302, 150, 29);
+
+        individualTask_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        individualTask_lbl.setText("Individual Tasks");
+        getContentPane().add(individualTask_lbl);
+        individualTask_lbl.setBounds(395, 304, 128, 22);
+
+        payLater_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        payLater_lbl.setText("Pay Later");
+        getContentPane().add(payLater_lbl);
+        payLater_lbl.setBounds(395, 253, 73, 22);
+
+        payLater_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Yes", "No" }));
+        getContentPane().add(payLater_cmbo);
+        payLater_cmbo.setBounds(532, 250, 150, 27);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
+    private void email_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_email_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
+    }//GEN-LAST:event_email_txtActionPerformed
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
+    private void phone_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_phone_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+    }//GEN-LAST:event_phone_txtActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void address_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_address_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_address_txtActionPerformed
+
+    private void customerType_cmboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_customerType_cmboItemStateChanged
+
+    }//GEN-LAST:event_customerType_cmboItemStateChanged
+
+    private void discountType_cmboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_discountType_cmboItemStateChanged
+
+    }//GEN-LAST:event_discountType_cmboItemStateChanged
+
+    private void vehicle_add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicle_add_btnActionPerformed
+        if (addVehicleForm != null) {
+            addVehicleForm.setVisible(true);
+        }
+    }//GEN-LAST:event_vehicle_add_btnActionPerformed
+
+    private void vehicle_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicle_delete_btnActionPerformed
+        if (vehicle_cmbo.getSelectedItem() != null) {
+            String[] vehicleString = null;
+            vehicleString = String.valueOf(vehicle_cmbo.getSelectedItem()).split(",");
+            vehicle_cmbo.removeItem(vehicle_cmbo.getSelectedItem());
+
+            if (vehicleList != null) {
+                for (int i = 0; i < vehicleList.size(); i++) {
+                    if (vehicleList.get(i).getReg_num() == vehicleString[0]) {
+                        vehicleList.remove(i);
+                    }
+                }
+            }
+
+            vehicle_cmbo.setSelectedItem(null);
+        }
+    }//GEN-LAST:event_vehicle_delete_btnActionPerformed
+
+    private void create_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_btnActionPerformed
+
+        if (name_txt.getText() == ""
+                || email_txt.getText() == ""
+                || !phone_txt.getText().matches("[0-9]{11}")
+                || address_txt.getText() == ""
+                || !postcode_txt.getText().matches("^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$")) {
+            JOptionPane.showMessageDialog(new JFrame("Error"), "Incorrect format for text fields.");
+        } else {
+            try {
+                if (customerType_cmbo.getSelectedItem().equals("Account Holder")) {
+                    System.out.println("Account Holder");
+                    if (accHolder == null) {
+                        accHolder = new AccountHolder(name_txt.getText(), email_txt.getText(),
+                                phone_txt.getText(), address_txt.getText(), postcode_txt.getText());
+
+                        if (payLater_cmbo.getSelectedItem().equals("Yes")) {
+                            accHolder.setPay_later(true);
+                        } else {
+                            accHolder.setPay_later(false);
+                        }
+
+                        if (discountType_cmbo.getSelectedItem().equals("Fixed Discount")) {
+                            accHolder.setDiscount_plan(new FixedDiscount(Float.parseFloat(discountPercent_txt.getText())));
+                            System.out.println("Discount");
+                        }
+                        if (discountType_cmbo.getSelectedItem().equals("Variable Discount")) {
+                            VariableDiscount vd = new VariableDiscount(Float.parseFloat(discountPercent_txt.getText()), Float.parseFloat(motPercent_txt.getText()),
+                                     Float.parseFloat(individualTask_txt.getText()), Float.parseFloat(spareParts_txt.getText()));
+                            accHolder.setDiscount_plan(vd);
+
+                        }
+                        if (discountType_cmbo.getSelectedItem().equals("Flexible Discount")) {
+                            accHolder.setDiscount_plan(new FlexibleDiscount());
+                        }
+
+                        control.AddCustomer(accHolder, vehicleList);
+
+                        if (franchiseeMenuForm != null) {
+                            franchiseeMenuForm.hideGUI();
+                        }
+                    }
+                } else {
+                    if (cust == null) {
+                        cust = new Customer(name_txt.getText(), email_txt.getText(),
+                                phone_txt.getText(), address_txt.getText(), postcode_txt.getText());
+                        control.AddCustomer(cust, vehicleList);
+
+                        if (franchiseeMenuForm != null) {
+                            franchiseeMenuForm.hideGUI();
+                        }
+                    }
+                }
+
+                JOptionPane.showMessageDialog(new JFrame("Created Customer"), "Customer successfully created.");
+                reset();
+                control.OpenMenu();
+            } catch (Exception e) {
+                e.printStackTrace();
+                JOptionPane.showMessageDialog(new JFrame("Creating Customer"), "Creation failed.");
+            }
+
+        }
+    }//GEN-LAST:event_create_btnActionPerformed
+
+    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
+        reset();
+        this.setVisible(false);
+        control.logout();
+    }//GEN-LAST:event_logout_btnActionPerformed
+
+    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
+        reset();
+        this.setVisible(false);
+        control.OpenMenu();
+    }//GEN-LAST:event_back_btnActionPerformed
+
+    private void postcode_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postcode_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_postcode_txtActionPerformed
+
+    public void reset() {
+        name_txt.setText("");
+        email_txt.setText("");
+        phone_txt.setText("");
+        address_txt.setText("");
+        postcode_txt.setText("");
+
+        discountPercent_txt.setText("");
+
+        vehicle_cmbo.removeAllItems();
+
+        customerType_cmbo.setSelectedItem("Casual");
+
+        vehicleList.clear();
+        cust = null;
+        accHolder = null;
+    }
+
+    @Override
+    public void setVisible(boolean v) {
+        super.setVisible(v);
+
+        if (v) {
+            if (franchiseeMenuForm != null) {
+                franchiseeMenuForm.dispose();
+                //franchiseeMenuForm.setVisible(false);
+            }
+        } else {
+            addVehicleForm.setVisible(false);
+        }
+
+    }
 
     /**
      * @param args the command line arguments
@@ -264,7 +511,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
+ /*try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
@@ -279,7 +526,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(CreateCustCardForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(CreateCustCardForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
+        }*/
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -306,28 +553,135 @@ public class CreateCustCardForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
+    private javax.swing.JLabel address_lbl;
+    private javax.swing.JTextField address_txt;
+    private javax.swing.JButton back_btn;
+    private javax.swing.JLabel createCustomer_lbl;
+    private javax.swing.JButton create_btn;
+    private javax.swing.JComboBox<String> customerType_cmbo;
+    private javax.swing.JLabel customerType_lbl;
+    private javax.swing.JLabel discountPercent_lbl;
+    private javax.swing.JTextField discountPercent_txt;
+    private javax.swing.JComboBox<String> discountType_cmbo;
+    private javax.swing.JLabel discountType_lbl;
+    private javax.swing.JLabel discount_lbl;
+    private javax.swing.JLabel email_lbl;
+    private javax.swing.JTextField email_txt;
+    private javax.swing.JLabel individualTask_lbl;
+    private javax.swing.JTextField individualTask_txt;
+    private javax.swing.JButton logout_btn;
+    private javax.swing.JLabel motPercent_lbl;
+    private javax.swing.JTextField motPercent_txt;
+    private javax.swing.JLabel name_lbl;
+    private javax.swing.JTextField name_txt;
+    private javax.swing.JComboBox<String> payLater_cmbo;
+    private javax.swing.JLabel payLater_lbl;
+    private javax.swing.JLabel phone_lbl;
+    private javax.swing.JTextField phone_txt;
+    private javax.swing.JLabel postcode_lbl;
+    private javax.swing.JTextField postcode_txt;
+    private javax.swing.JLabel spareParts_lbl;
+    private javax.swing.JTextField spareParts_txt;
+    private javax.swing.JButton vehicle_add_btn;
+    private javax.swing.JComboBox<String> vehicle_cmbo;
+    private javax.swing.JButton vehicle_delete_btn;
+    private javax.swing.JLabel vehicle_lbl;
     // End of variables declaration//GEN-END:variables
+
+    class CustomerTypeItemListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Object item = e.getItem();
+                if (item == "Account Holder") {
+                    discount_lbl.setVisible(true);
+                    discountType_lbl.setVisible(true);
+                    discountPercent_lbl.setVisible(true);
+                    payLater_lbl.setVisible(true);
+
+                    discountType_cmbo.setVisible(true);
+                    discountPercent_txt.setVisible(true);
+                    payLater_cmbo.setVisible(true);
+
+                } else {
+                    discount_lbl.setVisible(false);
+                    discountType_lbl.setVisible(false);
+                    discountPercent_lbl.setVisible(false);
+                    motPercent_lbl.setVisible(false);
+                    individualTask_lbl.setVisible(false);
+                    spareParts_lbl.setVisible(false);
+                    payLater_lbl.setVisible(false);
+
+                    discountType_cmbo.setVisible(false);
+                    discountPercent_txt.setVisible(false);
+                    motPercent_txt.setVisible(false);
+                    individualTask_txt.setVisible(false);
+                    spareParts_txt.setVisible(false);
+                    payLater_cmbo.setVisible(false);
+                }
+            }
+        }
+    }
+
+    class DiscountTypeItemListener implements ItemListener {
+
+        @Override
+        public void itemStateChanged(ItemEvent e) {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                Object item = e.getItem();
+                if (item == "Fixed Discount" || item == "Variable Discount") {
+                    discountPercent_lbl.setVisible(true);
+                    discountPercent_txt.setVisible(true);
+                } else {
+                    discountPercent_lbl.setVisible(false);
+                    discountPercent_txt.setVisible(false);
+                }
+
+                if (item == "Variable Discount") {
+                    motPercent_lbl.setVisible(true);
+                    individualTask_lbl.setVisible(true);
+                    spareParts_lbl.setVisible(true);
+                    motPercent_txt.setVisible(true);
+                    individualTask_txt.setVisible(true);
+                    spareParts_txt.setVisible(true);
+
+                    payLater_lbl.setLocation(395, 403);
+                    payLater_cmbo.setLocation(532, 402);
+                } else {
+                    motPercent_lbl.setVisible(false);
+                    individualTask_lbl.setVisible(false);
+                    spareParts_lbl.setVisible(false);
+                    motPercent_txt.setVisible(false);
+                    individualTask_txt.setVisible(false);
+                    spareParts_txt.setVisible(false);
+
+                    payLater_lbl.setLocation(395, 253);
+                    payLater_cmbo.setLocation(532, 250);
+                }
+            }
+
+        }
+    }
+
+    public final class LengthRestrictedDocument extends PlainDocument {
+
+        private final int limit;
+
+        public LengthRestrictedDocument(int limit) {
+            this.limit = limit;
+        }
+
+        @Override
+        public void insertString(int offs, String str, AttributeSet a)
+                throws BadLocationException {
+            if (str == null) {
+                return;
+            }
+
+            if ((getLength() + str.length()) <= limit) {
+                super.insertString(offs, str, a);
+            }
+        }
+    }
 }

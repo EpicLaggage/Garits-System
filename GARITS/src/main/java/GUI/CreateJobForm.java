@@ -8,6 +8,7 @@ package GUI;
 import Account.Customer;
 import Account.Mechanic;
 import Account.Vehicle;
+import Core.Control;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
 import DatabaseConnect.DBConnectivity;
@@ -28,7 +29,7 @@ import javax.swing.table.TableColumn;
  * @author jly09
  */
 public class CreateJobForm extends javax.swing.JFrame {
-    
+    Control control;
     DBConnectivity dbConnect;
     Vehicle selectedVehicle;
     Customer selectedCustomer = new Customer();
@@ -47,6 +48,13 @@ public class CreateJobForm extends javax.swing.JFrame {
         initComponents();
         dbConnect = new DBConnect();
     }
+    
+    public CreateJobForm(Control c) {
+        initComponents();
+        control = c;
+        dbConnect = new DBConnect();
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -348,14 +356,14 @@ public class CreateJobForm extends javax.swing.JFrame {
                 customer.setName(rs.getString("customer_name"));
                 customer.setAddress(rs.getString("customer_address"));
                 customer.setEmail(rs.getString("customer_email"));
-                customer.setPhone(rs.getInt("customer_tel"));
+                customer.setPhone(rs.getString("customer_tel"));
                 customer.setAccountHolder(rs.getBoolean("customer_account_holder"));
                 customer.setCustomerId(rs.getInt("customer_id"));
 
                 String name = customer.getName();
                 String address = customer.getAddress();
                 String email = customer.getEmail();
-                int phone = customer.getPhone();
+                String phone = customer.getPhone();
                 boolean accountHolder = customer.isAccountHolder();;
                 
                 Object[] row = { name, email, phone, address,

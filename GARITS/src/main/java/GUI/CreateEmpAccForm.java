@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import Login.Login;
 import java.sql.SQLException;
 
@@ -13,7 +14,8 @@ import java.sql.SQLException;
  * @author jly09
  */
 public class CreateEmpAccForm extends javax.swing.JFrame {
-
+    Control control;
+    
     /**
      * Creates new form MenuForm
      */
@@ -21,6 +23,11 @@ public class CreateEmpAccForm extends javax.swing.JFrame {
         initComponents();
     }
 
+    public CreateEmpAccForm(Control c) {
+        initComponents();
+        control = c;
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always

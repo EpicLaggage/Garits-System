@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import DatabaseConnect.DBConnect;
 import static GUI.UpdateJobForm.BOLD;
 import Processing.Invoice;
@@ -37,6 +38,7 @@ import javax.swing.table.DefaultTableModel;
  * @author jly09
  */
 public class DisplayInvoiceForm extends javax.swing.JFrame {
+    Control control;
     ArrayList<Invoice> invoiceList = new ArrayList<Invoice>();
     DBConnect dbConnect;
     DefaultTableModel invoiceModel;
@@ -46,6 +48,12 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
      */
     public DisplayInvoiceForm() {
         initComponents();
+        dbConnect = new DBConnect();
+    }
+    
+    public DisplayInvoiceForm(Control c) {
+        initComponents();
+        control = c;
         dbConnect = new DBConnect();
     }
 

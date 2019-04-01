@@ -5,17 +5,25 @@
  */
 package GUI;
 
+import Core.Control;
+
 /**
  *
  * @author jly09
  */
 public class DisplayAlertForm extends javax.swing.JFrame {
-
+    Control control;
+    
     /**
      * Creates new form MenuForm
      */
     public DisplayAlertForm() {
         initComponents();
+    }
+    
+    public DisplayAlertForm(Control c) {
+        initComponents();
+        control = c;
     }
 
     /**
