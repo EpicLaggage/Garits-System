@@ -4,7 +4,7 @@ public class Account {
 
 	private String name;
 	private String email;
-	private int phone;
+	private String phone;
 	private String address;
 
         public Account() {
@@ -18,7 +18,7 @@ public class Account {
 	 * @param phone
 	 * @param address
 	 */
-        public Account(String name, String email, int phone, String address) {
+        public Account(String name, String email, String phone, String address) {
             this.name = name;
             this.email = email;
             this.phone = phone;
@@ -49,7 +49,7 @@ public class Account {
 		this.email = email;
 	}
 
-	public int getPhone() {
+	public String getPhone() {
 		return this.phone;
 	}
 
@@ -57,7 +57,7 @@ public class Account {
 	 * 
 	 * @param phone
 	 */
-	public void setPhone(int phone) {
+	public void setPhone(String phone) {
 		this.phone = phone;
 	}
 

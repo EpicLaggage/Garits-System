@@ -2,29 +2,37 @@ package Account;
 
 public class FlexibleDiscount implements DiscountPlan {
 
-	private float percentage;
-	private boolean available;
+    private float percentage = 0;
+    private boolean available;
+    String type = null;
 
-	/**
-	 * 
-	 * @param p
-	 */
-	public FlexibleDiscount(float p) {
-		// TODO - implement FlexibleDiscount.FlexibleDiscount
-		throw new UnsupportedOperationException();
-	}
+    /**
+     *
+     * @param p
+     */
+    public FlexibleDiscount(float p) {
+        percentage = p;
+        type = "Flexible Discount";
+    }
+    
+    public FlexibleDiscount() {
+        type = "Flexible Discount";
+    }
 
-	public void Calculate() {
-		// TODO - implement FlexibleDiscount.Calculate
-		throw new UnsupportedOperationException();
-	}
+    public void Calculate() {
+        
+    }
 
-	/**
-	 * 
-	 * @param percentage
-	 */
-	public void setPercentage(float percentage) {
-		this.percentage = percentage;
-	}
+    /**
+     *
+     * @param percentage
+     */
+    public void setPercentage(float percentage) {
+        this.percentage = percentage;
+    }
+    
+    public float getPercentage() {
+        return percentage;
+    }
 
 }
