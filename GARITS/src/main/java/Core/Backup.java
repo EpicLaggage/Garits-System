@@ -55,7 +55,7 @@ public class Backup {
             Runtime runtime = Runtime.getRuntime();
             
             if (os.equals("win")) {
-                p = runtime.exec("cmd /C mysqldump -h 192.168.1.10 garitsdb -u garitsuser -pgaritsdb > backup" + getCurrentDateTime() +  ".sql", null, dir);
+                p = runtime.exec("cmd /C mysqldump garitsdb -u garitsuser -pgaritsdb > backup" + getCurrentDateTime() +  ".sql", null, dir);
                 return true;
             }
             else if (os.equals("mac") || os.equals("unix")) {
@@ -63,7 +63,6 @@ public class Backup {
                 return true;
             }
             
-            //Process p = runtime.exec("dir", null, dir);  // for testing
             
             BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
             String line = reader.readLine();
@@ -82,8 +81,26 @@ public class Backup {
         return false;
     }
     
+    public boolean restoreFromBackup(File backup) {
+        Process p = null;
+        try {
+            //System.out.println(backup.getName());
+            File dir = new File("backups/");
+            Runtime runtime = Runtime.getRuntime();
+            p = runtime.exec("cmd /C mysql -u garitsuser -pgaritsdb garitsdb < " + backup.getName(), null, dir);
+            return true;
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        
+    }
+    
+    
+    // for testing
     public static void main(String[] args) {
-        //createBackup();
+        //restoreFromBackup();
     }
     
 }

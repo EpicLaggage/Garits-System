@@ -7,6 +7,7 @@ package GUI;
 
 import Core.Backup;
 import java.io.File;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -30,7 +31,7 @@ public class RestoreForm extends javax.swing.JFrame {
         model = (DefaultTableModel) backupTable.getModel();
         if (dirListing != null) {
             for (File child : dirListing) {
-                model.addRow(new Object[] {child.getName()});
+                model.addRow(new Object[] {child});
             }
         }
         
@@ -68,7 +69,7 @@ public class RestoreForm extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Date"
+                "File Path"
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -85,6 +86,11 @@ public class RestoreForm extends javax.swing.JFrame {
         }
 
         restoreButton.setText("Restore");
+        restoreButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restoreButtonActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Back");
 
@@ -129,6 +135,20 @@ public class RestoreForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void restoreButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restoreButtonActionPerformed
+        Backup backup = new Backup();
+        int selectedRow = backupTable.getSelectedRow();
+        int selectedColumn = backupTable.getSelectedColumn();
+        
+        File selectedFile = (File) model.getValueAt(selectedRow, selectedColumn);
+        System.out.println(selectedFile.getAbsolutePath());
+        
+        if (backup.restoreFromBackup(selectedFile)) {
+            JOptionPane.showMessageDialog(this, "Successfully restored from backup: " + selectedFile.getName());
+            this.dispose();
+        }
+    }//GEN-LAST:event_restoreButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -177,3 +197,4 @@ public class RestoreForm extends javax.swing.JFrame {
     private javax.swing.JButton restoreButton;
     // End of variables declaration//GEN-END:variables
 }
+
