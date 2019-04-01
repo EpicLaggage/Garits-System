@@ -8,7 +8,6 @@ package GUI;
 import Account.Customer;
 import Account.Mechanic;
 import Account.Vehicle;
-import Core.Control;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
 import DatabaseConnect.DBConnectivity;
@@ -29,7 +28,7 @@ import javax.swing.table.TableColumn;
  * @author jly09
  */
 public class CreateJobForm extends javax.swing.JFrame {
-    Control control;
+    
     DBConnectivity dbConnect;
     Vehicle selectedVehicle;
     Customer selectedCustomer = new Customer();
@@ -48,13 +47,6 @@ public class CreateJobForm extends javax.swing.JFrame {
         initComponents();
         dbConnect = new DBConnect();
     }
-    
-    public CreateJobForm(Control c) {
-        initComponents();
-        control = c;
-        dbConnect = new DBConnect();
-    }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -669,3 +661,4 @@ public class CreateJobForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     // End of variables declaration//GEN-END:variables
 }
+
