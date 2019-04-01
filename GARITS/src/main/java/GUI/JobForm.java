@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
 import Processing.Job;
@@ -22,6 +23,7 @@ import javax.swing.table.TableColumn;
  */
 public class JobForm extends javax.swing.JFrame {
     
+    Control control;
     DBConnect dbConnect;
     
     /**
@@ -31,6 +33,13 @@ public class JobForm extends javax.swing.JFrame {
         initComponents();
         dbConnect = new DBConnect();
     }
+    
+    public JobForm(Control c) {
+        initComponents();
+        control = c;
+        dbConnect = new DBConnect();
+    }
+    
     public boolean isCellEditable(int rowIndex, int columnIndex) {
         return true;
     }

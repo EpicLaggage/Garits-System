@@ -5,17 +5,24 @@
  */
 package GUI;
 
+import Core.Control;
+
 /**
  *
  * @author jly09
  */
 public class PaymentForm extends javax.swing.JFrame {
-
+    Control control;
     /**
      * Creates new form MenuForm
      */
     public PaymentForm() {
         initComponents();
+    }
+    
+    public PaymentForm(Control c) {
+        initComponents();
+        control = c;
     }
 
     /**

@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import StockControl.Part;
 import StockControl.Supplier;
 import java.sql.SQLException;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
  * @author jly09
  */
 public class AddPartForm extends javax.swing.JFrame {
+    Control control;
     Supplier supplierObj = new Supplier();
     ArrayList<Supplier> supplierList = supplierObj.getAllSuppliers();
 
@@ -25,6 +27,18 @@ public class AddPartForm extends javax.swing.JFrame {
     public AddPartForm() {
         initComponents();
         
+        
+        // Populates the combo box with the names of all suppliers
+            for (Supplier supplier : supplierList) {
+                partSupplier.addItem(supplier.getName());
+            }
+
+    }
+    
+    public AddPartForm(Control c) {
+        initComponents();
+        
+        control = c;
         
         // Populates the combo box with the names of all suppliers
             for (Supplier supplier : supplierList) {

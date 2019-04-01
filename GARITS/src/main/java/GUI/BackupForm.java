@@ -6,6 +6,7 @@
 package GUI;
 
 import Core.Backup;
+import Core.Control;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
@@ -14,12 +15,19 @@ import javax.swing.JOptionPane;
  * @author jorda
  */
 public class BackupForm extends javax.swing.JFrame {
-
+    Control control;
+    
     /**
      * Creates new form BackupForm
      */
     public BackupForm() {
         initComponents();
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public BackupForm(Control c) {
+        initComponents();
+        control = c;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 

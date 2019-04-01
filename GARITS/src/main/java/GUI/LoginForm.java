@@ -6,6 +6,7 @@
 package GUI;
 
 import Account.Staff;
+import Core.Control;
 import Login.Login;
 import java.sql.SQLException;
 
@@ -14,12 +15,18 @@ import java.sql.SQLException;
  * @author jly09
  */
 public class LoginForm extends javax.swing.JFrame {
-
+    Control control;
+    
     /**
      * Creates new form LoginForm
      */
     public LoginForm() {
         initComponents();
+    }
+    
+    public LoginForm(Control c) {
+        initComponents();
+        control = c;
     }
 
     /**

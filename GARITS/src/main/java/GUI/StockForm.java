@@ -5,17 +5,24 @@
  */
 package GUI;
 
+import Core.Control;
+
 /**
  *
  * @author jly09
  */
 public class StockForm extends javax.swing.JFrame {
-
+    Control control;
     /**
      * Creates new form MenuForm
      */
     public StockForm() {
         initComponents();
+    }
+    
+    public StockForm(Control c) {
+        initComponents();
+        control = c;
     }
 
     /**

@@ -5,17 +5,25 @@
  */
 package GUI;
 
+import Core.Control;
+
 /**
  *
  * @author jly09
  */
 public class OrderPartForm extends javax.swing.JFrame {
-
+    Control control;
+    
     /**
      * Creates new form MenuForm
      */
     public OrderPartForm() {
         initComponents();
+    }
+    
+    public OrderPartForm(Control c) {
+        initComponents();
+        control = c;
     }
 
     /**
