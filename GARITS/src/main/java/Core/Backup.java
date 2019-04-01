@@ -25,7 +25,7 @@ public class Backup {
     private static String getCurrentDateTime() {
         DateFormat dateFormat = new SimpleDateFormat("dd-MM-YYYY-HHmm");
         Date date = new Date();
-        System.out.println(dateFormat.format(date));
+        //System.out.println(dateFormat.format(date));
         String now = dateFormat.format(date);
         return now;
     }
@@ -55,7 +55,7 @@ public class Backup {
             Runtime runtime = Runtime.getRuntime();
             
             if (os.equals("win")) {
-                p = runtime.exec("cmd /C mysqldump garitsdb -u garitsuser -pgaritsdb > backup" + getCurrentDateTime() +  ".sql", null, dir);
+                p = runtime.exec("cmd /C mysqldump -h 192.168.1.10 garitsdb -u garitsuser -pgaritsdb > backup" + getCurrentDateTime() +  ".sql", null, dir);
                 return true;
             }
             else if (os.equals("mac") || os.equals("unix")) {

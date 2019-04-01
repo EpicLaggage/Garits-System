@@ -13,20 +13,21 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author jly09
  */
-public class BackupAndRestoreForm extends javax.swing.JFrame {
-
+public class RestoreForm extends javax.swing.JFrame {
+    DefaultTableModel model;
+    File dir = new File("backups/");
+    
     /**
      * Creates new form MenuForm
      */
-    public BackupAndRestoreForm() {
+    public RestoreForm() {
         initComponents();
         populateTable();
     }
 
     private void populateTable() {
-        File dir = new File("backups/");
         File[] dirListing = dir.listFiles();
-        DefaultTableModel model = (DefaultTableModel) backupTable.getModel();
+        model = (DefaultTableModel) backupTable.getModel();
         if (dirListing != null) {
             for (File child : dirListing) {
                 model.addRow(new Object[] {child.getName()});
@@ -34,7 +35,9 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
         }
         
     }
-    
+
+
+
     
     
     /**
@@ -50,7 +53,6 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         backupTable = new javax.swing.JTable();
-        backupButton = new javax.swing.JButton();
         restoreButton = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
 
@@ -59,7 +61,7 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
         jButton3.setText("Logout");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Backup And Restore");
+        jLabel1.setText("Restore From Backup");
 
         backupTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -82,13 +84,6 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
             backupTable.getColumnModel().getColumn(0).setMinWidth(300);
         }
 
-        backupButton.setText("Backup");
-        backupButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backupButtonActionPerformed(evt);
-            }
-        });
-
         restoreButton.setText("Restore");
 
         jButton4.setText("Back");
@@ -106,10 +101,7 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(backupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(restoreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(restoreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addComponent(jLabel1)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -131,21 +123,12 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
                         .addGap(155, 155, 155))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(backupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(restoreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(restoreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(84, 84, 84))))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void backupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backupButtonActionPerformed
-        Backup backup = new Backup();
-        if (backup.createBackup()) {
-            System.out.println("Successfully created backup");
-        }
-    }//GEN-LAST:event_backupButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -164,27 +147,28 @@ public class BackupAndRestoreForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(BackupAndRestoreForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestoreForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(BackupAndRestoreForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestoreForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(BackupAndRestoreForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestoreForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(BackupAndRestoreForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(RestoreForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new BackupAndRestoreForm().setVisible(true);
+                new RestoreForm().setVisible(true);
             }
         });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton backupButton;
     private javax.swing.JTable backupTable;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
