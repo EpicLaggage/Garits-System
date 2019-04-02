@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import StockControl.Alert;
 import StockControl.Part;
 import java.util.ArrayList;
 
@@ -13,37 +14,20 @@ import java.util.ArrayList;
  * @author jly09
  */
 public class AlertForm extends javax.swing.JFrame {
-
+    private static ArrayList<Part> lowStockParts;
     /**
      * Creates new form MenuForm
      */
-    public AlertForm() {
+    public AlertForm(ArrayList<Part> lowStockParts) {
+        this.lowStockParts = lowStockParts;
         initComponents();
-        lowStockParts();
+        displayLowStockParts();
     }
 
-    public int lowStockParts() {
-        ArrayList<Part> lowStockPartList = new ArrayList<>();
-        ArrayList<Part> allParts;
-        Part partObj = new Part();
-        int lowStockCount = 0;
-        
-        allParts = partObj.getAllParts();
-        
-        
-        for (Part part : allParts) {
-            if (part.getQty() < part.getThreshold()) {
-               lowStockPartList.add(part);
-               lowStockCount++;
-            }
+    private void displayLowStockParts() {
+        for (Part part : lowStockParts) {
+            lowStockArea.append("Part name: " + part.getName() + "    Quantity: " + part.getQty() + "    Threshold: " + part.getThreshold() + "\n");
         }
-        
-        for (Part lowStockPart : lowStockPartList) {
-            lowStockArea.append("Part name: " + lowStockPart.getName() + "    Quantity: " + lowStockPart.getQty() + "    Threshold: " + lowStockPart.getThreshold() + '\n');
-        }
-        
-        // to determine whether to run the low stock alert form or not
-        return lowStockCount;
     }
     
     
@@ -63,10 +47,11 @@ public class AlertForm extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         lowStockArea = new javax.swing.JTextArea();
+        replenishOrderButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton5.setText("OK");
+        jButton5.setText("Remind Me");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("LOW STOCK ALERT");
@@ -76,19 +61,29 @@ public class AlertForm extends javax.swing.JFrame {
         lowStockArea.setRows(5);
         jScrollPane1.setViewportView(lowStockArea);
 
+        replenishOrderButton.setText("Go to Replenishment Orders");
+        replenishOrderButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                replenishOrderButtonActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jScrollPane1)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(254, 254, 254))
             .addGroup(layout.createSequentialGroup()
-                .addGap(210, 210, 210)
-                .addComponent(jLabel1)
-                .addContainerGap(209, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(210, 210, 210)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(189, 189, 189)
+                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(30, 30, 30)
+                        .addComponent(replenishOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(131, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -98,12 +93,18 @@ public class AlertForm extends javax.swing.JFrame {
                 .addGap(17, 17, 17)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
+                    .addComponent(replenishOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(29, 29, 29))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void replenishOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replenishOrderButtonActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_replenishOrderButtonActionPerformed
 
     /**
      * @param args the command line arguments
@@ -137,7 +138,7 @@ public class AlertForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AlertForm().setVisible(true);
+                new AlertForm(lowStockParts).setVisible(true);
             }
         });
     }
@@ -147,5 +148,6 @@ public class AlertForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea lowStockArea;
+    private javax.swing.JButton replenishOrderButton;
     // End of variables declaration//GEN-END:variables
 }
