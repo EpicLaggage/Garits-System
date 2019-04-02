@@ -34,12 +34,12 @@ public class CustomerForm extends javax.swing.JFrame {
     public CustomerForm() {
         initComponents();
 
-        updateCustomerForm = new UpdateCustomerForm(control, this);
         accHolderList = new ArrayList<AccountHolder>();
 
         customer_tbl.setRowHeight(10);
 
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public CustomerForm(Control c, FranchiseeMenuForm fmf) {
@@ -47,12 +47,21 @@ public class CustomerForm extends javax.swing.JFrame {
 
         control = c;
         franchiseeMenuForm = fmf;
-        updateCustomerForm = new UpdateCustomerForm(control, this);
+        
+        control.getWindowList().add(this);
+        
         accHolderList = new ArrayList<AccountHolder>();
 
         customer_tbl.setRowHeight(20);
 
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     public void setControl(Control c) {
@@ -241,6 +250,8 @@ public class CustomerForm extends javax.swing.JFrame {
 
     private void update_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_btnActionPerformed
         if (!customer_tbl.getSelectionModel().isSelectionEmpty()) {
+            updateCustomerForm = new UpdateCustomerForm(control, this);
+            
             int selectedRow = customer_tbl.getSelectedRow();
             for (int i = 0; i < accHolderList.size(); i++) {
                 if (accHolderList.get(i).getCustomerId() == (int) customer_tbl.getValueAt(selectedRow, 0)) {
@@ -286,7 +297,7 @@ public class CustomerForm extends javax.swing.JFrame {
                 if (!vList.isEmpty()) {
                     for (int j = 0; j < vList.size(); j++) {
                         vehicleString = vehicleString + "[" + vList.get(j).getReg_num() + "," + vList.get(j).getMake() + "," + vList.get(j).getModel() + ","
-                                + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + "]\n";
+                                + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + vList.get(j).getPurchase_date() + "]\n";
                     }
 
                 }
@@ -298,14 +309,15 @@ public class CustomerForm extends javax.swing.JFrame {
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
         reset();
-        this.setVisible(false);
-        control.OpenMenu();
+        franchiseeMenuForm = new FranchiseeMenuForm(control);
+        franchiseeMenuForm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_back_btnActionPerformed
 
     private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
         reset();
-        this.setVisible(false);
         control.logout();
+        this.dispose();
     }//GEN-LAST:event_logout_btnActionPerformed
 
     public void reset() {
@@ -328,6 +340,7 @@ public class CustomerForm extends javax.swing.JFrame {
             if (updateCustomerForm.isVisible()) {
                 updateCustomerForm.dispose();
             }
+            this.dispose();
 
         }
     }
@@ -366,7 +379,7 @@ public class CustomerForm extends javax.swing.JFrame {
             if (!vList.isEmpty()) {
                 for (int j = 0; j < vList.size(); j++) {
                     vehicleString = vehicleString + "[" + vList.get(j).getReg_num() + "," + vList.get(j).getMake() + "," + vList.get(j).getModel() + ","
-                            + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + "]\n";
+                            + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + vList.get(j).getPurchase_date() + "]\n";
                 }
 
             }

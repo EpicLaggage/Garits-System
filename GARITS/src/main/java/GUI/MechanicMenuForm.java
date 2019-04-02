@@ -6,6 +6,7 @@
 package GUI;
 
 import Core.Control;
+import java.awt.Dimension;
 
 /**
  *
@@ -14,18 +15,38 @@ import Core.Control;
 public class MechanicMenuForm extends javax.swing.JFrame {
 
     Control control;
+    JobForm jobForm;
 
     /**
      * Creates new form MenuForm
      */
     public MechanicMenuForm() {
         initComponents();
+        
+        this.setSize(new Dimension(520, 430));
+        this.setPreferredSize(new Dimension(840, 600));
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public MechanicMenuForm(Control c) {
         initComponents();
+        
+        this.setSize(new Dimension(520, 430));
+        this.setPreferredSize(new Dimension(520, 430));
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         control = c;
+        control.getWindowList().add(this);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     public void setControl(Control c) {
@@ -41,49 +62,83 @@ public class MechanicMenuForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        panel = new javax.swing.JPanel();
+        displayUpdateJob_btn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
+        logout_btn = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Display and Update Jobs");
-
-        jButton3.setText("Logout");
+        displayUpdateJob_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        displayUpdateJob_btn.setText("Display and Update Jobs");
+        displayUpdateJob_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayUpdateJob_btnActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Job");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(670, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addGap(22, 22, 22))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(47, 47, 47)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(459, Short.MAX_VALUE))
+        logout_btn.setText("Logout");
+        logout_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_btnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(220, 220, 220)
+                        .addComponent(jLabel1))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(120, 120, 120)
+                        .addComponent(displayUpdateJob_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(110, 110, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(logout_btn)
+                .addGap(76, 76, 76))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
+                .addComponent(logout_btn)
                 .addGap(52, 52, 52)
                 .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(91, Short.MAX_VALUE))
+                .addGap(19, 19, 19)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(displayUpdateJob_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
+
+        getContentPane().add(panel);
+        panel.setBounds(0, 0, 520, 430);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void displayUpdateJob_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayUpdateJob_btnActionPerformed
+        jobForm = new JobForm(control, this);
+        jobForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_displayUpdateJob_btnActionPerformed
+
+    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
+        control.logout();
+        this.dispose();
+    }//GEN-LAST:event_logout_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -124,8 +179,10 @@ public class MechanicMenuForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton3;
+    private javax.swing.JButton displayUpdateJob_btn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton logout_btn;
+    private javax.swing.JPanel panel;
     // End of variables declaration//GEN-END:variables
 }

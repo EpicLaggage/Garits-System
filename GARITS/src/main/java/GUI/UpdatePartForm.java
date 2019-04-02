@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import StockControl.Part;
 import StockControl.Supplier;
 import java.util.ArrayList;
@@ -16,15 +17,43 @@ import javax.swing.JOptionPane;
  */
 public class UpdatePartForm extends javax.swing.JFrame {
     private static Part part;
+    Control control;
+    DisplayAllParts displayAllParts;
+    
     /**
      * Creates new form MenuForm
      */
     // will crash if a part is not passed in
     public UpdatePartForm(Part part) {
-        this.part = part;
         initComponents();
+        this.part = part;
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         populateFields();
+    }
+    
+    public UpdatePartForm(Control c, Part part) {
+        initComponents();
+        this.control = c;
+        control.getWindowList().add(this);
+        this.part = part;
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        populateFields();
+    }
+    
+    public UpdatePartForm(Control c, DisplayAllParts dap, Part part) {
+        initComponents();
+        this.control = c;
+        this.displayAllParts = dap;
+        control.getWindowList().add(this);
+        this.part = part;
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        populateFields();
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     public Part getPart() {
@@ -66,6 +95,7 @@ public class UpdatePartForm extends javax.swing.JFrame {
         idLabel = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         partNameLabel = new javax.swing.JLabel();
+        back_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
@@ -124,6 +154,13 @@ public class UpdatePartForm extends javax.swing.JFrame {
         partNameLabel.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         partNameLabel.setText("placeholder");
 
+        back_btn.setText("Back");
+        back_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_btnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -174,13 +211,20 @@ public class UpdatePartForm extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(200, 200, 200))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(updateButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(200, 200, 200))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(back_btn)
+                        .addGap(21, 21, 21))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
+                .addGap(11, 11, 11)
+                .addComponent(back_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -309,7 +353,13 @@ public class UpdatePartForm extends javax.swing.JFrame {
             populateFields();
         }
         
+        this.dispose();
+        
     }//GEN-LAST:event_updateButtonActionPerformed
+
+    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_back_btnActionPerformed
     
     // code to populate fields with existing data
     private void populateFields() {
@@ -376,6 +426,7 @@ public class UpdatePartForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back_btn;
     private javax.swing.JLabel idLabel;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;

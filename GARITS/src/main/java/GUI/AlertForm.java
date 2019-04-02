@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import StockControl.Part;
 import java.util.ArrayList;
 
@@ -13,13 +14,34 @@ import java.util.ArrayList;
  * @author jly09
  */
 public class AlertForm extends javax.swing.JFrame {
-
+    Control control;
+    
     /**
      * Creates new form MenuForm
      */
     public AlertForm() {
         initComponents();
         lowStockParts();
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public AlertForm(Control c) {
+        initComponents();
+        lowStockParts();
+        
+        control = c;
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     public int lowStockParts() {

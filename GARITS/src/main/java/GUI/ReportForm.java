@@ -7,6 +7,7 @@ package GUI;
 
 import Core.*;
 import Report.*;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
@@ -55,6 +56,8 @@ public class ReportForm extends javax.swing.JFrame {
 
         control = c;
         franchiseeMenuForm = fmf;
+        
+        control.getWindowList().add(this);
 
         selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
         exSelectedCmbo = String.valueOf(ext_filter_cmbo.getSelectedItem());
@@ -72,6 +75,8 @@ public class ReportForm extends javax.swing.JFrame {
 
         control = c;
         fpMenuForm = fpmf;
+        
+        control.getWindowList().add(this);
 
         selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
         exSelectedCmbo = String.valueOf(ext_filter_cmbo.getSelectedItem());
@@ -89,12 +94,23 @@ public class ReportForm extends javax.swing.JFrame {
 
         control = c;
         receptionMenuForm = rmf;
+        
+        control.getWindowList().add(this);
+
+        filter_cmbo.setSelectedItem("Spare Parts");
+        filter_cmbo.setEnabled(false);
 
         selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
         exSelectedCmbo = String.valueOf(ext_filter_cmbo.getSelectedItem());
 
         xext_filter_cmbo.setVisible(false);
         filter_txt.setVisible(false);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     public void setControl(Control c) {
@@ -130,6 +146,11 @@ public class ReportForm extends javax.swing.JFrame {
         getContentPane().setLayout(null);
 
         logout_btn.setText("Logout");
+        logout_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_btnActionPerformed(evt);
+            }
+        });
         getContentPane().add(logout_btn);
         logout_btn.setBounds(950, 13, 71, 25);
         getContentPane().add(filter_txt);
@@ -142,7 +163,7 @@ public class ReportForm extends javax.swing.JFrame {
 
         report_tbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null}
+
             },
             new String [] {
                 "File Name", "Date Created"
@@ -166,6 +187,11 @@ public class ReportForm extends javax.swing.JFrame {
         print_btn.setBounds(887, 542, 102, 44);
 
         back_btn.setText("Back");
+        back_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_btnActionPerformed(evt);
+            }
+        });
         getContentPane().add(back_btn);
         back_btn.setBounds(884, 13, 59, 25);
 
@@ -179,7 +205,7 @@ public class ReportForm extends javax.swing.JFrame {
         getContentPane().add(filter_lbl);
         filter_lbl.setBounds(52, 155, 38, 22);
 
-        filter_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No. of Vehicles", "Stock", "Avg. Time per Job" }));
+        filter_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No. of Vehicles", "Spare Parts", "Avg. Time per Job" }));
         filter_cmbo.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 filter_cmboItemStateChanged(evt);
@@ -198,6 +224,11 @@ public class ReportForm extends javax.swing.JFrame {
         ext_filter_cmbo.setBounds(260, 156, 99, 22);
 
         open_btn.setText("Open");
+        open_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                open_btnActionPerformed(evt);
+            }
+        });
         getContentPane().add(open_btn);
         open_btn.setBounds(52, 542, 102, 44);
 
@@ -229,8 +260,9 @@ public class ReportForm extends javax.swing.JFrame {
 
     private void sort_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sort_btnActionPerformed
         try {
-            if (filter_cmbo.getSelectedItem() == "Stock") {
-
+            if (filter_cmbo.getSelectedItem() == "Spare Parts") {
+                File odir = new File("Reports/Spare Parts");
+                listFilesFromDirectory(odir);
             }
             if (filter_cmbo.getSelectedItem() == "Avg. Time Per Job") {
 
@@ -258,91 +290,97 @@ public class ReportForm extends javax.swing.JFrame {
     }//GEN-LAST:event_sort_btnActionPerformed
 
     private void filter_cmboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filter_cmboItemStateChanged
-        if (!selectedCmbo.equals(filter_cmbo.getSelectedItem())) {
-            selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
-            if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
-                ext_filter_cmbo.removeAllItems();
-                ext_filter_cmbo.addItem("Overall");
-                ext_filter_cmbo.addItem("By Month");
-                ext_filter_cmbo.addItem("By Job Type");
-                ext_filter_cmbo.addItem("By Customer");
+        if (receptionMenuForm != null) {
+            if (!selectedCmbo.equals(filter_cmbo.getSelectedItem())) {
+                selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
+                if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
+                    ext_filter_cmbo.removeAllItems();
+                    ext_filter_cmbo.addItem("Overall");
+                    ext_filter_cmbo.addItem("By Month");
+                    ext_filter_cmbo.addItem("By Job Type");
+                    ext_filter_cmbo.addItem("By Customer");
+                }
+                if (filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
+                    ext_filter_cmbo.removeAllItems();
+                    ext_filter_cmbo.addItem("Overall");
+                    ext_filter_cmbo.addItem("By Job Type");
+                    ext_filter_cmbo.addItem("Mechanic");
+                }
             }
-            if (filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
-                ext_filter_cmbo.removeAllItems();
-                ext_filter_cmbo.addItem("Overall");
-                ext_filter_cmbo.addItem("By Job Type");
-                ext_filter_cmbo.addItem("Mechanic");
+
+            if (filter_cmbo.getSelectedItem() == "No. of Vehicles" || filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
+                ext_filter_cmbo.setVisible(true);
+                if (filter_cmbo.getSelectedItem() == "Avg. Time Per Job") {
+                    if (ext_filter_cmbo.getSelectedItem() == "Mechanic") {
+                        xext_filter_cmbo.setVisible(false);
+                        filter_txt.setVisible(true);
+                    } else {
+                        xext_filter_cmbo.setVisible(true);
+                        filter_txt.setVisible(false);
+                    }
+                }
+            } else {
+                ext_filter_cmbo.setVisible(false);
+                xext_filter_cmbo.setVisible(false);
+                filter_txt.setVisible(false);
             }
         }
 
-        if (filter_cmbo.getSelectedItem() == "No. of Vehicles" || filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
-            ext_filter_cmbo.setVisible(true);
-            if (filter_cmbo.getSelectedItem() == "Avg. Time Per Job") {
-                if (ext_filter_cmbo.getSelectedItem() == "Mechanic") {
-                    xext_filter_cmbo.setVisible(false);
-                    filter_txt.setVisible(true);
-                } else {
-                    xext_filter_cmbo.setVisible(true);
-                    filter_txt.setVisible(false);
-                }
-            }
-        } else {
-            ext_filter_cmbo.setVisible(false);
-            xext_filter_cmbo.setVisible(false);
-            filter_txt.setVisible(false);
-        }
     }//GEN-LAST:event_filter_cmboItemStateChanged
 
     private void ext_filter_cmboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ext_filter_cmboItemStateChanged
-        if (!selectedCmbo.equals(ext_filter_cmbo.getSelectedItem())) {
-            if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
-                if (ext_filter_cmbo.getSelectedItem() == "By Job Type") {
-                    xext_filter_cmbo.removeAllItems();
-                    xext_filter_cmbo.addItem("MOT");
-                    xext_filter_cmbo.addItem("Annual Service");
-                    xext_filter_cmbo.addItem("Repair");
-                    xext_filter_cmbo.setVisible(true);
-                } else if (ext_filter_cmbo.getSelectedItem() == "By Customer") {
-                    xext_filter_cmbo.removeAllItems();
-                    xext_filter_cmbo.addItem("Casual");
-                    xext_filter_cmbo.addItem("Account Holder");
-                    xext_filter_cmbo.setVisible(true);
-                } else {
-                    xext_filter_cmbo.setVisible(false);
-                }
+        if (receptionMenuForm != null) {
+            if (!selectedCmbo.equals(ext_filter_cmbo.getSelectedItem())) {
+                if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
+                    if (ext_filter_cmbo.getSelectedItem() == "By Job Type") {
+                        xext_filter_cmbo.removeAllItems();
+                        xext_filter_cmbo.addItem("MOT");
+                        xext_filter_cmbo.addItem("Annual Service");
+                        xext_filter_cmbo.addItem("Repair");
+                        xext_filter_cmbo.setVisible(true);
+                    } else if (ext_filter_cmbo.getSelectedItem() == "By Customer") {
+                        xext_filter_cmbo.removeAllItems();
+                        xext_filter_cmbo.addItem("Casual");
+                        xext_filter_cmbo.addItem("Account Holder");
+                        xext_filter_cmbo.setVisible(true);
+                    } else {
+                        xext_filter_cmbo.setVisible(false);
+                    }
 
-            }
-            if (filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
-                if (ext_filter_cmbo.getSelectedItem() == "By Job Type") {
-                    xext_filter_cmbo.removeAllItems();
-                    xext_filter_cmbo.addItem("MOT");
-                    xext_filter_cmbo.addItem("Annual Service");
-                    xext_filter_cmbo.addItem("Repair");
-                    xext_filter_cmbo.setVisible(true);
                 }
-                if (ext_filter_cmbo.getSelectedItem() == "Mechanic") {
-                    xext_filter_cmbo.setVisible(false);
-                    filter_txt.setVisible(true);
-                } else {
-                    xext_filter_cmbo.setVisible(true);
-                    filter_txt.setVisible(false);
-                }
-                if (ext_filter_cmbo.getSelectedItem() == "Overall") {
-                    xext_filter_cmbo.setVisible(false);
-                    filter_txt.setVisible(false);
-                }
+                if (filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
+                    if (ext_filter_cmbo.getSelectedItem() == "By Job Type") {
+                        xext_filter_cmbo.removeAllItems();
+                        xext_filter_cmbo.addItem("MOT");
+                        xext_filter_cmbo.addItem("Annual Service");
+                        xext_filter_cmbo.addItem("Repair");
+                        xext_filter_cmbo.setVisible(true);
+                    }
+                    if (ext_filter_cmbo.getSelectedItem() == "Mechanic") {
+                        xext_filter_cmbo.setVisible(false);
+                        filter_txt.setVisible(true);
+                    } else {
+                        xext_filter_cmbo.setVisible(true);
+                        filter_txt.setVisible(false);
+                    }
+                    if (ext_filter_cmbo.getSelectedItem() == "Overall") {
+                        xext_filter_cmbo.setVisible(false);
+                        filter_txt.setVisible(false);
+                    }
 
+                }
+                selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
             }
-            selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
+
+            if (xext_filter_cmbo.isVisible() || filter_txt.isVisible()) {
+                System.out.println("Yes");
+                sort_btn.setLocation(490, 154);
+            } else {
+                System.out.println("No");
+                sort_btn.setLocation(375, 154);
+            }
         }
 
-        if (xext_filter_cmbo.isVisible() || filter_txt.isVisible()) {
-            System.out.println("Yes");
-            sort_btn.setLocation(490, 154);
-        } else {
-            System.out.println("No");
-            sort_btn.setLocation(375, 154);
-        }
     }//GEN-LAST:event_ext_filter_cmboItemStateChanged
 
     private void generate_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generate_btnActionPerformed
@@ -350,7 +388,13 @@ public class ReportForm extends javax.swing.JFrame {
             checkForDirectory();
             if (filter_cmbo.getSelectedItem().equals("No. of Vehicles")) {
                 if (ext_filter_cmbo.getSelectedItem().equals("Overall")) {
-                    numVehicle = new NumOfVehicles("", new Date(), "Overall", control.NumOfVehicles());
+                    try {
+                        numVehicle = new NumOfVehicles("", new Date(), "Overall", control.NumOfVehicles());
+                        File odir = new File("Reports/No. of Vehicles/Overall");
+                        listFilesFromDirectory(odir);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
 
                 }
 
@@ -360,6 +404,48 @@ public class ReportForm extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_generate_btnActionPerformed
+
+    private void open_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_open_btnActionPerformed
+        if (!report_tbl.getSelectionModel().isSelectionEmpty()) {
+            int selectedRow = report_tbl.getSelectedRow();
+
+            for (int i = 0; i < fileList.size(); i++) {
+                if (fileList.get(i).getFileName().equals(report_tbl.getValueAt(selectedRow, 0))) {
+                    try {
+                        File reportFile = new File(fileList.get(i).getFilePath());
+                        Desktop.getDesktop().open(reportFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+    }//GEN-LAST:event_open_btnActionPerformed
+
+    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
+        if (fpMenuForm != null) {
+            fpMenuForm = new ForepersonMenuForm(control);
+            fpMenuForm.setVisible(true);
+        }
+        
+        if (franchiseeMenuForm != null) {
+            franchiseeMenuForm = new FranchiseeMenuForm(control);
+            franchiseeMenuForm.setVisible(true);
+        }
+        
+        if (receptionMenuForm != null) {
+            receptionMenuForm = new ReceptionistMenuForm(control);
+            receptionMenuForm.setVisible(true);
+        }
+        
+        this.dispose();
+    }//GEN-LAST:event_back_btnActionPerformed
+
+    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
+        control.logout();
+        this.dispose();
+    }//GEN-LAST:event_logout_btnActionPerformed
 
     public void listFilesFromDirectory(final File folder) {
         String fileName = null;
@@ -407,11 +493,60 @@ public class ReportForm extends javax.swing.JFrame {
             }
 
             if (filter_cmbo.getSelectedItem().equals("No. of Vehicles")) {
+                File vdir = new File("Reports/No. of Vehicles");
+                vdir.mkdir();
+
+                if (ext_filter_cmbo.getSelectedItem().equals("Overall")) {
+                    File odir = new File("Reports/No. of Vehicles/Overall");
+                    odir.mkdir();
+
+                }
+
+                if (ext_filter_cmbo.getSelectedItem().equals("By Job Type")) {
+                    File odir = new File("Reports/No. of Vehicles/By Job Type");
+                    odir.mkdir();
+
+                    if (xext_filter_cmbo.getSelectedItem().equals("MOT")) {
+                        File mdir = new File("Reports/No. of Vehicles/By Job Type/Mot");
+                        mdir.mkdir();
+                    }
+
+                    if (xext_filter_cmbo.getSelectedItem().equals("Annual Service")) {
+                        File mdir = new File("Reports/No. of Vehicles/By Job Type/Annual Service");
+                        mdir.mkdir();
+                    }
+
+                    if (xext_filter_cmbo.getSelectedItem().equals("Repair")) {
+                        File mdir = new File("Reports/No. of Vehicles/By Job Type/Repair");
+                        mdir.mkdir();
+                    }
+
+                }
+
+                if (ext_filter_cmbo.getSelectedItem().equals("Customer")) {
+                    File odir = new File("Reports/No. of Vehicles/Customer");
+                    odir.mkdir();
+
+                    if (xext_filter_cmbo.getSelectedItem().equals("Casual")) {
+                        File mdir = new File("Reports/No. of Vehicles/Customer/Casual");
+                        mdir.mkdir();
+                    }
+
+                    if (xext_filter_cmbo.getSelectedItem().equals("Account Holder")) {
+                        File mdir = new File("Reports/No. of Vehicles/Customer/Account Holder");
+                        mdir.mkdir();
+                    }
+
+                }
+
+            }
+
+            if (filter_cmbo.getSelectedItem().equals("Avg. Time Per Job")) {
                 if (!f.exists()) {
                     f.mkdir();
                 }
 
-                File vdir = new File("Reports/No. of Vehicles");
+                File vdir = new File("Reports/Avg. Time Per Job");
                 vdir.mkdir();
 
                 if (ext_filter_cmbo.getSelectedItem().equals("Overall")) {
@@ -419,8 +554,40 @@ public class ReportForm extends javax.swing.JFrame {
                         vdir.mkdir();
                     }
 
-                    File odir = new File("Reports/No. of Vehicles/Overall");
+                    File odir = new File("Reports/Avg. Time Per Job/Overall");
                     odir.mkdir();
+
+                }
+
+                if (ext_filter_cmbo.getSelectedItem().equals("By Job Type")) {
+                    File odir = new File("Reports/Avg. Time Per Job/By Job Type");
+                    odir.mkdir();
+
+                    if (xext_filter_cmbo.getSelectedItem().equals("MOT")) {
+                        File mdir = new File("Reports/Avg. Time Per Job/By Job Type/Mot");
+                        mdir.mkdir();
+                    }
+
+                    if (xext_filter_cmbo.getSelectedItem().equals("Annual Service")) {
+                        File mdir = new File("Reports/Avg. Time Per Job/By Job Type/Annual Service");
+                        mdir.mkdir();
+                    }
+
+                    if (xext_filter_cmbo.getSelectedItem().equals("Repair")) {
+                        File mdir = new File("Reports/Avg. Time Per Job/By Job Type/Repair");
+                        mdir.mkdir();
+                    }
+
+                }
+
+                if (ext_filter_cmbo.getSelectedItem().equals("Mechanic")) {
+                    File odir = new File("Reports/Avg. Time Per Job/Mechanic");
+                    odir.mkdir();
+
+                    String mechanic = filter_txt.getSelectedText();
+
+                    File mdir = new File("Reports/Avg. Timer Per Job/Mechanic/" + mechanic);
+                    mdir.mkdir();
 
                 }
 

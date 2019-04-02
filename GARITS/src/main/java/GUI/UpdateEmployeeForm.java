@@ -24,6 +24,13 @@ public class UpdateEmployeeForm extends javax.swing.JFrame {
     public UpdateEmployeeForm(Control c) {
         initComponents();
         control = c;
+        control.getWindowList().add(this);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**

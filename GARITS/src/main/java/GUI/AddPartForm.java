@@ -17,34 +17,99 @@ import java.util.ArrayList;
  */
 public class AddPartForm extends javax.swing.JFrame {
     Control control;
+    ReceptionistMenuForm receptionMenuForm;
+    ForepersonMenuForm fpMenuForm;
+    FranchiseeMenuForm franchiseeMenuForm;
+    
+    
     Supplier supplierObj = new Supplier();
     ArrayList<Supplier> supplierList = supplierObj.getAllSuppliers();
 
-    
     /**
      * Creates new form MenuForm
      */
     public AddPartForm() {
         initComponents();
-        
-        
+
         // Populates the combo box with the names of all suppliers
-            for (Supplier supplier : supplierList) {
-                partSupplier.addItem(supplier.getName());
-            }
+        for (Supplier supplier : supplierList) {
+            partSupplier.addItem(supplier.getName());
+        }
+
+        this.setLocationRelativeTo(null);
 
     }
-    
+
     public AddPartForm(Control c) {
         initComponents();
-        
+
         control = c;
+        control.getWindowList().add(this);
         
         // Populates the combo box with the names of all suppliers
-            for (Supplier supplier : supplierList) {
-                partSupplier.addItem(supplier.getName());
-            }
+        for (Supplier supplier : supplierList) {
+            partSupplier.addItem(supplier.getName());
+        }
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
 
+    public AddPartForm(Control c, ReceptionistMenuForm rmf) {
+        initComponents();
+
+        control = c;
+        receptionMenuForm = rmf;
+        
+        control.getWindowList().add(this);
+        
+        // Populates the combo box with the names of all suppliers
+        for (Supplier supplier : supplierList) {
+            partSupplier.addItem(supplier.getName());
+        }
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public AddPartForm(Control c, ForepersonMenuForm fpmf) {
+        initComponents();
+
+        control = c;
+        fpMenuForm = fpmf;
+        
+        control.getWindowList().add(this);
+        
+        // Populates the combo box with the names of all suppliers
+        for (Supplier supplier : supplierList) {
+            partSupplier.addItem(supplier.getName());
+        }
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public AddPartForm(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+
+        control = c;
+        franchiseeMenuForm = fmf;
+        
+        control.getWindowList().add(this);
+        
+        // Populates the combo box with the names of all suppliers
+        for (Supplier supplier : supplierList) {
+            partSupplier.addItem(supplier.getName());
+        }
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**
@@ -255,14 +320,14 @@ public class AddPartForm extends javax.swing.JFrame {
         }
 
         int threshold = Integer.parseInt(partThreshold.getText());
-        
+
         // gets the supplier selected
         for (int i = 0; i < supplierList.size(); i++) {
-            if (supplierList.get(i).getName().equals((String)partSupplier.getSelectedItem())) {
+            if (supplierList.get(i).getName().equals((String) partSupplier.getSelectedItem())) {
                 formSupplier = supplierList.get(i);
             }
         }
-        
+
         Part part = new Part(name, manufacturer, formSupplier, vehicleType, price, year, quantity, threshold);
 
         try {
@@ -276,23 +341,17 @@ public class AddPartForm extends javax.swing.JFrame {
                 partYear.setText("");
                 partThreshold.setText("");
             }
-        }
-        catch (SQLException e) {
+        } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
-        
-        
-        
-        
+
     }//GEN-LAST:event_partAddButtonActionPerformed
 
     private void partSupplierActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_partSupplierActionPerformed
         // TODO add your handling code here:
-        
 
-        
-        
+
     }//GEN-LAST:event_partSupplierActionPerformed
 
     private void partYearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_partYearActionPerformed
@@ -401,7 +460,7 @@ public class AddPartForm extends javax.swing.JFrame {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new AddPartForm().setVisible(true);
-     
+
             }
         });
     }
@@ -428,4 +487,3 @@ public class AddPartForm extends javax.swing.JFrame {
     private javax.swing.JTextField partYear;
     // End of variables declaration//GEN-END:variables
 }
-

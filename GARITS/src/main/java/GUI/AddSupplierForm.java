@@ -16,17 +16,66 @@ import javax.swing.JDialog;
  */
 public class AddSupplierForm extends javax.swing.JFrame {
     Control control;
+    ForepersonMenuForm fpMenuForm;
+    FranchiseeMenuForm franchiseeMenuForm;
+    ReceptionistMenuForm receptionMenuForm;
     
     /**
      * Creates new form MenuForm
      */
     public AddSupplierForm() {
         initComponents();
+        
+        this.setLocationRelativeTo(null);
     }
     
     public AddSupplierForm(Control c) {
         initComponents();
         control = c;
+        
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    AddSupplierForm(Control c, ForepersonMenuForm fpmf) {
+        initComponents();
+        control = c;
+        fpMenuForm = fpmf;
+        
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    AddSupplierForm(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+        control = c;
+        franchiseeMenuForm = fmf;
+        
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    AddSupplierForm(Control c, ReceptionistMenuForm rmf) {
+        initComponents();
+        control = c;
+        receptionMenuForm = rmf;
+        
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**
@@ -38,10 +87,10 @@ public class AddSupplierForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
+        logout_btn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         supplierAddButton = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        back_btn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -53,7 +102,12 @@ public class AddSupplierForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton3.setText("Logout");
+        logout_btn.setText("Logout");
+        logout_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_btnActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Add Supplier");
@@ -65,7 +119,12 @@ public class AddSupplierForm extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Back");
+        back_btn.setText("Back");
+        back_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_btnActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel4.setText("Email");
@@ -130,9 +189,9 @@ public class AddSupplierForm extends javax.swing.JFrame {
                         .addComponent(supplierAddButton, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(173, 173, 173))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton4)
+                        .addComponent(back_btn)
                         .addGap(7, 7, 7)
-                        .addComponent(jButton3)
+                        .addComponent(logout_btn)
                         .addGap(12, 12, 12))))
         );
         layout.setVerticalGroup(
@@ -140,8 +199,8 @@ public class AddSupplierForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3))
+                    .addComponent(back_btn)
+                    .addComponent(logout_btn))
                 .addGap(40, 40, 40)
                 .addComponent(jLabel1)
                 .addGap(54, 54, 54)
@@ -213,6 +272,30 @@ public class AddSupplierForm extends javax.swing.JFrame {
         
     }//GEN-LAST:event_supplierAddButtonActionPerformed
 
+    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
+        if (fpMenuForm != null) {
+            fpMenuForm = new ForepersonMenuForm(control);
+            fpMenuForm.setVisible(true);
+        }
+        
+        if (franchiseeMenuForm != null) {
+            franchiseeMenuForm = new FranchiseeMenuForm(control);
+            franchiseeMenuForm.setVisible(true);
+        }
+        
+        if (receptionMenuForm != null) {
+            receptionMenuForm = new ReceptionistMenuForm(control);
+            receptionMenuForm.setVisible(true);
+        }
+        
+        this.dispose();
+    }//GEN-LAST:event_back_btnActionPerformed
+
+    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
+        control.logout();
+        this.dispose();
+    }//GEN-LAST:event_logout_btnActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -280,13 +363,13 @@ public class AddSupplierForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton back_btn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JButton logout_btn;
     private javax.swing.JButton supplierAddButton;
     private javax.swing.JTextField supplierAddress;
     private javax.swing.JTextField supplierEmail;

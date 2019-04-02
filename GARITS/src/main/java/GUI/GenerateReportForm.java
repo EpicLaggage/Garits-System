@@ -34,12 +34,21 @@ public class GenerateReportForm extends javax.swing.JFrame {
 
         control = c;
         franchiseeMenuForm = fmf;
+        
+        control.getWindowList().add(this);
+        
         selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
         exSelectedCmbo = String.valueOf(ext_filter_cmbo.getSelectedItem());
     }
 
     public void setControl(Control c) {
         control = c;
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**
