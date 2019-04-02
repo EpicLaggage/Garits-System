@@ -34,11 +34,10 @@ public class Alert extends Thread {
         ArrayList<Part> lowStockParts = lowStockParts();
         
         while (true) {
-            /*
+            
             if (!reminderSnoozed) {
-                AlertForm alertForm = new AlertForm(lowStockParts);
-                alertForm.setVisible(true);
-            }*/
+                lowStockParts = lowStockParts();
+            }
 
             if (!lowStockParts.isEmpty()) {
                 
@@ -51,14 +50,14 @@ public class Alert extends Thread {
                   reminderSnoozed = false;
             }
             else {
-               JOptionPane.showMessageDialog(null, "Snoozed for 4 seconds");
+               JOptionPane.showMessageDialog(null, "Snoozed for 10 minutes");
                reminderSnoozed = true;
             }
             
             
             
             try {
-                Thread.sleep(4000);
+                Thread.sleep(600000);
             }
             catch (InterruptedException e) {
                 e.printStackTrace();

@@ -8,6 +8,8 @@ package GUI;
 import GUI.PartsTable.LowStockTableModel;
 import StockControl.Alert;
 import StockControl.Part;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 /**
@@ -105,7 +107,10 @@ public class AlertForm extends javax.swing.JFrame {
     private void replenishOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replenishOrderButtonActionPerformed
         int selectedRow = lowStockTable.getSelectedRow();
         Part selectedPart = tableModel.getLowStock().get(lowStockTable.convertRowIndexToModel(selectedRow));
-        System.out.println(selectedPart.getPrice());
+        ReplenishmentOrderForm orderForm = new ReplenishmentOrderForm(selectedPart);
+        orderForm.setVisible(true);
+        this.dispose();
+        
     }//GEN-LAST:event_replenishOrderButtonActionPerformed
 
     /**
