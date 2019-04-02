@@ -38,8 +38,8 @@ public class Alert extends Thread {
             if (!reminderSnoozed) {
                 AlertForm alertForm = new AlertForm(lowStockParts);
                 alertForm.setVisible(true);
-            }
-*/
+            }*/
+
             if (!lowStockParts.isEmpty()) {
                 
                 int reply = JOptionPane.showConfirmDialog(null,
@@ -48,7 +48,6 @@ public class Alert extends Thread {
                 if (reply == JOptionPane.YES_OPTION) {
                   AlertForm alertForm = new AlertForm(lowStockParts);
                   alertForm.setVisible(true);
-                  
                   reminderSnoozed = false;
             }
             else {

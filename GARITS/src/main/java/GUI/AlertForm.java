@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import GUI.PartsTable.LowStockTableModel;
 import StockControl.Alert;
 import StockControl.Part;
 import java.util.ArrayList;
@@ -15,20 +16,21 @@ import java.util.ArrayList;
  */
 public class AlertForm extends javax.swing.JFrame {
     private static ArrayList<Part> lowStockParts;
+    private LowStockTableModel tableModel;
+    private Alert alert;
     /**
      * Creates new form MenuForm
      */
     public AlertForm(ArrayList<Part> lowStockParts) {
         this.lowStockParts = lowStockParts;
+        
         initComponents();
-        displayLowStockParts();
+        tableModel = new LowStockTableModel();
+        tableModel.setLowStock(lowStockParts);
+        lowStockTable.setModel(tableModel);
+        
     }
 
-    private void displayLowStockParts() {
-        for (Part part : lowStockParts) {
-            lowStockArea.append("Part name: " + part.getName() + "    Quantity: " + part.getQty() + "    Threshold: " + part.getThreshold() + "\n");
-        }
-    }
     
     
     
@@ -43,67 +45,67 @@ public class AlertForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton5 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        lowStockArea = new javax.swing.JTextArea();
         replenishOrderButton = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        lowStockTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-
-        jButton5.setText("Remind Me");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("LOW STOCK ALERT");
 
-        lowStockArea.setEditable(false);
-        lowStockArea.setColumns(20);
-        lowStockArea.setRows(5);
-        jScrollPane1.setViewportView(lowStockArea);
-
-        replenishOrderButton.setText("Go to Replenishment Orders");
+        replenishOrderButton.setText("Create Replenishment Order");
         replenishOrderButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 replenishOrderButtonActionPerformed(evt);
             }
         });
 
+        lowStockTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        jScrollPane2.setViewportView(lowStockTable);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane1)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(210, 210, 210)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(189, 189, 189)
-                        .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(replenishOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(131, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(replenishOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(10, 10, 10)
                 .addComponent(jLabel1)
-                .addGap(17, 17, 17)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 236, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, 44, Short.MAX_VALUE)
-                    .addComponent(replenishOrderButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(29, 29, 29))
+                .addComponent(replenishOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(31, 31, 31))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void replenishOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replenishOrderButtonActionPerformed
-        // TODO add your handling code here:
+        int selectedRow = lowStockTable.getSelectedRow();
+        Part selectedPart = tableModel.getLowStock().get(lowStockTable.convertRowIndexToModel(selectedRow));
+        System.out.println(selectedPart.getPrice());
     }//GEN-LAST:event_replenishOrderButtonActionPerformed
 
     /**
@@ -144,10 +146,9 @@ public class AlertForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea lowStockArea;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable lowStockTable;
     private javax.swing.JButton replenishOrderButton;
     // End of variables declaration//GEN-END:variables
 }
