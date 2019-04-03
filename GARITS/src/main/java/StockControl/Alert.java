@@ -2,6 +2,7 @@ package StockControl;
 
 import GUI.AlertForm;
 import java.util.ArrayList;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class Alert extends Thread {
@@ -31,7 +32,7 @@ public class Alert extends Thread {
     }
     @Override
     public void run() {
-        ArrayList<Part> lowStockParts = lowStockParts();
+        List<Part> lowStockParts = lowStockParts();
         
         while (true) {
             
