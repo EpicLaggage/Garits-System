@@ -6,8 +6,11 @@
 package Core;
 
 import Account.Customer;
+import Account.Vehicle;
 import DatabaseConnect.DBConnect;
-import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
+import GUI.MotRemindersForm;
+import java.util.List;
+import java.sql.ResultSet;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ public class DetectMOTDue extends Thread {
     DBConnect dbConnect;
     ArrayList<Customer> motReminders = new ArrayList<Customer>();
     boolean reminderSnoozed = false;
+    String motDate;
 
     public DetectMOTDue() {
         dbConnect = new DBConnect();
@@ -37,7 +41,7 @@ public class DetectMOTDue extends Thread {
             if(!reminderSnoozed) {
                 //Adding 5 working days to date
                 Date date=new Date();
-                DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+                DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                 Calendar calendar = Calendar.getInstance();
                 date=calendar.getTime();
                 int days = 5;
@@ -54,24 +58,48 @@ public class DetectMOTDue extends Thread {
 
                 }            
                 date=calendar.getTime();
-                String motDate = dateFormat.format(date);
-                System.out.println(motDate);
+                motDate = dateFormat.format(date);
                 
-                String latePaymentsQuery = "SELECT * FROM garitsdb.Invoice WHERE"
-                        + " invoice_paid = '0' AND payment_due_date <= '" 
-                        + calendar + "';";
+                
+                String motDueQuery = "SELECT * FROM garitsdb.Vehicle, "
+                        + "garitsdb.Customer WHERE garitsdb.Customer.customer_account_holder = '1' \n" +
+                        "AND garitsdb.Vehicle.customer_id =  garitsdb.Customer.customer_id\n" +
+                        "AND garitsdb.Vehicle.purchase_date LIKE '____-"+motDate.substring(5) + "';";
+                ResultSet rs; 
+                try {
+                    rs = dbConnect.read(motDueQuery);
+
+                    while(rs.next()) {
+                        Customer customer = new Customer();
+                        Vehicle vehicle = new Vehicle();
+                        List<Vehicle> vehicles = new ArrayList<Vehicle>();
+                        vehicle.setReg_num(rs.getString("reg_no"));
+                        customer.setName(rs.getString("customer_name"));
+                        customer.setAddress(rs.getString("customer_address"));
+                        customer.setPostcode(rs.getString("customer_postcode"));
+                        vehicles.add(vehicle);
+                        customer.setVehicles(vehicles);
+                        motReminders.add(customer);
+                        
+                    }
+
+                }
+                catch (Exception exc) {
+                    exc.printStackTrace();
+                }
 
             }
             
-            //do check for user role here
+            
+            //do check for new date here
             if(!motReminders.isEmpty()){
                 int reply = JOptionPane.showConfirmDialog(null,
                         "Do you want to MOT reminders?",
                         "MOT reminder", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
-//                  RemindersForm reminders = new RemindersForm(
-//                          unpaidInvoices);
-//                  reminders.setVisible(true);
+                  MotRemindersForm reminders = new MotRemindersForm(
+                          motReminders, motDate);
+                  reminders.setVisible(true);
                   motReminders.clear();
                   reminderSnoozed = false;
                 }
@@ -84,7 +112,7 @@ public class DetectMOTDue extends Thread {
             // sleep pauses thread execution for 15 minutes below
 
             try {
-                    Thread.sleep(5000);//900000
+                    Thread.sleep(900000);//900000
             }
             catch(InterruptedException e)
             {}

@@ -1,10 +1,13 @@
 package Account;
 
+import java.util.List;
+
 public class Customer extends Account {
     
         private boolean accountHolder;
         private int customerId;
-	private Vehicle[] vehicles;
+	private List<Vehicle> vehicles;
+        private String postcode;
         
         
 
@@ -19,7 +22,7 @@ public class Customer extends Account {
 	 * @param phone
 	 * @param address
 	 */
-        public Customer(boolean accountHolder, int customerId, Vehicle[] vehicles, String name, String email, String phone, String address) {
+        public Customer(boolean accountHolder, int customerId, List<Vehicle> vehicles, String name, String email, String phone, String address) {
             super(name, email, phone, address);
             this.accountHolder = accountHolder;
             this.customerId = customerId;
@@ -34,11 +37,11 @@ public class Customer extends Account {
             this.accountHolder = accountHolder;
         }
 
-        public Vehicle[] getVehicles() {
+        public List<Vehicle> getVehicles() {
             return vehicles;
         }
 
-        public void setVehicles(Vehicle[] vehicles) {
+        public void setVehicles(List<Vehicle> vehicles) {
             this.vehicles = vehicles;
         }
 
@@ -49,6 +52,16 @@ public class Customer extends Account {
         public void setCustomerId(int customerId) {
             this.customerId = customerId;
         }
+
+    public String getPostcode() {
+        return postcode;
+    }
+
+    public void setPostcode(String postcode) {
+        this.postcode = postcode;
+    }
+        
+        
         
              
         
