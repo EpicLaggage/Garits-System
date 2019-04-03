@@ -5,34 +5,101 @@
  */
 package GUI;
 
+import Core.Control;
 import GUI.PartsTable.LowStockTableModel;
 import StockControl.Alert;
 import StockControl.Part;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author jly09
  */
 public class AlertForm extends javax.swing.JFrame {
-    private static ArrayList<Part> lowStockParts;
-    private LowStockTableModel tableModel;
-    private Alert alert;
+    Control control;
+    static List<Part> lowStockParts;
+    
     /**
      * Creates new form MenuForm
      */
-    public AlertForm(ArrayList<Part> lowStockParts) {
-        this.lowStockParts = lowStockParts;
-        
+    public AlertForm() {
         initComponents();
-        tableModel = new LowStockTableModel();
-        tableModel.setLowStock(lowStockParts);
-        lowStockTable.setModel(tableModel);
+        lowStockParts();
         
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public AlertForm(List<Part> parts) {
+        initComponents();
+        
+        lowStockParts = parts;
+        
+        lowStockParts();
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
+    
+    public AlertForm(Control c) {
+        initComponents();
+        lowStockParts();
+        
+        control = c;
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public AlertForm(Control c, List<Part> parts) {
+        initComponents();
+        
+        lowStockParts = parts;
+        
+        lowStockParts();
+        
+        control = c;
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
+    }
+    
+    public int lowStockParts() {
+        ArrayList<Part> lowStockPartList = new ArrayList<>();
+        ArrayList<Part> allParts;
+        Part partObj = new Part();
+        int lowStockCount = 0;
+        
+        allParts = partObj.getAllParts();
+        
+        
+        for (Part part : allParts) {
+            if (part.getQty() < part.getThreshold()) {
+               lowStockPartList.add(part);
+               lowStockCount++;
+            }
+        }
+        /*
+        for (Part lowStockPart : lowStockPartList) {
+            lowStockArea.append("Part name: " + lowStockPart.getName() + "    Quantity: " + lowStockPart.getQty() + "    Threshold: " + lowStockPart.getThreshold() + '\n');
+        }
+        */
+        // to determine whether to run the low stock alert form or not
+        return lowStockCount;
+    }
     
     
     
@@ -106,11 +173,11 @@ public class AlertForm extends javax.swing.JFrame {
 
     private void replenishOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replenishOrderButtonActionPerformed
         int selectedRow = lowStockTable.getSelectedRow();
-        Part selectedPart = tableModel.getLowStock().get(lowStockTable.convertRowIndexToModel(selectedRow));
-        ReplenishmentOrderForm orderForm = new ReplenishmentOrderForm(selectedPart);
-        orderForm.setVisible(true);
+        //Part selectedPart = tableModel.getLowStock().get(lowStockTable.convertRowIndexToModel(selectedRow));
+        //ReplenishmentOrderForm orderForm = new ReplenishmentOrderForm(selectedPart);
+        //orderForm.setVisible(true);
         this.dispose();
-        
+
     }//GEN-LAST:event_replenishOrderButtonActionPerformed
 
     /**

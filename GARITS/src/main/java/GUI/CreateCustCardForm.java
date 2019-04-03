@@ -45,6 +45,9 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         initComponents();
         this.setSize(new Dimension(770, 685));
         this.setPreferredSize(new Dimension(770, 685));
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
         customerType_cmbo.addItemListener(new CustomerTypeItemListener());
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
@@ -60,11 +63,17 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         initComponents();
         this.setSize(new Dimension(770, 685));
         this.setPreferredSize(new Dimension(770, 685));
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        
         customerType_cmbo.addItemListener(new CustomerTypeItemListener());
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
         control = c;
         franchiseeMenuForm = fmf;
+        
+        control.getWindowList().add(this);
+        
         addVehicleForm = new AddVehicleForm(control, this);
         vehicleList = new ArrayList<Vehicle>();
         phone_txt.setDocument(new LengthRestrictedDocument(11));
@@ -72,6 +81,12 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
         customerType_cmbo.setSelectedItem("Casual");
         this.setLocationRelativeTo(null);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     public void setControl(Control c) {
@@ -394,7 +409,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
                 || email_txt.getText() == ""
                 || !phone_txt.getText().matches("[0-9]{11}")
                 || address_txt.getText() == ""
-                || !postcode_txt.getText().matches("^[A-Z]{1,2}[0-9R][0-9A-Z]? [0-9][ABD-HJLNP-UW-Z]{2}$")) {
+                || !postcode_txt.getText().matches("^[A-Z]{1,2}[0-9R][0-9A-Z]?[ ]{0,1}[0-9][A-Z]{2}$")) {
             JOptionPane.showMessageDialog(new JFrame("Error"), "Incorrect format for text fields.");
         } else {
             try {
@@ -455,14 +470,15 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
     private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
         reset();
-        this.setVisible(false);
         control.logout();
+        this.dispose();
     }//GEN-LAST:event_logout_btnActionPerformed
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
         reset();
-        this.setVisible(false);
-        control.OpenMenu();
+        franchiseeMenuForm = new FranchiseeMenuForm(control);
+        franchiseeMenuForm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_back_btnActionPerformed
 
     private void postcode_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postcode_txtActionPerformed

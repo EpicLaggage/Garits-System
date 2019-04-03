@@ -6,6 +6,7 @@
 package GUI;
 
 import Core.Backup;
+import Core.Control;
 import java.io.File;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,9 +16,12 @@ import javax.swing.table.DefaultTableModel;
  * @author jly09
  */
 public class RestoreForm extends javax.swing.JFrame {
+
+    Control control;
+    AdminMenuForm adminMenuForm;
     DefaultTableModel model;
     File dir = new File("backups/");
-    
+
     /**
      * Creates new form MenuForm
      */
@@ -26,21 +30,38 @@ public class RestoreForm extends javax.swing.JFrame {
         populateTable();
     }
 
+    public RestoreForm(Control c) {
+        initComponents();
+        control = c;
+        control.getWindowList().add(this);
+        populateTable();
+    }
+
+    public RestoreForm(Control c, AdminMenuForm amf) {
+        initComponents();
+        control = c;
+        adminMenuForm = amf;
+        control.getWindowList().add(this);
+        populateTable();
+    }
+
     private void populateTable() {
         File[] dirListing = dir.listFiles();
         model = (DefaultTableModel) backupTable.getModel();
         if (dirListing != null) {
             for (File child : dirListing) {
-                model.addRow(new Object[] {child});
+                model.addRow(new Object[]{child});
             }
         }
-        
+
     }
 
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
+    }
 
-
-    
-    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,16 +71,21 @@ public class RestoreForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
+        logout_btn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         backupTable = new javax.swing.JTable();
         restoreButton = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        back_Btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton3.setText("Logout");
+        logout_btn.setText("Logout");
+        logout_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_btnActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Restore From Backup");
@@ -92,7 +118,12 @@ public class RestoreForm extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Back");
+        back_Btn.setText("Back");
+        back_Btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_BtnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -100,9 +131,9 @@ public class RestoreForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addComponent(back_Btn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(logout_btn)
                 .addGap(22, 22, 22))
             .addGroup(layout.createSequentialGroup()
                 .addGap(52, 52, 52)
@@ -118,19 +149,15 @@ public class RestoreForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(logout_btn)
+                    .addComponent(back_Btn))
                 .addGap(40, 40, 40)
                 .addComponent(jLabel1)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(28, 28, 28)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(155, 155, 155))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(restoreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(84, 84, 84))))
+                .addGap(28, 28, 28)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(restoreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(58, Short.MAX_VALUE))
         );
 
         pack();
@@ -140,15 +167,28 @@ public class RestoreForm extends javax.swing.JFrame {
         Backup backup = new Backup();
         int selectedRow = backupTable.getSelectedRow();
         int selectedColumn = backupTable.getSelectedColumn();
-        
+
         File selectedFile = (File) model.getValueAt(selectedRow, selectedColumn);
         System.out.println(selectedFile.getAbsolutePath());
-        
+
         if (backup.restoreFromBackup(selectedFile)) {
             JOptionPane.showMessageDialog(this, "Successfully restored from backup: " + selectedFile.getName());
+            adminMenuForm = new AdminMenuForm(control);
+            adminMenuForm.setVisible(true);
             this.dispose();
         }
     }//GEN-LAST:event_restoreButtonActionPerformed
+
+    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
+        control.logout();
+        this.dispose();
+    }//GEN-LAST:event_logout_btnActionPerformed
+
+    private void back_BtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_BtnActionPerformed
+        adminMenuForm = new AdminMenuForm(control);
+        adminMenuForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_back_BtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -189,12 +229,11 @@ public class RestoreForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton back_Btn;
     private javax.swing.JTable backupTable;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton logout_btn;
     private javax.swing.JButton restoreButton;
     // End of variables declaration//GEN-END:variables
 }
-

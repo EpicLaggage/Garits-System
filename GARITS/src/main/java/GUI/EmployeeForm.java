@@ -23,7 +23,15 @@ public class EmployeeForm extends javax.swing.JFrame {
     
     public EmployeeForm(Control c) {
         initComponents();
+        
         control = c;
+        control.getWindowList().add(this);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
     
 

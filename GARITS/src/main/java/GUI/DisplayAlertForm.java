@@ -19,11 +19,25 @@ public class DisplayAlertForm extends javax.swing.JFrame {
      */
     public DisplayAlertForm() {
         initComponents();
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     public DisplayAlertForm(Control c) {
         initComponents();
+        
         control = c;
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**

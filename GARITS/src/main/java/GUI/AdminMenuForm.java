@@ -6,6 +6,7 @@
 package GUI;
 
 import Core.*;
+import java.awt.Dimension;
 
 /**
  *
@@ -13,22 +14,43 @@ import Core.*;
  */
 public class AdminMenuForm extends javax.swing.JFrame {
     Control control;
+    BackupForm backupForm;
+    RestoreForm restoreForm;
+    CreateEmpAccForm createEmployeeForm;
+    EmployeeForm employeeForm;
     
     /**
      * Creates new form MenuForm
      */
     public AdminMenuForm() {
         initComponents();
+        this.setSize(new Dimension(840, 600));
+        this.setPreferredSize(new Dimension(840, 600));
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public AdminMenuForm(Control c) {
         initComponents();
+        this.setSize(new Dimension(840, 600));
+        this.setPreferredSize(new Dimension(840, 600));
         
         control = c;
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     public void setControl(Control c) {
         control = c;
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
     
     /**
@@ -40,76 +62,143 @@ public class AdminMenuForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        backupRestore_btn = new javax.swing.JButton();
+        panel = new javax.swing.JPanel();
+        database_lbl = new javax.swing.JLabel();
+        backup_btn = new javax.swing.JButton();
         addUser_btn = new javax.swing.JButton();
+        user_lbl = new javax.swing.JLabel();
         user_sud_btn = new javax.swing.JButton();
         logout_btn = new javax.swing.JButton();
-        database_lbl = new javax.swing.JLabel();
-        user_lbl = new javax.swing.JLabel();
+        restore_btn = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(840, 580));
+        getContentPane().setLayout(null);
 
-        backupRestore_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        backupRestore_btn.setText("Backup and Restore");
-
-        addUser_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        addUser_btn.setText("Add User");
-
-        user_sud_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        user_sud_btn.setText("Search, Update and Delete");
-
-        logout_btn.setText("Logout");
+        panel.setMinimumSize(new java.awt.Dimension(840, 600));
+        panel.setPreferredSize(new java.awt.Dimension(840, 600));
 
         database_lbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         database_lbl.setText("Database");
 
+        backup_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        backup_btn.setText("Backup");
+        backup_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                backup_btnActionPerformed(evt);
+            }
+        });
+
+        addUser_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        addUser_btn.setText("Add User");
+        addUser_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addUser_btnActionPerformed(evt);
+            }
+        });
+
         user_lbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         user_lbl.setText("User");
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(755, 755, 755)
-                        .addComponent(logout_btn))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(database_lbl)
-                            .addComponent(backupRestore_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
+        user_sud_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        user_sud_btn.setText("Search, Update and Delete");
+        user_sud_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                user_sud_btnActionPerformed(evt);
+            }
+        });
+
+        logout_btn.setText("Logout");
+
+        restore_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        restore_btn.setText("Restore");
+        restore_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                restore_btnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(200, 200, 200)
+                        .addComponent(database_lbl)
+                        .addGap(210, 210, 210)
                         .addComponent(user_lbl))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(52, 52, 52)
-                        .addComponent(addUser_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(user_sud_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(12, 12, 12))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(65, 65, 65)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 656, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(120, 120, 120)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(restore_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(backup_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(33, 33, 33)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(addUser_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(user_sud_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(logout_btn)
+                .addGap(32, 32, 32))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
                 .addGap(13, 13, 13)
                 .addComponent(logout_btn)
                 .addGap(52, 52, 52)
-                .addComponent(database_lbl)
-                .addGap(18, 18, 18)
-                .addComponent(backupRestore_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(user_lbl)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(addUser_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(user_sud_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(database_lbl)
+                    .addComponent(user_lbl))
+                .addGap(19, 19, 19)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(150, 150, 150)
+                        .addComponent(restore_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(addUser_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(backup_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addComponent(user_sud_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
+
+        getContentPane().add(panel);
+        panel.setBounds(0, 0, 840, 600);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void backup_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backup_btnActionPerformed
+        backupForm = new BackupForm(control, this);
+        backupForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_backup_btnActionPerformed
+
+    private void user_sud_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_user_sud_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_user_sud_btnActionPerformed
+
+    private void restore_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restore_btnActionPerformed
+        restoreForm = new RestoreForm(control, this);
+        restoreForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_restore_btnActionPerformed
+
+    private void addUser_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUser_btnActionPerformed
+        createEmployeeForm = new CreateEmpAccForm(control, this);
+        createEmployeeForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_addUser_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -149,9 +238,12 @@ public class AdminMenuForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton addUser_btn;
-    private javax.swing.JButton backupRestore_btn;
+    private javax.swing.JButton backup_btn;
     private javax.swing.JLabel database_lbl;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton logout_btn;
+    private javax.swing.JPanel panel;
+    private javax.swing.JButton restore_btn;
     private javax.swing.JLabel user_lbl;
     private javax.swing.JButton user_sud_btn;
     // End of variables declaration//GEN-END:variables

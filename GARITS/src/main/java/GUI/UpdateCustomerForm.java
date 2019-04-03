@@ -67,6 +67,9 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
 
         control = c;
         customerForm = cf;
+        
+        control.getWindowList().add(this);
+        
         addVehicleForm = new AddVehicleForm(control, this);
         updateVehicleForm = new UpdateVehicleForm(control, this);
         vehicleList = new ArrayList<Vehicle>();
@@ -75,6 +78,12 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
 
         this.setLocationRelativeTo(null);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     public void setControl(Control c) {

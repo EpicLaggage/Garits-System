@@ -6,17 +6,27 @@
 package GUI;
 
 import Core.Control;
+import java.awt.Dimension;
 
 /**
  *
  * @author jly09
  */
 public class FranchiseeMenuForm extends javax.swing.JFrame {
-
-    Control control = null;
-    CreateCustCardForm createCustomerForm = null;
-    CustomerForm customerForm = null;
-    ReportForm reportForm = null;
+    Control control;
+    CreateCustCardForm createCustomerForm;
+    CustomerForm customerForm;
+    ReportForm reportForm;
+    CreateJobForm createJobForm;
+    JobForm jobForm;
+    DisplayReminderForm displayReminderForm;
+    AddPartForm addPartForm;
+    DisplayAllParts displayAllParts;
+    OrderPartForm orderPartForm;
+    AddSupplierForm addSupplierForm;
+    DisplayInvoiceForm displayInvoiceForm;
+    DisplayAlertForm displayAlertForm;
+    AlertForm alertForm;
 
     /**
      * Creates new form MenuForm
@@ -24,20 +34,31 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     public FranchiseeMenuForm() {
         initComponents();
         
-        createCustomerForm = new CreateCustCardForm();
-        customerForm = new CustomerForm();
+        this.setSize(new Dimension(1570, 680));
+        this.setPreferredSize(new Dimension(1570, 680));
+
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public FranchiseeMenuForm(Control c) {
         initComponents();
+        
+        this.setSize(new Dimension(1570, 680));
+        this.setPreferredSize(new Dimension(1570, 680));
 
         control = c;
-        
-        createCustomerForm = new CreateCustCardForm(control, this);
-        customerForm = new CustomerForm(control, this);
-        reportForm = new ReportForm(control, this);
+        control.getWindowList().add(this);
         
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     public void setControl(Control c) {
@@ -59,50 +80,39 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton10 = new javax.swing.JButton();
+        panel = new javax.swing.JPanel();
+        logout_btn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
         createCust_btn = new javax.swing.JButton();
         customer_suad_btn = new javax.swing.JButton();
+        createJob_btn = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        displayUpdateJobs_btn = new javax.swing.JButton();
+        displayReminders_btn = new javax.swing.JButton();
+        displayUpdateParts_btn = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        orderParts_btn = new javax.swing.JButton();
+        addSupplier_btn = new javax.swing.JButton();
+        reports_btn = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        jButton14 = new javax.swing.JButton();
-        jButton15 = new javax.swing.JButton();
+        displayAlerts_btn = new javax.swing.JButton();
+        displayPrintInvoice_btn = new javax.swing.JButton();
+        createInvoice_btn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton16 = new javax.swing.JButton();
+        jSeparator1 = new javax.swing.JSeparator();
+        addParts_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1000, 600));
+        setSize(new java.awt.Dimension(1000, 600));
+        getContentPane().setLayout(null);
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton2.setText("Create Job");
-        jButton2.setMaximumSize(new java.awt.Dimension(163, 31));
-        jButton2.setMinimumSize(new java.awt.Dimension(163, 31));
-        jButton2.setPreferredSize(new java.awt.Dimension(163, 31));
-
-        jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton4.setText("Display and Update Jobs");
-
-        jButton3.setText("Logout");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel2.setText("Job");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel3.setText("Stock");
-
-        jButton6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton6.setText("Search, Update, Add and Delete");
-
-        jButton10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton10.setText("Create Invoice");
+        logout_btn.setText("Logout");
+        logout_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_btnActionPerformed(evt);
+            }
+        });
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel4.setText("Customer");
@@ -123,148 +133,292 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
             }
         });
 
-        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel5.setText("Reports");
-
-        jButton12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton12.setText("Display and Print");
-
-        jButton13.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton13.setText("Order Parts");
-
-        jButton14.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton14.setText("Generate Report");
-        jButton14.addActionListener(new java.awt.event.ActionListener() {
+        createJob_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        createJob_btn.setText("Create Job");
+        createJob_btn.setMaximumSize(new java.awt.Dimension(163, 31));
+        createJob_btn.setMinimumSize(new java.awt.Dimension(163, 31));
+        createJob_btn.setPreferredSize(new java.awt.Dimension(163, 31));
+        createJob_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton14ActionPerformed(evt);
+                createJob_btnActionPerformed(evt);
             }
         });
 
-        jButton15.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton15.setText("Add Supplier");
+        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel2.setText("Job");
+
+        displayUpdateJobs_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        displayUpdateJobs_btn.setText("Display and Update Jobs");
+        displayUpdateJobs_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayUpdateJobs_btnActionPerformed(evt);
+            }
+        });
+
+        displayReminders_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        displayReminders_btn.setText("Display Reminders");
+        displayReminders_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayReminders_btnActionPerformed(evt);
+            }
+        });
+
+        displayUpdateParts_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        displayUpdateParts_btn.setText("Display and Update Parts");
+        displayUpdateParts_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayUpdateParts_btnActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel3.setText("Stock");
+
+        orderParts_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        orderParts_btn.setText("Order Parts");
+        orderParts_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                orderParts_btnActionPerformed(evt);
+            }
+        });
+
+        addSupplier_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        addSupplier_btn.setText("Add Supplier");
+        addSupplier_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addSupplier_btnActionPerformed(evt);
+            }
+        });
+
+        reports_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        reports_btn.setText("Display, Generate, Print");
+        reports_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                reports_btnActionPerformed(evt);
+            }
+        });
+
+        jLabel5.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel5.setText("Reports");
+
+        displayAlerts_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        displayAlerts_btn.setText("Display Alerts");
+        displayAlerts_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayAlerts_btnActionPerformed(evt);
+            }
+        });
+
+        displayPrintInvoice_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        displayPrintInvoice_btn.setText("Display and Print Invoices");
+        displayPrintInvoice_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayPrintInvoice_btnActionPerformed(evt);
+            }
+        });
+
+        createInvoice_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        createInvoice_btn.setText("Create Invoice");
+        createInvoice_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                createInvoice_btnActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Invoice/Alerts");
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton1.setText("Display Invoices");
+        addParts_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        addParts_btn.setText("Add Parts");
+        addParts_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addParts_btnActionPerformed(evt);
+            }
+        });
 
-        jButton7.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton7.setText("Display Alerts");
-
-        jButton16.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton16.setText("Display Reminders");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
-                .addGap(22, 22, 22))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(64, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 265, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 259, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel5))
-                        .addGap(0, 128, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 246, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 283, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jLabel4)
-                                    .addComponent(createCust_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 257, Short.MAX_VALUE)
-                                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(customer_suad_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton16, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jLabel3))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton3))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(73, 73, 73)
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(180, 180, 180)
                         .addComponent(jLabel4)
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(customer_suad_btn, javax.swing.GroupLayout.DEFAULT_SIZE, 98, Short.MAX_VALUE)
-                            .addComponent(createCust_btn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                    .addComponent(jButton16, javax.swing.GroupLayout.DEFAULT_SIZE, 100, Short.MAX_VALUE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(31, 31, 31)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton15, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addComponent(jLabel5)
-                .addGap(27, 27, 27)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(79, Short.MAX_VALUE))
+                        .addGap(210, 210, 210)
+                        .addComponent(jLabel2)
+                        .addGap(226, 226, 226)
+                        .addComponent(jLabel3)
+                        .addGap(197, 197, 197)
+                        .addComponent(jLabel5)
+                        .addGap(156, 156, 156)
+                        .addComponent(jLabel1))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1440, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addGap(120, 120, 120)
+                                .addComponent(customer_suad_btn)
+                                .addGap(29, 29, 29)
+                                .addComponent(displayUpdateJobs_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addGap(390, 390, 390)
+                                .addComponent(displayReminders_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addGap(120, 120, 120)
+                                .addComponent(createCust_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(29, 29, 29)
+                                .addComponent(createJob_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(27, 27, 27)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addComponent(addParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(301, 301, 301)
+                                .addComponent(createInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(displayUpdateParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(orderParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(addSupplier_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(panelLayout.createSequentialGroup()
+                                        .addGap(31, 31, 31)
+                                        .addComponent(reports_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(29, 29, 29)
+                                        .addComponent(displayPrintInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(panelLayout.createSequentialGroup()
+                                        .addGap(301, 301, 301)
+                                        .addComponent(displayAlerts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                .addGap(110, 110, 110))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                .addComponent(logout_btn)
+                .addGap(78, 78, 78))
         );
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(logout_btn)
+                .addGap(52, 52, 52)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1)
+                        .addComponent(jLabel5)))
+                .addGap(19, 19, 19)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(createCust_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(createJob_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(addParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(createInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(9, 9, 9)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(customer_suad_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(displayUpdateJobs_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(displayPrintInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(10, 10, 10)
+                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(displayReminders_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(displayAlerts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addComponent(displayUpdateParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9)
+                                .addComponent(orderParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10)
+                                .addComponent(addSupplier_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(reports_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+
+        getContentPane().add(panel);
+        panel.setBounds(0, 0, 1570, 680);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void createCust_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createCust_btnActionPerformed
-        hideGUI();
+        createCustomerForm = new CreateCustCardForm(control, this);
         createCustomerForm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_createCust_btnActionPerformed
 
     private void customer_suad_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customer_suad_btnActionPerformed
-        hideGUI();
+        customerForm = new CustomerForm(control, this);
         customerForm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_customer_suad_btnActionPerformed
 
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
-        hideGUI();
+    private void addParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addParts_btnActionPerformed
+        addPartForm = new AddPartForm();
+        addPartForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_addParts_btnActionPerformed
+
+    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
+        control.logout();
+        this.dispose();
+    }//GEN-LAST:event_logout_btnActionPerformed
+
+    private void createJob_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createJob_btnActionPerformed
+        createJobForm = new CreateJobForm(control, this);
+        createJobForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_createJob_btnActionPerformed
+
+    private void displayUpdateJobs_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayUpdateJobs_btnActionPerformed
+        jobForm = new JobForm(control, this);
+        jobForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_displayUpdateJobs_btnActionPerformed
+
+    private void displayReminders_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayReminders_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_displayReminders_btnActionPerformed
+
+    private void displayUpdateParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayUpdateParts_btnActionPerformed
+        displayAllParts = new DisplayAllParts(control, this);
+        displayAllParts.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_displayUpdateParts_btnActionPerformed
+
+    private void orderParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderParts_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_orderParts_btnActionPerformed
+
+    private void addSupplier_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplier_btnActionPerformed
+        addSupplierForm = new AddSupplierForm(control, this);
+        addSupplierForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_addSupplier_btnActionPerformed
+
+    private void reports_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_reports_btnActionPerformed
+        reportForm = new ReportForm(control, this);
         reportForm.setVisible(true);
-    }//GEN-LAST:event_jButton14ActionPerformed
+        this.dispose();
+    }//GEN-LAST:event_reports_btnActionPerformed
+
+    private void createInvoice_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoice_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_createInvoice_btnActionPerformed
+
+    private void displayPrintInvoice_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayPrintInvoice_btnActionPerformed
+        displayInvoiceForm = new DisplayInvoiceForm(control, this);
+        displayInvoiceForm.setVisible(true);
+    }//GEN-LAST:event_displayPrintInvoice_btnActionPerformed
+
+    private void displayAlerts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayAlerts_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_displayAlerts_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -317,24 +471,26 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addParts_btn;
+    private javax.swing.JButton addSupplier_btn;
     private javax.swing.JButton createCust_btn;
+    private javax.swing.JButton createInvoice_btn;
+    private javax.swing.JButton createJob_btn;
     private javax.swing.JButton customer_suad_btn;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
-    private javax.swing.JButton jButton15;
-    private javax.swing.JButton jButton16;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
+    private javax.swing.JButton displayAlerts_btn;
+    private javax.swing.JButton displayPrintInvoice_btn;
+    private javax.swing.JButton displayReminders_btn;
+    private javax.swing.JButton displayUpdateJobs_btn;
+    private javax.swing.JButton displayUpdateParts_btn;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton logout_btn;
+    private javax.swing.JButton orderParts_btn;
+    private javax.swing.JPanel panel;
+    private javax.swing.JButton reports_btn;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,6 +6,7 @@
 package GUI;
 
 import Account.Mechanic;
+import Core.Control;
 import DatabaseConnect.DBConnect;
 import Processing.Invoice;
 import Processing.Job;
@@ -43,6 +44,7 @@ import javax.swing.table.TableColumn;
  */
 public class UpdateJobForm extends javax.swing.JFrame {
     public static final String BOLD = "resources/fonts/OpenSans-Bold.ttf";
+    Control control;
     Job selectedJob;
     String searchText;
     String searchFilter;
@@ -73,6 +75,24 @@ public class UpdateJobForm extends javax.swing.JFrame {
         this.searchFilter = searchFilter;
         this.searchText = searchText;
         this.allJobs = allJobs;
+    }
+    
+    public UpdateJobForm(Control c, Job selectedJob, String searchText,
+            String searchFilter, JobForm allJobs) {
+        initComponents();
+        this.control = c;
+        control.getWindowList().add(this);
+        this.selectedJob = selectedJob;
+        dbConnect = control.getDatabaseConnector();
+        this.searchFilter = searchFilter;
+        this.searchText = searchText;
+        this.allJobs = allJobs;
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**

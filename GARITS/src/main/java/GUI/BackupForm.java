@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
  */
 public class BackupForm extends javax.swing.JFrame {
     Control control;
+    AdminMenuForm adminMenuForm;
     
     /**
      * Creates new form BackupForm
@@ -23,13 +24,38 @@ public class BackupForm extends javax.swing.JFrame {
     public BackupForm() {
         initComponents();
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
     }
     
     public BackupForm(Control c) {
         initComponents();
+        
         control = c;
+        
+        control.getWindowList().add(this);
+        
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
     }
+    
+    public BackupForm(Control c, AdminMenuForm amf) {
+        initComponents();
+        
+        control = c;
+        adminMenuForm = amf;
+        
+        control.getWindowList().add(this);
+        
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        this.setLocationRelativeTo(null);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -42,16 +68,30 @@ public class BackupForm extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         backupButton = new javax.swing.JButton();
+        report_lbl = new javax.swing.JLabel();
+        cancel_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Backup Database");
+        jLabel1.setText("Backup");
 
+        backupButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         backupButton.setText("Backup Now");
         backupButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 backupButtonActionPerformed(evt);
+            }
+        });
+
+        report_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        report_lbl.setText("Database");
+
+        cancel_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        cancel_btn.setText("Cancel");
+        cancel_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cancel_btnActionPerformed(evt);
             }
         });
 
@@ -62,21 +102,30 @@ public class BackupForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1))
+                        .addGap(72, 72, 72)
+                        .addComponent(backupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(83, 83, 83)
-                        .addComponent(backupButton)))
-                .addContainerGap(70, Short.MAX_VALUE))
+                        .addGap(117, 117, 117)
+                        .addComponent(cancel_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(133, 133, 133)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(report_lbl)
+                            .addComponent(jLabel1))))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(40, 40, 40)
+                .addComponent(report_lbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
-                .addComponent(backupButton)
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addGap(63, 63, 63)
+                .addComponent(backupButton, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(29, 29, 29)
+                .addComponent(cancel_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(56, Short.MAX_VALUE))
         );
 
         pack();
@@ -87,8 +136,14 @@ public class BackupForm extends javax.swing.JFrame {
         if (backup.createBackup()) {
             JOptionPane.showMessageDialog(this, "Backup successfully created");
             this.dispose(); // close window after backup has been created
+            adminMenuForm.setVisible(true);
         }
     }//GEN-LAST:event_backupButtonActionPerformed
+
+    private void cancel_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_btnActionPerformed
+        this.dispose();
+        adminMenuForm.setVisible(true);
+    }//GEN-LAST:event_cancel_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -127,6 +182,8 @@ public class BackupForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton backupButton;
+    private javax.swing.JButton cancel_btn;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel report_lbl;
     // End of variables declaration//GEN-END:variables
 }

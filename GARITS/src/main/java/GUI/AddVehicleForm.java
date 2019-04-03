@@ -7,6 +7,8 @@ package GUI;
 
 import Core.*;
 import Account.Vehicle;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
@@ -27,23 +29,27 @@ public class AddVehicleForm extends javax.swing.JFrame {
      */
     public AddVehicleForm() {
         initComponents();
-        
+
         regNum_txt.setDocument(new LengthRestrictedDocument(8));
         engine_serial_no_txt.setDocument(new LengthRestrictedDocument(10));
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
-        
+
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public AddVehicleForm(Control c) {
         initComponents();
 
         control = c;
+        control.getWindowList().add(this);
+        
         regNum_txt.setDocument(new LengthRestrictedDocument(8));
         engine_serial_no_txt.setDocument(new LengthRestrictedDocument(10));
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
-        
+
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public AddVehicleForm(CreateCustCardForm cForm) {
@@ -57,13 +63,14 @@ public class AddVehicleForm extends javax.swing.JFrame {
 
         control = c;
         custForm = cForm;
-        
+
         control = c;
         regNum_txt.setDocument(new LengthRestrictedDocument(8));
         engine_serial_no_txt.setDocument(new LengthRestrictedDocument(10));
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
-        
+
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public AddVehicleForm(Control c, UpdateCustomerForm cForm) {
@@ -71,13 +78,20 @@ public class AddVehicleForm extends javax.swing.JFrame {
 
         control = c;
         updateCustForm = cForm;
-        
+
         control = c;
         regNum_txt.setDocument(new LengthRestrictedDocument(8));
         engine_serial_no_txt.setDocument(new LengthRestrictedDocument(10));
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
-        
+
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     public void setControl(Control c) {
@@ -112,6 +126,8 @@ public class AddVehicleForm extends javax.swing.JFrame {
         chassisNo_txt = new javax.swing.JTextField();
         chassisNo_lbl = new javax.swing.JLabel();
         back_btn = new javax.swing.JButton();
+        purchaseDate_lbl = new javax.swing.JLabel();
+        purchaseDate_txt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -134,11 +150,23 @@ public class AddVehicleForm extends javax.swing.JFrame {
         model_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         model_lbl.setText("Model");
 
+        regNum_txt.setToolTipText("Vehicle registration number");
+
+        make_txt.setToolTipText("Vehicle make");
+
+        model_txt.setToolTipText("Vehicle model");
+
+        colour_txt.setToolTipText("Vehicle colour");
+
         colour_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         colour_lbl.setText("Colour");
 
+        engine_serial_no_txt.setToolTipText("Vehicle engine serial number");
+
         engine_serial_no_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         engine_serial_no_lbl.setText("Engine Serial No.");
+
+        chassisNo_txt.setToolTipText("Vehicle chassis no");
 
         chassisNo_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         chassisNo_lbl.setText("Chassis No.");
@@ -150,88 +178,112 @@ public class AddVehicleForm extends javax.swing.JFrame {
             }
         });
 
+        purchaseDate_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        purchaseDate_lbl.setText("Purchase Date");
+
+        purchaseDate_txt.setToolTipText("Vehicle purchase date (dd/mm/yyyy)");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(add_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(53, 53, 53)
                         .addComponent(addVehicle_lbl)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(170, 170, 170)
                         .addComponent(back_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addComponent(regNum_lbl)
+                        .addGap(51, 51, 51)
+                        .addComponent(regNum_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addComponent(make_lbl)
+                        .addGap(73, 73, 73)
+                        .addComponent(make_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addComponent(model_lbl)
+                        .addGap(67, 67, 67)
+                        .addComponent(model_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(72, 72, 72)
+                        .addComponent(colour_lbl)
+                        .addGap(63, 63, 63)
+                        .addComponent(colour_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(31, 31, 31)
+                        .addComponent(engine_serial_no_lbl)
+                        .addGap(21, 21, 21)
+                        .addComponent(engine_serial_no_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(178, 178, 178)
+                        .addComponent(add_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(purchaseDate_lbl)
+                            .addComponent(chassisNo_lbl))
+                        .addGap(36, 36, 36)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(31, 31, 31)
-                                .addComponent(engine_serial_no_lbl)
-                                .addGap(21, 21, 21)
-                                .addComponent(engine_serial_no_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(chassisNo_lbl)
-                                    .addGap(36, 36, 36)
-                                    .addComponent(chassisNo_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                    .addGap(72, 72, 72)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(make_lbl)
-                                                .addComponent(model_lbl)
-                                                .addComponent(colour_lbl))
-                                            .addGap(63, 63, 63)
-                                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                                .addComponent(model_txt, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 150, Short.MAX_VALUE)
-                                                .addComponent(make_txt, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(regNum_txt, javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(colour_txt)))
-                                        .addComponent(regNum_lbl, javax.swing.GroupLayout.Alignment.LEADING)))))
-                        .addGap(0, 115, Short.MAX_VALUE)))
+                            .addComponent(chassisNo_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(purchaseDate_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(55, 55, 55)
+                        .addGap(42, 42, 42)
                         .addComponent(addVehicle_lbl))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(back_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(back_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(55, 55, 55)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(regNum_lbl)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(regNum_lbl))
                     .addComponent(regNum_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(make_lbl)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(make_lbl))
                     .addComponent(make_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(model_lbl)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(model_lbl))
                     .addComponent(model_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(colour_lbl)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(colour_lbl))
                     .addComponent(colour_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(engine_serial_no_lbl)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(engine_serial_no_lbl))
                     .addComponent(engine_serial_no_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chassisNo_lbl)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(1, 1, 1)
+                        .addComponent(chassisNo_lbl))
                     .addComponent(chassisNo_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 87, Short.MAX_VALUE)
-                .addComponent(add_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(55, 55, 55))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(purchaseDate_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(purchaseDate_lbl))
+                .addGap(40, 40, 40)
+                .addComponent(add_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         pack();
@@ -240,30 +292,45 @@ public class AddVehicleForm extends javax.swing.JFrame {
     private void add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_btnActionPerformed
         vehicle = new Vehicle();
         if (regNum_txt.getText() != ""
-                || make_txt.getText() != ""
-                || model_txt.getText() != ""
-                || engine_serial_no_txt.getText() != ""
-                || chassisNo_txt.getText() != ""
-                || colour_txt.getText() != "") {
+                && make_txt.getText() != ""
+                && model_txt.getText() != ""
+                && engine_serial_no_txt.getText() != ""
+                && chassisNo_txt.getText() != ""
+                && colour_txt.getText() != ""
+                && purchaseDate_txt.getText().matches("[0-9]{2}[0-9]{2}[0-9]{4}")) {
+            
+            Date date = null;
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 
-            vehicle.setReg_num(regNum_txt.getText());
-            vehicle.setMake(make_txt.getText());
-            vehicle.setModel(model_txt.getText());
-            vehicle.setEngine_serial_no(engine_serial_no_txt.getText());
-            vehicle.setChassis_no(chassisNo_txt.getText());
-            vehicle.setColour(colour_txt.getText());
-
-            if (custForm != null && vehicle != null) {
-                custForm.getVehicleList().add(vehicle);
-                custForm.getVehicleComboBox().addItem(vehicle.getReg_num() + "," + vehicle.getMake() + "," + vehicle.getModel());
-                this.setVisible(false);
+            try {
+                date = dateFormat.parse(purchaseDate_txt.getText());
+                
+            } catch (Exception e) {
+                date = null;
             }
 
-            if (updateCustForm != null && vehicle != null) {
-                updateCustForm.getVehicleList().add(vehicle);
-                updateCustForm.getVehicleComboBox().addItem(vehicle.getReg_num() + "," + vehicle.getMake() + "," + vehicle.getModel());
-                this.setVisible(false);
+            if (date != null) {
+                vehicle.setReg_num(regNum_txt.getText());
+                vehicle.setMake(make_txt.getText());
+                vehicle.setModel(model_txt.getText());
+                vehicle.setEngine_serial_no(engine_serial_no_txt.getText());
+                vehicle.setChassis_no(chassisNo_txt.getText());
+                vehicle.setColour(colour_txt.getText());
+                vehicle.setPurchase_date(purchaseDate_txt.getText());
+
+                if (custForm != null && vehicle != null) {
+                    custForm.getVehicleList().add(vehicle);
+                    custForm.getVehicleComboBox().addItem(vehicle.getReg_num() + "," + vehicle.getMake() + "," + vehicle.getModel());
+                    this.setVisible(false);
+                }
+
+                if (updateCustForm != null && vehicle != null) {
+                    updateCustForm.getVehicleList().add(vehicle);
+                    updateCustForm.getVehicleComboBox().addItem(vehicle.getReg_num() + "," + vehicle.getMake() + "," + vehicle.getModel());
+                    this.setVisible(false);
+                }
             }
+
         }
 
     }//GEN-LAST:event_add_btnActionPerformed
@@ -378,6 +445,8 @@ public class AddVehicleForm extends javax.swing.JFrame {
     private javax.swing.JTextField make_txt;
     private javax.swing.JLabel model_lbl;
     private javax.swing.JTextField model_txt;
+    private javax.swing.JLabel purchaseDate_lbl;
+    private javax.swing.JTextField purchaseDate_txt;
     private javax.swing.JLabel regNum_lbl;
     private javax.swing.JTextField regNum_txt;
     // End of variables declaration//GEN-END:variables

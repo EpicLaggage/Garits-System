@@ -7,9 +7,12 @@ import GUI.*;
 
 import DatabaseConnect.DBConnect;
 import java.sql.*;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import javax.swing.JFrame;
 
 public class Control {
 
@@ -19,63 +22,40 @@ public class Control {
     //Database Connection
     DBConnect dbConnect;
 
-    Customer cust = null;
-
     //GUI Forms
-    AddPartForm addPartForm;
-    AddSupplierForm addSupplierForm;
-    CreateEmpAccForm createEmployeeForm;
-    CreateJobForm createJobForm;
-    DisplayAlertForm displayAlertForm;
-    DisplayInvoiceForm displayInvoiceForm;
-    DisplayReminderForm displayReminderForm;
-    EmployeeForm employeeForm;
-    JobForm jobForm;
     LoginForm loginForm;
+    
     AdminMenuForm adminMenuForm;
     ForepersonMenuForm fpMenuForm;
     FranchiseeMenuForm franchiseeMenuForm;
     MechanicMenuForm mechanicMenuForm;
     ReceptionistMenuForm receptionMenuForm;
-    OrderPartForm orderPartForm;
-    PaymentForm paymentForm;
-    RemindersForm remindersForm;
-    StockForm stockForm;
-    UpdateEmployeeForm updateEmployeeForm;
-    UpdateJobForm updateJobForm;
+    
+    List<JFrame> windowList;
+    
+    Thread getTime;
 
     public Control() {
         dbConnect = new DBConnect();
         
-        adminMenuForm = new AdminMenuForm(this);
+        windowList = new ArrayList<>();
+
+        /*adminMenuForm = new AdminMenuForm(this);
         fpMenuForm = new ForepersonMenuForm(this);
         franchiseeMenuForm = new FranchiseeMenuForm(this);
         mechanicMenuForm = new MechanicMenuForm(this);
-        receptionMenuForm = new ReceptionistMenuForm(this);
-        addPartForm = new AddPartForm(this);
-        addSupplierForm = new AddSupplierForm(this);
-        createJobForm = new CreateJobForm(this);
-        displayAlertForm = new DisplayAlertForm(this);
-        displayInvoiceForm = new DisplayInvoiceForm(this);
-        displayReminderForm = new DisplayReminderForm(this);
-        employeeForm = new EmployeeForm(this);
-        jobForm = new JobForm(this);
+        receptionMenuForm = new ReceptionistMenuForm(this);*/
         loginForm = new LoginForm(this);
-        orderPartForm = new OrderPartForm(this);
-        paymentForm = new PaymentForm(this);
-        remindersForm = new RemindersForm(this);
-        stockForm = new StockForm(this);
-        updateEmployeeForm = new UpdateEmployeeForm(this);
-        
-        Thread getTime = new DetectLatePayment();
+
+        getTime = new DetectLatePayment();
         getTime.start();
 
-        HideForms();
+        //disposeForms();
 
-        staff = new Staff("Jack", "1", "Franchisee", "Jack");
+        //staff = new Staff("Jack", "1", "Administrator", "Jack");
 
-        OpenMenu();
-
+        loginForm.setVisible(true);
+        //OpenMenu();
     }
 
     /**
@@ -142,8 +122,12 @@ public class Control {
                     ps1.close();
 
                     for (int i = 0; i < vList.size(); i++) {
-                        PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO vehicle (reg_no,car_make,car_model,engine_serial,chassis_no,colour,customer_id) VALUES "
-                                + "(?,?,?,?,?,?,?)");
+                        PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO vehicle (reg_no,car_make,car_model,engine_serial,chassis_no,colour,purchase_date,customer_id) VALUES "
+                                + "(?,?,?,?,?,?,?,?)");
+
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        Date purchase_date = dateFormat.parse(vList.get(i).getPurchase_date());
+                        java.sql.Date sqlDate = new java.sql.Date(purchase_date.getTime());
 
                         ps2.setString(1, vList.get(i).getReg_num());
                         ps2.setString(2, vList.get(i).getMake());
@@ -151,7 +135,8 @@ public class Control {
                         ps2.setString(4, vList.get(i).getEngine_serial_no());
                         ps2.setString(5, vList.get(i).getChassis_no());
                         ps2.setString(6, vList.get(i).getColour());
-                        ps2.setInt(7, id);
+                        ps2.setDate(7, sqlDate);
+                        ps2.setInt(8, id);
 
                         dbConnect.executeWriteQuery(ps2);
                         ps2.close();
@@ -197,8 +182,12 @@ public class Control {
             if (vList != null) {
 
                 for (int i = 0; i < vList.size(); i++) {
-                    PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO vehicle (reg_no,car_make,car_model,engine_serial,chassis_no,colour,customer_id) VALUES "
-                            + "(?,?,?,?,?,?,?)");
+                    PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO vehicle (reg_no,car_make,car_model,engine_serial,chassis_no,colour,purchase_date,customer_id) VALUES "
+                            + "(?,?,?,?,?,?,?,?)");
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                    Date purchase_date = dateFormat.parse(vList.get(i).getPurchase_date());
+                    java.sql.Date sqlDate = new java.sql.Date(purchase_date.getTime());
 
                     ps2.setString(1, vList.get(i).getReg_num());
                     ps2.setString(2, vList.get(i).getMake());
@@ -206,7 +195,8 @@ public class Control {
                     ps2.setString(4, vList.get(i).getEngine_serial_no());
                     ps2.setString(5, vList.get(i).getChassis_no());
                     ps2.setString(6, vList.get(i).getColour());
-                    ps2.setInt(7, id);
+                    ps2.setDate(7, sqlDate);
+                    ps2.setInt(8, id);
 
                     dbConnect.executeWriteQuery(ps2);
                     ps2.close();
@@ -425,7 +415,7 @@ public class Control {
             dbConnect.executeWriteQuery(ps);
             ps.close();
 
-            PreparedStatement ps1 = dbConnect.setPreparedStatement(dbConnect.connect(), "DELETE FROM Vehicle WHERE customer_id=?");
+            PreparedStatement ps1 = dbConnect.setPreparedStatement(dbConnect.connect(), "DELETE FROM vehicle WHERE customer_id=?");
             ps1.setInt(1, acc.getCustomerId());
 
             dbConnect.executeWriteQuery(ps1);
@@ -434,8 +424,12 @@ public class Control {
             if (acc.getVehicles() != null) {
 
                 for (int i = 0; i < acc.getVehicles().size(); i++) {
-                    PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO vehicle (reg_no,car_make,car_model,engine_serial,chassis_no,colour,customer_id) VALUES "
-                            + "(?,?,?,?,?,?,?)");
+                    PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO vehicle (reg_no,car_make,car_model,engine_serial,chassis_no,colour,purchase_date,customer_id) VALUES "
+                            + "(?,?,?,?,?,?,?,?)");
+
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                    Date purchase_date = dateFormat.parse(acc.getVehicles().get(i).getPurchase_date());
+                    java.sql.Date sqlDate = new java.sql.Date(purchase_date.getTime());
 
                     ps2.setString(1, acc.getVehicles().get(i).getReg_num());
                     ps2.setString(2, acc.getVehicles().get(i).getMake());
@@ -443,6 +437,7 @@ public class Control {
                     ps2.setString(4, acc.getVehicles().get(i).getEngine_serial_no());
                     ps2.setString(5, acc.getVehicles().get(i).getChassis_no());
                     ps2.setString(6, acc.getVehicles().get(i).getColour());
+                    ps2.setDate(7, sqlDate);
                     ps2.setInt(7, acc.getCustomerId());
 
                     dbConnect.executeWriteQuery(ps2);
@@ -806,7 +801,7 @@ public class Control {
                         ps1.close();
 
                     }
-                    
+
                     if (accountHolder == 1) {
                         acc = new AccountHolder(rs.getString("customer_name"), rs.getString("customer_email"), rs.getString("customer_tel"), rs.getString("customer_address"), rs.getString("customer_postcode"), rs.getInt("customer_id"));
                         acc.setVehicles(vList);
@@ -991,21 +986,25 @@ public class Control {
 
     public List<Vehicle> NumOfVehicles() {
         List<Vehicle> vehicleList = new ArrayList<>();
-        
+
         try {
             PreparedStatement ps = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM vehicle");
             ResultSet rs = dbConnect.executeReadQuery(ps);
-            
+
             if (rs != null) {
                 while (rs.next()) {
-                    vehicleList.add(new Vehicle(rs.getString("reg_no"), rs.getString("car_make"), rs.getString("car_model"), rs.getString("colour"), rs.getString("engine_serial"), rs.getString("chassis_no")));
+                    String[] dateArray = rs.getString("purchase_date").split("-");
+                    String dateFormat = dateArray[2] + "-" + dateArray[1] + "-" + dateArray[0];
+
+                    vehicleList.add(new Vehicle(rs.getString("reg_no"), rs.getString("car_make"), rs.getString("car_model"), rs.getString("colour"),
+                            rs.getString("engine_serial"), rs.getString("chassis_no"), dateFormat));
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        
+
         return vehicleList;
     }
 
@@ -1054,61 +1053,117 @@ public class Control {
 
     //logouts out
     public void logout() {
-        HideForms();
+        loginForm = new LoginForm(this);
         loginForm.setVisible(true);
+        
         if (staff != null) {
             staff = null;
         }
     }
-    
+
     public void setStaff(Staff staff) {
         this.staff = staff;
     }
 
     //Opens the menu and delegates which menu buttons are available by checking the role
     public void OpenMenu() {
-        HideForms();
+        //disposeForms();
         switch (CheckRole()) {
             case "Administrator":
+                adminMenuForm = new AdminMenuForm(this);
                 adminMenuForm.setVisible(true);
                 break;
             case "Franchisee":
+                franchiseeMenuForm = new FranchiseeMenuForm(this);
                 franchiseeMenuForm.setVisible(true);
                 break;
             case "Receptionist":
+                receptionMenuForm = new ReceptionistMenuForm(this);
                 receptionMenuForm.setVisible(true);
                 break;
             case "Mechanic":
+                mechanicMenuForm = new MechanicMenuForm(this);
                 mechanicMenuForm.setVisible(true);
                 break;
             case "Foreperson":
+                fpMenuForm = new ForepersonMenuForm(this);
                 fpMenuForm.setVisible(true);
                 break;
             default:
-
                 break;
         }
     }
+    
+    public void disposeForms() {
+        loginForm.dispose();
+        adminMenuForm.dispose();
+        fpMenuForm.dispose();
+        franchiseeMenuForm.dispose();
+        mechanicMenuForm.dispose();
+        receptionMenuForm.dispose();
+    }
 
-    public void HideForms() {
-        addPartForm.setVisible(false);
-        addSupplierForm.setVisible(false);
-        createJobForm.setVisible(false);
-        displayAlertForm.setVisible(false);
-        displayInvoiceForm.setVisible(false);
-        displayReminderForm.setVisible(false);
-        employeeForm.setVisible(false);
-        jobForm.setVisible(false);
+    public void hideForms() {
         loginForm.setVisible(false);
         adminMenuForm.setVisible(false);
         fpMenuForm.setVisible(false);
         franchiseeMenuForm.setVisible(false);
         mechanicMenuForm.setVisible(false);
         receptionMenuForm.setVisible(false);
-        orderPartForm.setVisible(false);
-        paymentForm.setVisible(false);
-        remindersForm.setVisible(false);
-        stockForm.setVisible(false);
-        updateEmployeeForm.setVisible(false);
+    }
+
+    public DBConnect getDatabaseConnector() {
+        return dbConnect;
+    }
+    
+    public void terminateThread() {
+        
+        if (windowList.isEmpty()) {
+            getTime.stop();
+        }
+        else {
+            boolean exists = false;
+            for (JFrame frame : windowList) {
+                if (frame.isDisplayable()) {
+                    //System.out.println("Not Disposed");
+                    exists = true;
+                }
+                else {
+                    //System.out.println("Disposed");
+                }
+            }
+            
+            if (!exists) {
+                getTime.stop();
+            }
+        }
+    }
+    
+    public void setAdminMenuForm(AdminMenuForm amf) {
+        adminMenuForm = amf;
+    }
+    
+    public void setForepersonMenuForm(ForepersonMenuForm fpmf) {
+        fpMenuForm = fpmf;
+    }
+    
+    public void setFranchiseeMenuForm(FranchiseeMenuForm fmf) {
+        franchiseeMenuForm = fmf;
+    }
+    
+    public void setReceptionMenuForm(ReceptionistMenuForm rmf) {
+        receptionMenuForm = rmf;
+    }
+    
+    public void setMechanicMenuForm(MechanicMenuForm mmf) {
+        mechanicMenuForm = mmf;
+    }
+    
+    public void setLoginForm(LoginForm lf) {
+        loginForm = lf;
+    }
+    
+    public List<JFrame> getWindowList() {
+        return windowList;
     }
 }

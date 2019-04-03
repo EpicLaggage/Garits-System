@@ -6,6 +6,7 @@
 package GUI;
 
 import Core.Control;
+import java.awt.Dimension;
 
 /**
  *
@@ -13,18 +14,45 @@ import Core.Control;
  */
 public class ForepersonMenuForm extends javax.swing.JFrame {
     Control control = null;
+    CreateJobForm createJobForm;
+    JobForm jobForm;
+    DisplayInvoiceForm displayInvoiceForm;
+    DisplayAllParts displayAllParts;
+    OrderPartForm orderPartForm;
+    AddSupplierForm addSupplierForm;
+    ReportForm reportForm;
+    AddPartForm addPartForm;
     
     /**
      * Creates new form MenuForm
      */
     public ForepersonMenuForm() {
         initComponents();
+        
+        this.setSize(new Dimension(1100, 850));
+        this.setPreferredSize(new Dimension(1100, 850));
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     public ForepersonMenuForm(Control c) {
         initComponents();
         
+        this.setSize(new Dimension(1100, 850));
+        this.setPreferredSize(new Dimension(1100, 850));
+        
         control = c;
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
     
     public void setControl(Control c) {
@@ -41,121 +69,224 @@ public class ForepersonMenuForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton2 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        panel = new javax.swing.JPanel();
+        displayUpdateJobs_btn = new javax.swing.JButton();
+        orderParts_btn = new javax.swing.JButton();
+        generateStockReport_btn = new javax.swing.JButton();
+        addSupplier_btn = new javax.swing.JButton();
+        displayPrintInvoice_btn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
+        createJob_btn = new javax.swing.JButton();
+        logout_btn = new javax.swing.JButton();
         jLabel4 = new javax.swing.JLabel();
-        jButton12 = new javax.swing.JButton();
+        displayUpdateParts_btn = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        addParts_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(1130, 725));
+        setSize(new java.awt.Dimension(1130, 725));
+        getContentPane().setLayout(null);
 
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton2.setText("Create Job");
+        panel.setPreferredSize(new java.awt.Dimension(961, 811));
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton4.setText("Display and Update Jobs");
+        displayUpdateJobs_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        displayUpdateJobs_btn.setText("Display and Update Jobs");
+        displayUpdateJobs_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayUpdateJobs_btnActionPerformed(evt);
+            }
+        });
 
-        jButton3.setText("Logout");
+        orderParts_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        orderParts_btn.setText("Order Parts");
+        orderParts_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                orderParts_btnActionPerformed(evt);
+            }
+        });
+
+        generateStockReport_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        generateStockReport_btn.setText("Generate Stock Report");
+        generateStockReport_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                generateStockReport_btnActionPerformed(evt);
+            }
+        });
+
+        addSupplier_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        addSupplier_btn.setText("Add Supplier");
+        addSupplier_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addSupplier_btnActionPerformed(evt);
+            }
+        });
+
+        displayPrintInvoice_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        displayPrintInvoice_btn.setText("Display and Print Invoice");
+        displayPrintInvoice_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayPrintInvoice_btnActionPerformed(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel2.setText("Job");
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel3.setText("Stock");
-
-        jButton6.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton6.setText("Search, Update, Add and Delete");
-
-        jButton8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton8.setText("Generate Stock Report");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        createJob_btn.setBackground(new java.awt.Color(255, 255, 255));
+        createJob_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        createJob_btn.setText("Create Job");
+        createJob_btn.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        createJob_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                createJob_btnActionPerformed(evt);
             }
         });
 
-        jButton9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton9.setText("Create Invoice");
-
-        jButton11.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton11.setText("Order Parts");
+        logout_btn.setText("Logout");
 
         jLabel4.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel4.setText("Report");
 
-        jButton12.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jButton12.setText("Add Supplier");
+        displayUpdateParts_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        displayUpdateParts_btn.setText("Display and Update Parts");
+        displayUpdateParts_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                displayUpdateParts_btnActionPerformed(evt);
+            }
+        });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap(64, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton3)
-                        .addGap(22, 22, 22))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(90, 90, 90))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jButton6, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel3, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton8, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(64, 64, 64))))
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel3.setText("Stock");
+
+        addParts_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        addParts_btn.setText("Add Parts");
+        addParts_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                addParts_btnActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
+        panel.setLayout(panelLayout);
+        panelLayout.setHorizontalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(228, 228, 228)
+                        .addComponent(jLabel2)
+                        .addGap(246, 246, 246)
+                        .addComponent(jLabel3)
+                        .addGap(231, 231, 231)
+                        .addComponent(jLabel4))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 957, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(120, 120, 120)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(displayUpdateJobs_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(displayPrintInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(createJob_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(33, 33, 33)
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(panelLayout.createSequentialGroup()
+                                .addComponent(addParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(33, 33, 33)
+                                .addComponent(generateStockReport_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(displayUpdateParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(orderParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(addSupplier_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 257, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(85, 85, 85))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                .addComponent(logout_btn)
+                .addGap(41, 41, 41))
         );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+        panelLayout.setVerticalGroup(
+            panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(panelLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
-                .addGap(66, 66, 66)
-                .addComponent(jLabel2)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
-                .addComponent(jLabel3)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
-                .addComponent(jLabel4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(66, Short.MAX_VALUE))
+                .addComponent(logout_btn)
+                .addGap(52, 52, 52)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel4))
+                .addGap(19, 19, 19)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(createJob_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(generateStockReport_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(addParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(9, 9, 9)
+                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(displayUpdateJobs_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addComponent(displayPrintInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addComponent(displayUpdateParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addComponent(orderParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(9, 9, 9)
+                        .addComponent(addSupplier_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
+
+        getContentPane().add(panel);
+        panel.setBounds(0, 0, 1100, 850);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+    private void generateStockReport_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_generateStockReport_btnActionPerformed
+        reportForm = new ReportForm(control, this);
+        reportForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_generateStockReport_btnActionPerformed
+
+    private void addSupplier_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplier_btnActionPerformed
+        addSupplierForm = new AddSupplierForm(control, this);
+        addSupplierForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_addSupplier_btnActionPerformed
+
+    private void createJob_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createJob_btnActionPerformed
+        createJobForm = new CreateJobForm(control, this);
+        createJobForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_createJob_btnActionPerformed
+
+    private void displayUpdateJobs_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayUpdateJobs_btnActionPerformed
+        jobForm = new JobForm(control, this);
+        jobForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_displayUpdateJobs_btnActionPerformed
+
+    private void displayPrintInvoice_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayPrintInvoice_btnActionPerformed
+        displayInvoiceForm = new DisplayInvoiceForm(control, this);
+        displayInvoiceForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_displayPrintInvoice_btnActionPerformed
+
+    private void displayUpdateParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayUpdateParts_btnActionPerformed
+        displayAllParts = new DisplayAllParts(control, this);
+        displayAllParts.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_displayUpdateParts_btnActionPerformed
+
+    private void orderParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderParts_btnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton8ActionPerformed
+    }//GEN-LAST:event_orderParts_btnActionPerformed
+
+    private void addParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addParts_btnActionPerformed
+        addPartForm = new AddPartForm(control, this);
+        addPartForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_addParts_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -200,16 +331,19 @@ public class ForepersonMenuForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JButton addParts_btn;
+    private javax.swing.JButton addSupplier_btn;
+    private javax.swing.JButton createJob_btn;
+    private javax.swing.JButton displayPrintInvoice_btn;
+    private javax.swing.JButton displayUpdateJobs_btn;
+    private javax.swing.JButton displayUpdateParts_btn;
+    private javax.swing.JButton generateStockReport_btn;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton logout_btn;
+    private javax.swing.JButton orderParts_btn;
+    private javax.swing.JPanel panel;
     // End of variables declaration//GEN-END:variables
 }

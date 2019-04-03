@@ -21,11 +21,15 @@ import javax.swing.table.TableRowSorter;
  * @author jorda
  */
 public class DisplayAllParts extends javax.swing.JFrame {
+
     Control control;
+    ForepersonMenuForm fpMenuForm;
+    FranchiseeMenuForm franchiseeMenuForm;
+    ReceptionistMenuForm receptionMenuForm;
+    UpdatePartForm updatePartForm;
     private PartsTableModel tableModel;
     private Part part;
 
-    
     /**
      * Creates new form DisplayAllParts
      */
@@ -36,136 +40,271 @@ public class DisplayAllParts extends javax.swing.JFrame {
         // to search through parts
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());
         partsTable.setRowSorter(rowSorter);
-        
+
         //code that allows for parts to be searched and updated in real time
-        searchField.getDocument().addDocumentListener(new DocumentListener(){
-            
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 String input = searchField.getText();
-                
+
                 if (input.trim().length() == 0) {
                     rowSorter.setRowFilter(null);
-                }
-                else {
-                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
-                }
-        }
-            
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                String input = searchField.getText();
-                
-                if (input.trim().length() == 0) {
-                    rowSorter.setRowFilter(null);
-                }
-                else {
+                } else {
                     rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
                 }
             }
-            
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+
             @Override
             public void changedUpdate(DocumentEvent e) {
                 throw new UnsupportedOperationException("Not supported yet");
             }
-        
-        
-    });
-        
-        
+
+        });
+
     }
-    
+
     public DisplayAllParts(Control c) {
         initComponents();
+
         control = c;
+        control.getWindowList().add(this);
+
         tableModel = new PartsTableModel(part);
         partsTable.setModel(tableModel);
         // to search through parts
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());
         partsTable.setRowSorter(rowSorter);
-        
+
         //code that allows for parts to be searched and updated in real time
-        searchField.getDocument().addDocumentListener(new DocumentListener(){
-            
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 String input = searchField.getText();
-                
+
                 if (input.trim().length() == 0) {
                     rowSorter.setRowFilter(null);
-                }
-                else {
-                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
-                }
-        }
-            
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                String input = searchField.getText();
-                
-                if (input.trim().length() == 0) {
-                    rowSorter.setRowFilter(null);
-                }
-                else {
+                } else {
                     rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
                 }
             }
-            
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+
             @Override
             public void changedUpdate(DocumentEvent e) {
                 throw new UnsupportedOperationException("Not supported yet");
             }
+
+        });
+
+    }
+
+    DisplayAllParts(Control c, ForepersonMenuForm fpmf) {
+        initComponents();
+
+        control = c;
+        fpMenuForm = fpmf;
         
-        
-    });
-        
-        
+        control.getWindowList().add(this);
+
+        tableModel = new PartsTableModel(part);
+        partsTable.setModel(tableModel);
+        // to search through parts
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());
+        partsTable.setRowSorter(rowSorter);
+
+        //code that allows for parts to be searched and updated in real time
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet");
+            }
+
+        });
     }
     
+    DisplayAllParts(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+
+        control = c;
+        franchiseeMenuForm = fmf;
+        
+        control.getWindowList().add(this);
+
+        tableModel = new PartsTableModel(part);
+        partsTable.setModel(tableModel);
+        // to search through parts
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());
+        partsTable.setRowSorter(rowSorter);
+
+        //code that allows for parts to be searched and updated in real time
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet");
+            }
+
+        });
+    }
+    
+    DisplayAllParts(Control c, ReceptionistMenuForm rmf) {
+        initComponents();
+
+        control = c;
+        receptionMenuForm = rmf;
+        
+        control.getWindowList().add(this);
+
+        tableModel = new PartsTableModel(part);
+        partsTable.setModel(tableModel);
+        // to search through parts
+        TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());
+        partsTable.setRowSorter(rowSorter);
+
+        //code that allows for parts to be searched and updated in real time
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                throw new UnsupportedOperationException("Not supported yet");
+            }
+
+        });
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
+    }
+
     // refreshes the table with the updated part fields
     private void populateTable() {
         TableRowSorter<TableModel> rowSorter = new TableRowSorter<>(partsTable.getModel());
         partsTable.setRowSorter(rowSorter);
-        
 
         //code that allows for parts to be searched and updated in real time
-        searchField.getDocument().addDocumentListener(new DocumentListener(){
-            
+        searchField.getDocument().addDocumentListener(new DocumentListener() {
+
             @Override
             public void insertUpdate(DocumentEvent e) {
                 String input = searchField.getText();
-                
+
                 if (input.trim().length() == 0) {
                     rowSorter.setRowFilter(null);
-                }
-                else {
-                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
-                }
-        }
-            
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                String input = searchField.getText();
-                
-                if (input.trim().length() == 0) {
-                    rowSorter.setRowFilter(null);
-                }
-                else {
+                } else {
                     rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
                 }
             }
-            
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                String input = searchField.getText();
+
+                if (input.trim().length() == 0) {
+                    rowSorter.setRowFilter(null);
+                } else {
+                    rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + input));
+                }
+            }
+
             @Override
             public void changedUpdate(DocumentEvent e) {
                 throw new UnsupportedOperationException("Not supported yet");
             }
-        
-        
-    });
+
+        });
     }
-        
-        
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -176,19 +315,22 @@ public class DisplayAllParts extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         partsTable = new javax.swing.JTable();
         updatePartButton = new javax.swing.JButton();
-        backButton = new javax.swing.JButton();
+        back_btn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         searchField = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        logout_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Display All Parts");
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("All Parts");
+        setMinimumSize(new java.awt.Dimension(800, 640));
+        setPreferredSize(new java.awt.Dimension(800, 640));
+        setResizable(false);
+        setSize(new java.awt.Dimension(800, 640));
 
         partsTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -207,10 +349,10 @@ public class DisplayAllParts extends javax.swing.JFrame {
             }
         });
 
-        backButton.setText("Back");
-        backButton.addActionListener(new java.awt.event.ActionListener() {
+        back_btn.setText("Back");
+        back_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                backButtonActionPerformed(evt);
+                back_btnActionPerformed(evt);
             }
         });
 
@@ -223,41 +365,57 @@ public class DisplayAllParts extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        jLabel3.setText("Display and Update Parts");
+
+        jLabel4.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jLabel4.setText("Stock");
+
+        logout_btn.setText("Logout");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 996, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 883, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(backButton))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(updatePartButton, javax.swing.GroupLayout.PREFERRED_SIZE, 145, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                        .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 202, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel3)
+                    .addComponent(updatePartButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(52, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(back_btn)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(logout_btn)
+                .addGap(24, 24, 24))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(backButton))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(30, 30, 30)
+                .addGap(13, 13, 13)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(updatePartButton, javax.swing.GroupLayout.DEFAULT_SIZE, 46, Short.MAX_VALUE)
-                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(back_btn)
+                    .addComponent(logout_btn))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel4)
+                .addGap(7, 7, 7)
+                .addComponent(jLabel3)
+                .addGap(26, 26, 26)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(searchField, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 379, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(updatePartButton, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(54, Short.MAX_VALUE))
         );
 
         pack();
@@ -268,30 +426,44 @@ public class DisplayAllParts extends javax.swing.JFrame {
         // gets the part object at the selected row
         Part selectedPart = tableModel.getParts().get(partsTable.convertRowIndexToModel(selectedRow));
         //System.out.println(selectedPart.toString());
-        UpdatePartForm updatePartForm = new UpdatePartForm(selectedPart);
+        updatePartForm = new UpdatePartForm(control, this, selectedPart);
         //updatePartForm.setPart(selectedPart);
         updatePartForm.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         updatePartForm.setVisible(true);
         updatePartForm.addWindowListener(new WindowAdapter() {
-                public void windowClosing(WindowEvent e) {
-                    populateTable();
-                    
-                }
-            });
-        
-        
+            public void windowClosing(WindowEvent e) {
+                populateTable();
+
+            }
+        });
+
+
     }//GEN-LAST:event_updatePartButtonActionPerformed
 
-    private void backButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backButtonActionPerformed
-        // TODO add your handling code here:
+    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
+        if (fpMenuForm != null) {
+            fpMenuForm = new ForepersonMenuForm(control);
+            fpMenuForm.setVisible(true);
+        }
+        
+        if (franchiseeMenuForm != null) {
+            franchiseeMenuForm = new FranchiseeMenuForm(control);
+            franchiseeMenuForm.setVisible(true);
+        }
+        
+        if (receptionMenuForm != null) {
+            receptionMenuForm = new ReceptionistMenuForm(control);
+            receptionMenuForm.setVisible(true);
+        }
+        
         this.dispose();
-    }//GEN-LAST:event_backButtonActionPerformed
+    }//GEN-LAST:event_back_btnActionPerformed
 
     private void searchFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_searchFieldActionPerformed
-        // TODO add your handling code here:
+        control.logout();
+        this.dispose();
     }//GEN-LAST:event_searchFieldActionPerformed
 
-    
     /**
      * @param args the command line arguments
      */
@@ -328,10 +500,12 @@ public class DisplayAllParts extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton backButton;
-    private javax.swing.JLabel jLabel1;
+    private javax.swing.JButton back_btn;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JButton logout_btn;
     private javax.swing.JTable partsTable;
     private javax.swing.JTextField searchField;
     private javax.swing.JButton updatePartButton;
