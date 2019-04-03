@@ -73,6 +73,10 @@ public class RemindersForm extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
+        jComboBox1 = new javax.swing.JComboBox();
+        jLabel3 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -116,6 +120,29 @@ public class RemindersForm extends javax.swing.JFrame {
             }
         });
 
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "1", "2", "3", " " }));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setText("Sort by reminder count");
+
+        jButton1.setText("View all");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        jButton2.setText("Display All");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -123,9 +150,16 @@ public class RemindersForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(55, 55, 55)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(140, 140, 140)
+                        .addComponent(jLabel3)
+                        .addGap(66, 66, 66)
+                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60)
+                        .addComponent(jButton1))
                     .addComponent(jLabel2))
-                .addGap(684, 797, Short.MAX_VALUE))
+                .addGap(330, 330, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton4)
@@ -137,7 +171,8 @@ public class RemindersForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jButton2))
                     .addComponent(jScrollPane1))
                 .addGap(52, 52, 52))
         );
@@ -151,11 +186,17 @@ public class RemindersForm extends javax.swing.JFrame {
                 .addGap(16, 16, 16)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addGap(28, 28, 28)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel3)
+                    .addComponent(jButton1))
+                .addGap(22, 22, 22)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton2))
                 .addContainerGap(82, Short.MAX_VALUE))
         );
 
@@ -269,7 +310,7 @@ public class RemindersForm extends javax.swing.JFrame {
                             .setTextAlignment(TextAlignment.RIGHT)
                             .setMultipliedLeading(1)
                             .add(new Text(String.format("REMINDER " + 
-                                    invoice.isReminderSent()+1+
+                                    invoice.isReminderSent()+
                                     "- INVOICE NO.: %s\n",
                                     invoice.getInvoiceId())).setFontSize(14))
                             .add(currDate));    
@@ -346,7 +387,6 @@ public class RemindersForm extends javax.swing.JFrame {
                     + "invoice_reminder=invoice_reminder+1 " + "WHERE "
                     + "(`invoice_id` = '" + invoice.getInvoiceId() + "');"; 
             try {
-                System.out.println("TEST");
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
                 PreparedStatement statement = conn.prepareStatement(reminderUpdate);
@@ -359,6 +399,165 @@ public class RemindersForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jButton7ActionPerformed
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO SORT BY REMINDER COUNT
+        invoiceModel = (DefaultTableModel) jTable1.getModel();
+        invoiceModel.setRowCount(0);
+        for(Invoice invoice : unpaidInvoices) {
+            if(invoice.isReminderSent() == Integer.parseInt(
+                    jComboBox1.getSelectedItem().toString())){
+                Object[] row = { invoice.getJobId(), invoice.getPaymentDueDate(),
+                    invoice.getCustomerName(), invoice.getCustomerEmail(), 
+                    invoice.isReminderSent(), invoice.getInvoiceId(), invoice};
+                invoiceModel.addRow(row);
+            }
+        }
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        invoiceModel = (DefaultTableModel) jTable1.getModel();
+        invoiceModel.setRowCount(0);
+        for(Invoice invoice : unpaidInvoices) {
+            Object[] row = { invoice.getJobId(), invoice.getPaymentDueDate(),
+                invoice.getCustomerName(), invoice.getCustomerEmail(), 
+            invoice.isReminderSent(), invoice.getInvoiceId(), invoice};
+            invoiceModel.addRow(row);
+        }
+        
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO All reminders to PDF's
+        for(int rows = 0; rows < invoiceModel.getRowCount(); rows++) {
+            Invoice invoice = (Invoice) jTable1.getValueAt(rows, 6);
+            //GETTING MISSING INVOICE DATA
+            DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+            java.util.Date date = new java.util.Date();
+            String currDate = dateFormat.format(date);
+
+            // TODO OPEN INVOICE IN PDF
+            String dest = "/Users/paul/Uni/GARITS/software/Garits/GARITS"
+                    + "/resources/Invoice" + invoice.getInvoiceId() +
+                    "Reminder" + invoice.isReminderSent() + ".pdf";       
+            PdfWriter writer = null; 
+            try {
+                writer = new PdfWriter(dest);
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(UpdateJobForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // Creating a PdfDocument       
+            PdfDocument pdfDoc = new PdfDocument(writer); 
+
+            PdfFont bold = null;
+            try {
+                bold = PdfFontFactory.createFont(BOLD, true);
+            } catch (IOException ex) {
+                Logger.getLogger(UpdateJobForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // Adding a new page 
+            pdfDoc.addNewPage();               
+
+            // Creating a Document
+            Document document = new Document(pdfDoc);
+            //Adding INvoice number
+            document.add(
+                    new Paragraph()
+                            .setTextAlignment(TextAlignment.RIGHT)
+                            .setMultipliedLeading(1)
+                            .add(new Text(String.format("REMINDER " + 
+                                    invoice.isReminderSent()+
+                                    "- INVOICE NO.: %s\n",
+                                    invoice.getInvoiceId())).setFontSize(14))
+                            .add(currDate));    
+            //Adding adresses
+            document.add(getAddressTable(invoice.getCustomerName(),
+                    invoice.getCustomerAddress(), invoice.getCustomerPostCode(),
+                    bold));
+            document.add(new Paragraph().add("\n"));
+            //Adding Vehicle details
+            document.add(
+                    new Paragraph()
+                            .setTextAlignment(TextAlignment.LEFT)
+                            .setMultipliedLeading(1)
+                            .add(new Text(String.format("Dear %s,\n", invoice.getCustomerName())))
+                            .add(new Text("\n"))
+                            .add(new Text(String.format("Vehicle Registraion No: "
+                                    + "%s\n", invoice.getRegNum())))
+                            .add(new Text(String.format("Amount Due:  %s\n", 
+                                    invoice.getAmountDue())))
+            );
+            document.add(new Paragraph().add("\n"));
+
+            document.add(new Paragraph().add(new Text("According to our "
+                    + "records, it appears that we have not yet received "
+                    + "payment of the above invoice, which was posted "
+                    + "to you on " + invoice.getJobEnd() + " for work done on the "
+                    + "vehicle listed above.")));
+
+            document.add(new Paragraph().add("We would appreaciate payment "
+                    + "at your earliest convenience."));
+
+            document.add(new Paragraph().add("If you have already sent a "
+                    + "payment to us recently, please accept our apologies."));
+
+            //Ending
+            document.add(new Paragraph()
+                    .add(new Text("\n"))
+                    .add(new Text("Yours sincerely,\n"))
+                    .add(new Text("\n"))
+                    .add(new Text("G. Lancaster"))
+            );
+            // Closing the document
+            document.close();
+
+            System.out.println("PDF Created");
+
+            try {
+
+                File pdfFile = new File(dest);
+                if (pdfFile.exists()) {
+
+                        if (Desktop.isDesktopSupported()) {
+                                Desktop.getDesktop().open(pdfFile);
+                        } else {
+                                System.out.println("Awt Desktop is not supported!");
+                        }
+
+                } else {
+                        System.out.println("File is not exists!");
+                }
+
+                System.out.println("Done");
+
+            } catch (Exception ex) {
+                  ex.printStackTrace();
+            }
+            //UPDATING PAYMENT DUE DATE AND REMINDER COUNT
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            LocalDate paymentDueDate = LocalDate.parse(
+                    invoice.getPaymentDueDate(), formatter);
+
+            String reminderUpdate = "UPDATE Invoice SET "
+                    + "payment_due_date = '" + paymentDueDate.plusMonths(1) + "', "
+                    + "invoice_reminder=invoice_reminder+1 " + "WHERE "
+                    + "(`invoice_id` = '" + invoice.getInvoiceId() + "');"; 
+            try {
+                Connection conn = dbConnect.connect();
+                conn.setAutoCommit(false);
+                PreparedStatement statement = conn.prepareStatement(reminderUpdate);
+                statement.execute();
+                conn.commit();
+                conn.setAutoCommit(true);
+            }
+            catch (Exception exc) {
+                exc.printStackTrace();
+            }
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -459,11 +658,15 @@ public class RemindersForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton7;
+    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
