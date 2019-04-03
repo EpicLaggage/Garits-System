@@ -59,6 +59,9 @@ public class AlertForm extends javax.swing.JFrame {
     
     public AlertForm(Control c, List<Part> parts) {
         initComponents();
+        
+        lowStockParts = parts;
+        
         lowStockParts();
         
         control = c;
