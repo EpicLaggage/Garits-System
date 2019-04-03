@@ -30,6 +30,9 @@ public class garits {
         Thread getTime = new DetectLatePayment();
         getTime.start();
         
+        Thread getMot = new DetectMOTDue();
+        getMot.start();
+        
         try {
             
         }
