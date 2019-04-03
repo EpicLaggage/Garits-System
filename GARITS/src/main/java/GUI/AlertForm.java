@@ -21,25 +21,29 @@ import javax.swing.table.DefaultTableModel;
  */
 public class AlertForm extends javax.swing.JFrame {
     Control control;
-    static List<Part> lowStockParts;
+    static ArrayList<Part> lowStockParts;
+    private LowStockTableModel tableModel;
+
     
     /**
      * Creates new form MenuForm
      */
     public AlertForm() {
         initComponents();
-        lowStockParts();
-        
+        tableModel = new LowStockTableModel();
+        lowStockTable.setModel(tableModel);
+        tableModel.setLowStock(lowStockParts);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
-    public AlertForm(List<Part> parts) {
+    public AlertForm(ArrayList<Part> parts) {
         initComponents();
         
         lowStockParts = parts;
-        
-        lowStockParts();
+        tableModel = new LowStockTableModel();
+        lowStockTable.setModel(tableModel);
+        tableModel.setLowStock(lowStockParts);
         
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -48,21 +52,26 @@ public class AlertForm extends javax.swing.JFrame {
     
     public AlertForm(Control c) {
         initComponents();
-        lowStockParts();
         
         control = c;
         control.getWindowList().add(this);
         
+        
+        tableModel = new LowStockTableModel();
+        lowStockTable.setModel(tableModel);
+        tableModel.setLowStock(lowStockParts);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
-    public AlertForm(Control c, List<Part> parts) {
+    public AlertForm(Control c, ArrayList<Part> parts) {
         initComponents();
         
         lowStockParts = parts;
         
-        lowStockParts();
+        tableModel = new LowStockTableModel();
+        lowStockTable.setModel(tableModel);
+        tableModel.setLowStock(lowStockParts);
         
         control = c;
         control.getWindowList().add(this);
@@ -77,29 +86,6 @@ public class AlertForm extends javax.swing.JFrame {
         control.terminateThread();
     }
     
-    public int lowStockParts() {
-        ArrayList<Part> lowStockPartList = new ArrayList<>();
-        ArrayList<Part> allParts;
-        Part partObj = new Part();
-        int lowStockCount = 0;
-        
-        allParts = partObj.getAllParts();
-        
-        
-        for (Part part : allParts) {
-            if (part.getQty() < part.getThreshold()) {
-               lowStockPartList.add(part);
-               lowStockCount++;
-            }
-        }
-        /*
-        for (Part lowStockPart : lowStockPartList) {
-            lowStockArea.append("Part name: " + lowStockPart.getName() + "    Quantity: " + lowStockPart.getQty() + "    Threshold: " + lowStockPart.getThreshold() + '\n');
-        }
-        */
-        // to determine whether to run the low stock alert form or not
-        return lowStockCount;
-    }
     
     
     
@@ -116,7 +102,7 @@ public class AlertForm extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         replenishOrderButton = new javax.swing.JButton();
-        jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         lowStockTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -133,13 +119,16 @@ public class AlertForm extends javax.swing.JFrame {
 
         lowStockTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
             },
             new String [] {
-
+                "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(lowStockTable);
+        jScrollPane1.setViewportView(lowStockTable);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -148,24 +137,23 @@ public class AlertForm extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 660, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jLabel1)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(replenishOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                    .addComponent(replenishOrderButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 198, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(10, 10, 10)
                 .addComponent(jLabel1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 365, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
                 .addComponent(replenishOrderButton, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(31, 31, 31))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -173,9 +161,9 @@ public class AlertForm extends javax.swing.JFrame {
 
     private void replenishOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replenishOrderButtonActionPerformed
         int selectedRow = lowStockTable.getSelectedRow();
-        //Part selectedPart = tableModel.getLowStock().get(lowStockTable.convertRowIndexToModel(selectedRow));
-        //ReplenishmentOrderForm orderForm = new ReplenishmentOrderForm(selectedPart);
-        //orderForm.setVisible(true);
+        Part selectedPart = tableModel.getLowStock().get(lowStockTable.convertRowIndexToModel(selectedRow));
+        ReplenishmentOrderForm orderForm = new ReplenishmentOrderForm(selectedPart);
+        orderForm.setVisible(true);
         this.dispose();
 
     }//GEN-LAST:event_replenishOrderButtonActionPerformed
@@ -219,7 +207,7 @@ public class AlertForm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable lowStockTable;
     private javax.swing.JButton replenishOrderButton;
     // End of variables declaration//GEN-END:variables
