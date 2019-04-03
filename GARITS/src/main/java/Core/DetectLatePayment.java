@@ -51,7 +51,7 @@ public class DetectLatePayment extends Thread {
                         invoice.setJobEnd(rs.getString("invoice_date"));
                         invoice.setPaymentDueDate(rs.getString("payment_due_date"));
                         invoice.setAmountDue(rs.getFloat("invoice_total"));
-                        invoice.setReminderSent(rs.getInt("invoice_reminder"));
+                        invoice.setReminderSent(rs.getInt("invoice_reminder")+1);
                         unpaidInvoices.add(invoice);
                     }
 

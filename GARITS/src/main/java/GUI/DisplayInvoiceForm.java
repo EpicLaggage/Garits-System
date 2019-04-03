@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -5,7 +6,6 @@
  */
 package GUI;
 
-import Core.Control;
 import DatabaseConnect.DBConnect;
 import static GUI.UpdateJobForm.BOLD;
 import Processing.Invoice;
@@ -38,11 +38,6 @@ import javax.swing.table.DefaultTableModel;
  * @author jly09
  */
 public class DisplayInvoiceForm extends javax.swing.JFrame {
-    Control control;
-    ForepersonMenuForm fpMenuForm;
-    FranchiseeMenuForm franchiseeMenuForm;
-    ReceptionistMenuForm receptionMenuForm;
-    
     ArrayList<Invoice> invoiceList = new ArrayList<Invoice>();
     DBConnect dbConnect;
     DefaultTableModel invoiceModel;
@@ -54,50 +49,6 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
         initComponents();
         dbConnect = new DBConnect();
     }
-    
-    public DisplayInvoiceForm(Control c) {
-        initComponents();
-        
-        control = c;
-        dbConnect = control.getDatabaseConnector();
-        control.getWindowList().add(this);
-    }
-
-    DisplayInvoiceForm(Control c, ForepersonMenuForm fpmf) {
-        initComponents();
-        
-        control = c;
-        fpMenuForm = fpmf;
-        
-        dbConnect = control.getDatabaseConnector();
-        control.getWindowList().add(this);
-    }
-    
-    DisplayInvoiceForm(Control c, FranchiseeMenuForm fmf) {
-        initComponents();
-        
-        control = c;
-        franchiseeMenuForm = fmf;
-        
-        dbConnect = control.getDatabaseConnector();
-        control.getWindowList().add(this);
-    }
-    
-    DisplayInvoiceForm(Control c, ReceptionistMenuForm rmf) {
-        initComponents();
-        
-        control = c;
-        receptionMenuForm = rmf;
-        
-        dbConnect = control.getDatabaseConnector();
-        control.getWindowList().add(this);
-    }
-    
-    @Override
-    public void dispose() {
-        super.dispose();
-        control.terminateThread();
-    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -108,12 +59,12 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        logout_btn = new javax.swing.JButton();
+        jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
         jButton5 = new javax.swing.JButton();
-        back_btn = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -123,12 +74,7 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             }
         });
 
-        logout_btn.setText("Logout");
-        logout_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                logout_btnActionPerformed(evt);
-            }
-        });
+        jButton3.setText("Logout");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Display and Print");
@@ -158,12 +104,7 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             }
         });
 
-        back_btn.setText("Back");
-        back_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                back_btnActionPerformed(evt);
-            }
-        });
+        jButton4.setText("Back");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Invoice");
@@ -174,9 +115,9 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(back_btn)
+                .addComponent(jButton4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(logout_btn)
+                .addComponent(jButton3)
                 .addGap(22, 22, 22))
             .addGroup(layout.createSequentialGroup()
                 .addGap(52, 52, 52)
@@ -192,8 +133,8 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(logout_btn)
-                    .addComponent(back_btn))
+                    .addComponent(jButton3)
+                    .addComponent(jButton4))
                 .addGap(16, 16, 16)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -388,8 +329,7 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             }
             
             // TODO OPEN INVOICE IN PDF
-            String dest = "/Users/paul/Uni/GARITS/software/Garits/GARITS"
-                    + "/resources/InvoiceNo" + invoice.getInvoiceId() + ".pdf";       
+            String dest = "resources/InvoiceNo" + invoice.getInvoiceId() + ".pdf";       
             PdfWriter writer = null; 
             try {
                 writer = new PdfWriter(dest);
@@ -498,30 +438,6 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
         
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
-        if (fpMenuForm != null) {
-            fpMenuForm = new ForepersonMenuForm(control);
-            fpMenuForm.setVisible(true);
-        }
-        
-        if (franchiseeMenuForm != null) {
-            franchiseeMenuForm = new FranchiseeMenuForm(control);
-            franchiseeMenuForm.setVisible(true);
-        }
-        
-        if (receptionMenuForm != null) {
-            receptionMenuForm = new ReceptionistMenuForm(control);
-            receptionMenuForm.setVisible(true);
-        }
-        
-        this.dispose();
-    }//GEN-LAST:event_back_btnActionPerformed
-
-    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
-        control.logout();
-        this.dispose();
-    }//GEN-LAST:event_logout_btnActionPerformed
-
     /**
      * @param args the command line arguments
      */
@@ -573,12 +489,12 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton back_btn;
+    private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable jTable1;
-    private javax.swing.JButton logout_btn;
     // End of variables declaration//GEN-END:variables
 }
