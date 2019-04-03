@@ -92,5 +92,4 @@ public class Customer extends Account {
     public void setCustomerContact(String contact) {
         this.customer_contact = contact;
     }
-
 }
