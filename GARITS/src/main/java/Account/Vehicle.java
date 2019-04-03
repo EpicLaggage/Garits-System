@@ -29,6 +29,16 @@ public class Vehicle {
             this.engine_serial_no = engine_serial_no;
             this.chassis_no = chassis_no;
         }
+        
+        public Vehicle(String reg_num, String make, String model, String colour, String engine_serial_no, String chassis_no, String purchase_date) {
+            this.model = model;
+            this.reg_num = reg_num;
+            this.make = make;
+            this.colour = colour;
+            this.engine_serial_no = engine_serial_no;
+            this.chassis_no = chassis_no;
+            this.purchase_date = purchase_date;
+        }
 
 	public String getModel() {
 		return this.model;

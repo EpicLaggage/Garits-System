@@ -2,27 +2,31 @@ package Account;
 
 public class FixedDiscount implements DiscountPlan {
 
-	/**
-	 * 
-	 * @param p
-	 */
-	public FixedDiscount(float p) {
-		// TODO - implement FixedDiscount.FixedDiscount
-		throw new UnsupportedOperationException();
-	}
+    float percentage = 0;
+    String type = null;
+    /**
+     *
+     * @param p
+     */
+    public FixedDiscount(float p) {
+        percentage = p;
+        type = "Fixed Discount";
+    }
 
-	public void Calculate() {
-		// TODO - implement FixedDiscount.Calculate
-		throw new UnsupportedOperationException();
-	}
+    public void Calculate() {
+        
+    }
 
-	/**
-	 * 
-	 * @param percentage
-	 */
-	public void setPercentage(float percentage) {
-		// TODO - implement FixedDiscount.setPercentage
-		throw new UnsupportedOperationException();
-	}
+    /**
+     *
+     * @param percentage
+     */
+    public void setPercentage(float percentage) {
+        this.percentage = percentage;
+    }
+    
+    public float getPercentage() {
+        return percentage;
+    }
 
 }

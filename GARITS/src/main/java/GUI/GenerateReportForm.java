@@ -5,17 +5,50 @@
  */
 package GUI;
 
+import Core.*;
+
 /**
  *
  * @author jly09
  */
 public class GenerateReportForm extends javax.swing.JFrame {
 
+    Control control;
+    FranchiseeMenuForm franchiseeMenuForm = null;
+
+    String selectedCmbo = null;
+    String exSelectedCmbo = null;
+
     /**
      * Creates new form MenuForm
      */
     public GenerateReportForm() {
         initComponents();
+
+        selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
+        exSelectedCmbo = String.valueOf(ext_filter_cmbo.getSelectedItem());
+    }
+
+    public GenerateReportForm(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+
+        control = c;
+        franchiseeMenuForm = fmf;
+        
+        control.getWindowList().add(this);
+        
+        selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
+        exSelectedCmbo = String.valueOf(ext_filter_cmbo.getSelectedItem());
+    }
+
+    public void setControl(Control c) {
+        control = c;
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**
@@ -27,119 +60,195 @@ public class GenerateReportForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        logout_btn = new javax.swing.JButton();
+        generateReport_lbl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton6 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton7 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        report_tbl = new javax.swing.JTable();
+        print_btn = new javax.swing.JButton();
+        back_btn = new javax.swing.JButton();
+        filter_lbl = new javax.swing.JLabel();
+        filter_cmbo = new javax.swing.JComboBox<>();
+        ext_filter_cmbo = new javax.swing.JComboBox<>();
+        generate_btn = new javax.swing.JButton();
+        sort_btn = new javax.swing.JButton();
+        xext_filter_cmbo = new javax.swing.JComboBox<>();
+        filter_txt = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(null);
 
-        jButton3.setText("Logout");
+        logout_btn.setText("Logout");
+        getContentPane().add(logout_btn);
+        logout_btn.setBounds(880, 13, 71, 25);
 
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Generate Report");
+        generateReport_lbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        generateReport_lbl.setText("Generate Report");
+        getContentPane().add(generateReport_lbl);
+        generateReport_lbl.setBounds(52, 83, 177, 29);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        report_tbl.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null}
+                {}
             },
             new String [] {
-                "Reg No.", "Make", "Model", "Colour", "Engine Serial No.", "Chassis No.", "Job Type"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, true, true, true, true
-            };
 
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
+            }
+        ));
+        jScrollPane1.setViewportView(report_tbl);
+
+        getContentPane().add(jScrollPane1);
+        jScrollPane1.setBounds(52, 198, 869, 326);
+
+        print_btn.setText("Print");
+        getContentPane().add(print_btn);
+        print_btn.setBounds(819, 542, 102, 44);
+
+        back_btn.setText("Back");
+        getContentPane().add(back_btn);
+        back_btn.setBounds(814, 13, 59, 25);
+
+        filter_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        filter_lbl.setText("Filter");
+        getContentPane().add(filter_lbl);
+        filter_lbl.setBounds(52, 155, 38, 22);
+
+        filter_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No. of Vehicles", "Stock", "Avg. Time per Job" }));
+        filter_cmbo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                filter_cmboActionPerformed(evt);
             }
         });
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(4).setResizable(false);
-            jTable1.getColumnModel().getColumn(5).setResizable(false);
-        }
+        getContentPane().add(filter_cmbo);
+        filter_cmbo.setBounds(120, 156, 122, 22);
 
-        jButton6.setText("Print");
+        ext_filter_cmbo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "By Job Type", "By Month", "By Customer" }));
+        ext_filter_cmbo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ext_filter_cmboActionPerformed(evt);
+            }
+        });
+        getContentPane().add(ext_filter_cmbo);
+        ext_filter_cmbo.setBounds(260, 156, 99, 22);
 
-        jButton4.setText("Back");
+        generate_btn.setText("Generate");
+        getContentPane().add(generate_btn);
+        generate_btn.setBounds(699, 542, 102, 44);
 
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setText("Filter");
+        sort_btn.setText("Sort");
+        sort_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                sort_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(sort_btn);
+        sort_btn.setBounds(426, 155, 57, 25);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "No. of Vehicles" }));
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "By Job Type" }));
-
-        jButton7.setText("Generate");
-
-        jButton5.setText("Sort");
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addGap(22, 22, 22))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(52, 52, 52)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(30, 30, 30)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(30, 30, 30)
-                        .addComponent(jButton5))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 869, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(52, 52, 52))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addGap(45, 45, 45)
-                .addComponent(jLabel1)
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel3)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jButton5)))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(64, Short.MAX_VALUE))
-        );
+        xext_filter_cmbo.setPreferredSize(new java.awt.Dimension(99, 22));
+        getContentPane().add(xext_filter_cmbo);
+        xext_filter_cmbo.setBounds(377, 156, 99, 22);
+        getContentPane().add(filter_txt);
+        filter_txt.setBounds(380, 155, 88, 25);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void sort_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sort_btnActionPerformed
+        if (filter_cmbo.getSelectedItem() == "Stock") {
+
+        }
+        if (filter_cmbo.getSelectedItem() == "Avg. Time Per Job") {
+
+        }
+        if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
+            if (ext_filter_cmbo.getSelectedItem() == "By Job Type") {
+
+            }
+            if (ext_filter_cmbo.getSelectedItem() == "By Customer") {
+
+            }
+            if (ext_filter_cmbo.getSelectedItem() == "By Date") {
+
+            }
+        }
+    }//GEN-LAST:event_sort_btnActionPerformed
+
+    private void filter_cmboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_filter_cmboActionPerformed
+        if (!selectedCmbo.equals(filter_cmbo.getSelectedItem())) {
+            if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
+                selectedCmbo = "No. of Vehicles";
+                ext_filter_cmbo.removeAllItems();
+                ext_filter_cmbo.addItem("Overall");
+                ext_filter_cmbo.addItem("By Month");
+                ext_filter_cmbo.addItem("By Job Type");
+                ext_filter_cmbo.addItem("By Customer");
+            }
+            if (filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
+                selectedCmbo = "Avg. Time per Job";
+                ext_filter_cmbo.removeAllItems();
+                ext_filter_cmbo.addItem("Overall");
+                ext_filter_cmbo.addItem("By Job Type");
+                ext_filter_cmbo.addItem("Mechanic");
+            }
+        }
+
+        if (filter_cmbo.getSelectedItem() == "No. of Vehicles" || filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
+            ext_filter_cmbo.setVisible(true);
+            if (filter_cmbo.getSelectedItem() == "Avg. Time Per Job") {
+                if (ext_filter_cmbo.getSelectedItem() == "Mechanic") {
+                    xext_filter_cmbo.setVisible(false);
+                    filter_txt.setVisible(true);
+                } else {
+                    xext_filter_cmbo.setVisible(true);
+                    filter_txt.setVisible(false);
+                }
+            }
+        } else {
+            ext_filter_cmbo.setVisible(false);
+        }
+
+    }//GEN-LAST:event_filter_cmboActionPerformed
+
+    private void ext_filter_cmboActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ext_filter_cmboActionPerformed
+        if (!selectedCmbo.equals(ext_filter_cmbo.getSelectedItem())) {
+            if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
+                if (ext_filter_cmbo.getSelectedItem() == "By Job Type") {
+                    xext_filter_cmbo.removeAllItems();
+                    xext_filter_cmbo.addItem("MOT");
+                    xext_filter_cmbo.addItem("Annual Service");
+                    xext_filter_cmbo.addItem("Repair");
+                }
+                if (ext_filter_cmbo.getSelectedItem() == "By Customer") {
+                    xext_filter_cmbo.removeAllItems();
+                    xext_filter_cmbo.addItem("Casual");
+                    xext_filter_cmbo.addItem("Account Holder");
+                }
+            }
+            if (filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
+                if (ext_filter_cmbo.getSelectedItem() == "By Job Type") {
+                    xext_filter_cmbo.removeAllItems();
+                    xext_filter_cmbo.addItem("MOT");
+                    xext_filter_cmbo.addItem("Annual Service");
+                    xext_filter_cmbo.addItem("Repair");
+                }
+                
+            }
+            
+        }
+        if (filter_cmbo.getSelectedItem() == "Avg. Time per Job") {
+            if (ext_filter_cmbo.getSelectedItem() == "Mechanic") {
+                xext_filter_cmbo.setVisible(false);
+                filter_txt.setVisible(true);
+            } else {
+                xext_filter_cmbo.setVisible(true);
+                filter_txt.setVisible(false);
+            }
+        }
+        if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
+            if (ext_filter_cmbo.getSelectedItem() == "") {
+                
+            }
+        }
+    }//GEN-LAST:event_ext_filter_cmboActionPerformed
 
     /**
      * @param args the command line arguments
@@ -208,16 +317,20 @@ public class GenerateReportForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton back_btn;
+    private javax.swing.JComboBox<String> ext_filter_cmbo;
+    private javax.swing.JComboBox<String> filter_cmbo;
+    private javax.swing.JLabel filter_lbl;
+    private javax.swing.JTextField filter_txt;
+    private javax.swing.JLabel generateReport_lbl;
+    private javax.swing.JButton generate_btn;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JButton logout_btn;
+    private javax.swing.JButton print_btn;
+    private javax.swing.JTable report_tbl;
+    private javax.swing.JButton sort_btn;
+    private javax.swing.JComboBox<String> xext_filter_cmbo;
     // End of variables declaration//GEN-END:variables
+
+
 }

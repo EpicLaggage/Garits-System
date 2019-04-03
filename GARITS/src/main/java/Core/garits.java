@@ -8,6 +8,8 @@ package Core;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
 import java.sql.*;
+import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
 
 /**
  *
@@ -15,30 +17,16 @@ import java.sql.*;
  */
 public class garits {
 
-    DBConnect dbConnect;
-    
-    public garits() {
-        dbConnect = new DBConnect();
-
-    }
-    
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws SQLException {
-        new garits();
-        Thread getTime = new DetectLatePayment();
-        getTime.start();
-        
-        Thread getMot = new DetectMOTDue();
-        getMot.start();
-        
+    public static void main(String[] args) {
         try {
-            
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
         }
-        catch (Exception exc) {
-            exc.printStackTrace();
-        }
+        
+        new Control();
     }
-    
+
 }

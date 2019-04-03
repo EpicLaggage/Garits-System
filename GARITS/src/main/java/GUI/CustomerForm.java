@@ -5,17 +5,67 @@
  */
 package GUI;
 
+import Account.AccountHolder;
+import Account.FixedDiscount;
+import Account.FlexibleDiscount;
+import Account.VariableDiscount;
+import Account.Vehicle;
+import Core.*;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author jly09
  */
 public class CustomerForm extends javax.swing.JFrame {
 
+    Control control;
+    UpdateCustomerForm updateCustomerForm;
+    FranchiseeMenuForm franchiseeMenuForm;
+
+    //Temporary list of accounts
+    List<AccountHolder> accHolderList;
+
     /**
      * Creates new form MenuForm
      */
     public CustomerForm() {
         initComponents();
+
+        accHolderList = new ArrayList<AccountHolder>();
+
+        customer_tbl.setRowHeight(10);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    public CustomerForm(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+
+        control = c;
+        franchiseeMenuForm = fmf;
+        
+        control.getWindowList().add(this);
+        
+        accHolderList = new ArrayList<AccountHolder>();
+
+        customer_tbl.setRowHeight(20);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
+    }
+
+    public void setControl(Control c) {
+        control = c;
     }
 
     /**
@@ -27,111 +77,316 @@ public class CustomerForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
+        logout_btn = new javax.swing.JButton();
+        sud_lbl = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton6 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jButton5 = new javax.swing.JButton();
+        customer_tbl = new javax.swing.JTable();
+        update_btn = new javax.swing.JButton();
+        back_btn = new javax.swing.JButton();
+        customer_lbl = new javax.swing.JLabel();
+        customerName_lbl = new javax.swing.JLabel();
+        customerLookup_txt = new javax.swing.JTextField();
+        search_btn = new javax.swing.JButton();
+        delete_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jButton3.setText("Logout");
-
-        jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
-        jLabel1.setText("Search, Update and Delete");
-
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null, null, null, null, null}
-            },
-            new String [] {
-                "No.", "Type", "Status", "Description", "Duration", "Start Date", "End Date", "Vehicle"
-            }
-        ));
-        jScrollPane1.setViewportView(jTable1);
-
-        jButton6.setText("Update");
-
-        jButton4.setText("Back");
-
-        jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel2.setText("Customer");
-
-        jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        jLabel3.setText("Customer Name");
-
-        jTextField1.setPreferredSize(new java.awt.Dimension(8, 22));
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        logout_btn.setText("Logout");
+        logout_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                logout_btnActionPerformed(evt);
             }
         });
 
-        jButton5.setText("Search");
+        sud_lbl.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
+        sud_lbl.setText("Search, Update and Delete");
+
+        customer_tbl.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Name", "Email", "Phone No.", "Address", "Postcode", "Account Type", "Discount Plan", "Vehicle"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.Integer.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Object.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, true, false, false, true
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(customer_tbl);
+
+        update_btn.setText("Update");
+        update_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                update_btnActionPerformed(evt);
+            }
+        });
+
+        back_btn.setText("Back");
+        back_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_btnActionPerformed(evt);
+            }
+        });
+
+        customer_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        customer_lbl.setText("Customer");
+
+        customerName_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        customerName_lbl.setText("Customer Name");
+
+        customerLookup_txt.setPreferredSize(new java.awt.Dimension(8, 22));
+        customerLookup_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                customerLookup_txtActionPerformed(evt);
+            }
+        });
+
+        search_btn.setText("Search");
+        search_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                search_btnActionPerformed(evt);
+            }
+        });
+
+        delete_btn.setText("Delete");
+        delete_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                delete_btnActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(592, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(back_btn)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addComponent(logout_btn)
                 .addGap(22, 22, 22))
             .addGroup(layout.createSequentialGroup()
                 .addGap(51, 51, 51)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 945, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1)
-                            .addComponent(jLabel2))
-                        .addGap(361, 361, 361))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jLabel3)
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(18, 18, 18)
-                            .addComponent(jButton5))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 647, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(sud_lbl)
+                                    .addComponent(customer_lbl))
+                                .addGap(361, 361, 361))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(customerName_lbl)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(customerLookup_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(search_btn)
+                                .addGap(290, 290, 290))
+                            .addComponent(delete_btn, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(update_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 102, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
+                    .addComponent(logout_btn)
+                    .addComponent(back_btn))
                 .addGap(34, 34, 34)
-                .addComponent(jLabel2)
+                .addComponent(customer_lbl)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addComponent(sud_lbl)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton5))
+                    .addComponent(customerName_lbl)
+                    .addComponent(customerLookup_txt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(search_btn))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 326, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(41, 41, 41)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(61, 61, 61))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(update_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(delete_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(70, 70, 70))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void customerLookup_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_customerLookup_txtActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_customerLookup_txtActionPerformed
+
+    private void delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_delete_btnActionPerformed
+        if (!customer_tbl.getSelectionModel().isSelectionEmpty()) {
+            AccountHolder acc = null;
+            int selectedRow = customer_tbl.getSelectedRow();
+            for (int i = 0; i < accHolderList.size(); i++) {
+                if (accHolderList.get(i).getCustomerId() == (int) customer_tbl.getValueAt(selectedRow, 0)) {
+                    acc = accHolderList.get(i);
+                }
+            }
+            control.DeleteCustomer(acc.getCustomerId(), acc.getVehicles(), (String) customer_tbl.getValueAt(selectedRow, 6));
+
+        }
+
+        updateTable();
+    }//GEN-LAST:event_delete_btnActionPerformed
+
+    private void update_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_update_btnActionPerformed
+        if (!customer_tbl.getSelectionModel().isSelectionEmpty()) {
+            updateCustomerForm = new UpdateCustomerForm(control, this);
+            
+            int selectedRow = customer_tbl.getSelectedRow();
+            for (int i = 0; i < accHolderList.size(); i++) {
+                if (accHolderList.get(i).getCustomerId() == (int) customer_tbl.getValueAt(selectedRow, 0)) {
+                    updateCustomerForm.setValues(accHolderList.get(i));
+                    updateCustomerForm.setVisible(true);
+                }
+
+            }
+        }
+
+    }//GEN-LAST:event_update_btnActionPerformed
+
+    private void search_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_search_btnActionPerformed
+        String accType = "";
+        String discountPlan = "";
+        if (customerLookup_txt.getText() != "") {
+            accHolderList = control.SearchCustomerByName(customerLookup_txt.getText());
+            DefaultTableModel model = (DefaultTableModel) customer_tbl.getModel();
+            model.setRowCount(0);
+
+            for (int i = 0; i < accHolderList.size(); i++) {
+
+                if (accHolderList.get(i).getDiscount_plan() == null) {
+                    accType = "Casual";
+                    discountPlan = "None";
+                } else {
+                    accType = "Account Holder";
+
+                    if (accHolderList.get(i).getDiscount_plan() instanceof FixedDiscount) {
+                        discountPlan = "Fixed Discount";
+                    }
+                    if (accHolderList.get(i).getDiscount_plan() instanceof FlexibleDiscount) {
+                        discountPlan = "Flexible Discount";
+                    }
+                    if (accHolderList.get(i).getDiscount_plan() instanceof VariableDiscount) {
+                        discountPlan = "Variable Discount";
+                    }
+                }
+                List<Vehicle> vList = accHolderList.get(i).getVehicles();
+
+                String vehicleString = "";
+
+                if (!vList.isEmpty()) {
+                    for (int j = 0; j < vList.size(); j++) {
+                        vehicleString = vehicleString + "[" + vList.get(j).getReg_num() + "," + vList.get(j).getMake() + "," + vList.get(j).getModel() + ","
+                                + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + vList.get(j).getPurchase_date() + "]\n";
+                    }
+
+                }
+                
+                model.addRow(new Object[]{accHolderList.get(i).getCustomerId(), accHolderList.get(i).getName(), accHolderList.get(i).getEmail(), accHolderList.get(i).getPhone(), accHolderList.get(i).getAddress(), accHolderList.get(i).getPostcode(), accType, discountPlan, vehicleString});
+            }
+        }
+    }//GEN-LAST:event_search_btnActionPerformed
+
+    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
+        reset();
+        franchiseeMenuForm = new FranchiseeMenuForm(control);
+        franchiseeMenuForm.setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_back_btnActionPerformed
+
+    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
+        reset();
+        control.logout();
+        this.dispose();
+    }//GEN-LAST:event_logout_btnActionPerformed
+
+    public void reset() {
+        customerLookup_txt.setText("");
+
+        customer_tbl.removeAll();
+        updateCustomerForm.setVisible(false);
+    }
+
+    @Override
+    public void setVisible(boolean visible) {
+        super.setVisible(visible);
+
+        if (visible) {
+            updateTable();
+            if (franchiseeMenuForm != null) {
+                franchiseeMenuForm.dispose();
+            }
+        } else {
+            if (updateCustomerForm.isVisible()) {
+                updateCustomerForm.dispose();
+            }
+            this.dispose();
+
+        }
+    }
+
+    public void updateTable() {
+        String accType = "";
+        String discountPlan = "";
+        accHolderList = control.SearchCustomer();
+        DefaultTableModel model = (DefaultTableModel) customer_tbl.getModel();
+
+        model.setRowCount(0);
+
+        for (int i = 0; i < accHolderList.size(); i++) {
+
+            if (accHolderList.get(i).getDiscount_plan() == null) {
+                accType = "Casual";
+                discountPlan = "None";
+            } else {
+                accType = "Account Holder";
+
+                if (accHolderList.get(i).getDiscount_plan() instanceof FixedDiscount) {
+                    discountPlan = "Fixed Discount";
+                }
+                if (accHolderList.get(i).getDiscount_plan() instanceof FlexibleDiscount) {
+                    discountPlan = "Flexible Discount";
+                }
+                if (accHolderList.get(i).getDiscount_plan() instanceof VariableDiscount) {
+                    discountPlan = "Variable Discount";
+                }
+            }
+
+            List<Vehicle> vList = accHolderList.get(i).getVehicles();
+
+            String vehicleString = "";
+
+            if (!vList.isEmpty()) {
+                for (int j = 0; j < vList.size(); j++) {
+                    vehicleString = vehicleString + "[" + vList.get(j).getReg_num() + "," + vList.get(j).getMake() + "," + vList.get(j).getModel() + ","
+                            + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + vList.get(j).getPurchase_date() + "]\n";
+                }
+
+            }
+            
+            model.addRow(new Object[]{accHolderList.get(i).getCustomerId(), accHolderList.get(i).getName(), accHolderList.get(i).getEmail(), accHolderList.get(i).getPhone(), accHolderList.get(i).getAddress(), accHolderList.get(i).getPostcode(), accType, discountPlan, vehicleString});
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -176,15 +431,16 @@ public class CustomerForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
+    private javax.swing.JButton back_btn;
+    private javax.swing.JTextField customerLookup_txt;
+    private javax.swing.JLabel customerName_lbl;
+    private javax.swing.JLabel customer_lbl;
+    private javax.swing.JTable customer_tbl;
+    private javax.swing.JButton delete_btn;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JButton logout_btn;
+    private javax.swing.JButton search_btn;
+    private javax.swing.JLabel sud_lbl;
+    private javax.swing.JButton update_btn;
     // End of variables declaration//GEN-END:variables
 }

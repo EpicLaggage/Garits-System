@@ -5,17 +5,33 @@
  */
 package GUI;
 
+import Core.Control;
+
 /**
  *
  * @author jly09
  */
 public class DisplayReminderForm extends javax.swing.JFrame {
-
+    Control control;
+    
     /**
      * Creates new form MenuForm
      */
     public DisplayReminderForm() {
         initComponents();
+    }
+    
+    public DisplayReminderForm(Control c) {
+        initComponents();
+        
+        control = c;
+        control.getWindowList().add(this);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**
