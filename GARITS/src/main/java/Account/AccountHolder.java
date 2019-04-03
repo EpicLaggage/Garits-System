@@ -20,6 +20,10 @@ public class AccountHolder extends Customer {
             super(name, email, phone, address, pc, id);
         }
         
+        public AccountHolder(String name, String email, String phone, String address, String pc, String contact) {
+            super(name, email, phone, address, pc, contact);
+        }
+        
         public AccountHolder() {
             super();
         }

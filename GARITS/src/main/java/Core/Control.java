@@ -40,19 +40,19 @@ public class Control {
         
         windowList = new ArrayList<>();
 
-        /*adminMenuForm = new AdminMenuForm(this);
+        adminMenuForm = new AdminMenuForm(this);
         fpMenuForm = new ForepersonMenuForm(this);
         franchiseeMenuForm = new FranchiseeMenuForm(this);
         mechanicMenuForm = new MechanicMenuForm(this);
-        receptionMenuForm = new ReceptionistMenuForm(this);*/
+        receptionMenuForm = new ReceptionistMenuForm(this);
+        
         loginForm = new LoginForm(this);
+       loginForm.setVisible(true);
 
-        //disposeForms();
+        //staff = new Staff("Jack", "1", "Franchisee", "Jack");
 
-        //staff = new Staff("Jack", "1", "Administrator", "Jack");
-
-        loginForm.setVisible(true);
-        //OpenMenu();
+        
+        OpenMenu();
     }
 
     /**
@@ -86,8 +86,8 @@ public class Control {
      * @param accholder
      */
     public void AddCustomer(Customer cust, List<Vehicle> vList) {
-        String sql = "INSERT INTO Customer (customer_name,customer_address,customer_postcode,customer_tel,customer_email,account_holder) "
-                + "VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO Customer (customer_name,customer_address,customer_postcode,customer_tel,customer_email,customer_contact,customer_account_holder) "
+                + "VALUES (?,?,?,?,?,?,?)";
 
         ResultSet rs = null;
         int id = -1;
@@ -100,7 +100,8 @@ public class Control {
             ps.setString(3, cust.getPostcode());
             ps.setString(4, cust.getPhone());
             ps.setString(5, cust.getEmail());
-            ps.setInt(6, 0);
+            ps.setString(6, cust.getCustomerContact());
+            ps.setInt(7, 0);
 
             dbConnect.executeWriteQuery(ps);
             ps.close();
@@ -150,8 +151,8 @@ public class Control {
     }
 
     public void AddCustomer(AccountHolder cust, List<Vehicle> vList) {
-        String sql = "INSERT INTO Customer (customer_name,customer_address,customer_postcode,customer_tel,customer_email,account_holder) "
-                + "VALUES (?,?,?,?,?,?)";
+        String sql = "INSERT INTO Customer (customer_name,customer_address,customer_postcode,customer_tel,customer_email,customer_contact,customer_account_holder) "
+                + "VALUES (?,?,?,?,?,?,?)";
 
         ResultSet rs;
         int id = -1;
@@ -167,7 +168,8 @@ public class Control {
             ps.setString(3, cust.getPostcode());
             ps.setString(4, cust.getPhone());
             ps.setString(5, cust.getEmail());
-            ps.setInt(6, 1);
+            ps.setString(6, cust.getCustomerContact());
+            ps.setInt(7, 1);
 
             ResultSet rid = dbConnect.executeGetIDQuery(ps);
             if (rid.next()) {
@@ -201,7 +203,7 @@ public class Control {
 
             }
 
-            PreparedStatement ps3 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO customer_account_holder (discount_plan,customer_id,pay_later) VALUES (?,?,?)");
+            PreparedStatement ps3 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO account_holder (discount_plan,customer_id,pay_later) VALUES (?,?,?)");
             PreparedStatement ps4 = dbConnect.setIDPreparedStatement(dbConnect.connect(), "INSERT INTO discount (discount_type,customer_id) VALUES (?,?)");
 
             if (cust.getDiscount_plan() instanceof FixedDiscount) {
@@ -363,7 +365,7 @@ public class Control {
                 dbConnect.executeWriteQuery(ps3);
                 ps3.close();
 
-                PreparedStatement ps4 = dbConnect.setPreparedStatement(dbConnect.connect(), "DELETE FROM customer_account_holder WHERE customer_id=?");
+                PreparedStatement ps4 = dbConnect.setPreparedStatement(dbConnect.connect(), "DELETE FROM account_holder WHERE customer_id=?");
                 ps4.setInt(1, id);
                 dbConnect.executeWriteQuery(ps4);
                 ps4.close();
@@ -400,14 +402,16 @@ public class Control {
         }
 
         try {
-            PreparedStatement ps = dbConnect.setPreparedStatement(dbConnect.connect(), "UPDATE Customer SET customer_name=?,customer_address=?,customer_postcode=?,customer_tel=?,customer_email=?,account_holder=? WHERE customer_id=?");
+            PreparedStatement ps = dbConnect.setPreparedStatement(dbConnect.connect(), "UPDATE Customer SET customer_name=?,customer_address=?,customer_postcode=?,customer_tel=?,"
+                    + "customer_email=?,customer_contact=?,customer_account_holder=? WHERE customer_id=?");
             ps.setString(1, acc.getName());
             ps.setString(2, acc.getAddress());
             ps.setString(3, acc.getPostcode());
             ps.setString(4, acc.getPhone());
             ps.setString(5, acc.getAddress());
-            ps.setInt(6, accountHolder);
-            ps.setInt(7, acc.getCustomerId());
+            ps.setString(6, acc.getCustomerContact());
+            ps.setInt(7, accountHolder);
+            ps.setInt(8, acc.getCustomerId());
 
             dbConnect.executeWriteQuery(ps);
             ps.close();
@@ -424,7 +428,8 @@ public class Control {
                     PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO vehicle (reg_no,car_make,car_model,engine_serial,chassis_no,colour,purchase_date,customer_id) VALUES "
                             + "(?,?,?,?,?,?,?,?)");
 
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    System.out.println(acc.getVehicles().get(i).getPurchase_date());
                     Date purchase_date = dateFormat.parse(acc.getVehicles().get(i).getPurchase_date());
                     java.sql.Date sqlDate = new java.sql.Date(purchase_date.getTime());
 
@@ -435,7 +440,7 @@ public class Control {
                     ps2.setString(5, acc.getVehicles().get(i).getChassis_no());
                     ps2.setString(6, acc.getVehicles().get(i).getColour());
                     ps2.setDate(7, sqlDate);
-                    ps2.setInt(7, acc.getCustomerId());
+                    ps2.setInt(8, acc.getCustomerId());
 
                     dbConnect.executeWriteQuery(ps2);
                     ps2.close();
@@ -443,7 +448,7 @@ public class Control {
             }
             if (acc.getDiscount_plan() != null) {
 
-                PreparedStatement ps3 = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM customer_account_holder  WHERE customer_id=?");
+                PreparedStatement ps3 = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM account_holder  WHERE customer_id=?");
                 ps3.setInt(1, acc.getCustomerId());
 
                 rs = dbConnect.executeReadQuery(ps3);
@@ -502,14 +507,14 @@ public class Control {
                     dbConnect.executeWriteQuery(ps5);
                     ps5.close();
 
-                    PreparedStatement ps6 = dbConnect.setPreparedStatement(dbConnect.connect(), "DELETE FROM customer_account_holder WHERE customer_id=?");
+                    PreparedStatement ps6 = dbConnect.setPreparedStatement(dbConnect.connect(), "DELETE FROM account_holder WHERE customer_id=?");
                     ps6.setInt(1, acc.getCustomerId());
 
                     dbConnect.executeWriteQuery(ps6);
                     ps6.close();
                 }
 
-                PreparedStatement ps5 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO customer_account_holder (discount_plan,customer_id,pay_later) VALUES (?,?,?)");
+                PreparedStatement ps5 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO account_holder (discount_plan,customer_id,pay_later) VALUES (?,?,?)");
                 PreparedStatement ps6 = dbConnect.setIDPreparedStatement(dbConnect.connect(), "INSERT INTO discount (discount_type,customer_id) VALUES (?,?)");
 
                 if (acc.getDiscount_plan() instanceof FixedDiscount) {
@@ -667,14 +672,14 @@ public class Control {
         }
 
         try {
-            PreparedStatement ps = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM Customer WHERE customer_name=?");
+            PreparedStatement ps = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM customer WHERE customer_name=?");
             ps.setString(1, n);
 
             rs = dbConnect.executeReadQuery(ps);
             if (rs != null) {
                 while (rs.next()) {
                     id = rs.getInt("customer_id");
-                    accountHolder = rs.getInt("account_holder");
+                    accountHolder = rs.getInt("customer_account_holder");
 
                     PreparedStatement ps1 = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM vehicle WHERE customer_id=?");
                     ps1.setInt(1, id);
@@ -682,7 +687,7 @@ public class Control {
                     vrs = dbConnect.executeReadQuery(ps1);
                     if (vrs != null) {
                         while (vrs.next()) {
-                            vList.add(new Vehicle(vrs.getString("reg_no"), vrs.getString("car_make"), vrs.getString("car_model"), vrs.getString("colour"), vrs.getString("engine_serial"), vrs.getString("chassis_no")));
+                            vList.add(new Vehicle(vrs.getString("reg_no"), vrs.getString("car_make"), vrs.getString("car_model"), vrs.getString("colour"), vrs.getString("engine_serial"), vrs.getString("chassis_no"), vrs.getString("purchase_date")));
                         }
                         vrs.close();
 
@@ -691,7 +696,7 @@ public class Control {
                     if (accountHolder == 1) {
                         acc = new AccountHolder(rs.getString("customer_name"), rs.getString("customer_email"), rs.getString("customer_tel"), rs.getString("customer_address"), rs.getString("customer_postcode"), rs.getInt("customer_id"));
                         acc.setVehicles(vList);
-                        PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM customer_account_holder WHERE customer_id=i?");
+                        PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM account_holder WHERE customer_id=i?");
                         ps2.setInt(1, id);
 
                         aRs = dbConnect.executeReadQuery(ps2);
@@ -785,7 +790,7 @@ public class Control {
             if (rs != null) {
                 while (rs.next()) {
                     id = rs.getInt("customer_id");
-                    accountHolder = rs.getInt("account_holder");
+                    accountHolder = rs.getInt("customer_account_holder");
 
                     PreparedStatement ps1 = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM vehicle WHERE customer_id=?");
                     ps1.setInt(1, id);
@@ -793,7 +798,7 @@ public class Control {
                     vrs = dbConnect.executeReadQuery(ps1);
                     if (vrs != null) {
                         while (vrs.next()) {
-                            vList.add(new Vehicle(vrs.getString("reg_no"), vrs.getString("car_make"), vrs.getString("car_model"), vrs.getString("colour"), vrs.getString("engine_serial"), vrs.getString("chassis_no")));
+                            vList.add(new Vehicle(vrs.getString("reg_no"), vrs.getString("car_make"), vrs.getString("car_model"), vrs.getString("colour"), vrs.getString("engine_serial"), vrs.getString("chassis_no"), vrs.getString("purchase_date")));
                         }
                         ps1.close();
 
@@ -1072,7 +1077,7 @@ public class Control {
                 break;
             case "Franchisee":
                 //Starting thread which checks for late payments
-                getTime = new DetectLatePayment();
+                getTime = new DetectLatePayment(this);
                 getTime.start();
                 franchiseeMenuForm = new FranchiseeMenuForm(this);
                 franchiseeMenuForm.setVisible(true);

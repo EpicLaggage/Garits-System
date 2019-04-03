@@ -35,6 +35,7 @@ public class UpdateVehicleForm extends javax.swing.JFrame {
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
 
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public UpdateVehicleForm(Control c) {
@@ -46,12 +47,7 @@ public class UpdateVehicleForm extends javax.swing.JFrame {
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
 
         this.setLocationRelativeTo(null);
-    }
-
-    public UpdateVehicleForm(CreateCustCardForm cForm) {
-        initComponents();
-
-        custForm = cForm;
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public UpdateVehicleForm(Control c, CreateCustCardForm cForm) {
@@ -67,6 +63,7 @@ public class UpdateVehicleForm extends javax.swing.JFrame {
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
 
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public UpdateVehicleForm(Control c, UpdateCustomerForm cForm) {
@@ -81,6 +78,7 @@ public class UpdateVehicleForm extends javax.swing.JFrame {
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
 
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     @Override

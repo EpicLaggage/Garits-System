@@ -226,6 +226,9 @@ public class CreateEmpAccForm extends javax.swing.JFrame {
         passwordField.setText("");
         nameField.setText("");
         
+        adminMenuForm = new AdminMenuForm(control);
+        adminMenuForm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_createButtonActionPerformed
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed

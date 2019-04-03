@@ -60,7 +60,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         initComponents();
         
         control = c;
-        control.getDatabaseConnector();
+        dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
         
         this.setLocationRelativeTo(null);
@@ -73,7 +73,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         control = c;
         fpMenuForm = fpmf;
         
-        control.getDatabaseConnector();
+        dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
         
         this.setLocationRelativeTo(null);
@@ -86,7 +86,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         control = c;
         franchiseeMenuForm = fmf;
         
-        control.getDatabaseConnector();
+        dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
         
         this.setLocationRelativeTo(null);
@@ -99,7 +99,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         control = c;
         receptionMenuForm = rmf;
         
-        control.getDatabaseConnector();
+        dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
         
         this.setLocationRelativeTo(null);
@@ -457,7 +457,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         jComboBox2.getItemAt(0);
         TableColumn idColumn = jTable1.getColumnModel().getColumn(5);
         jTable1.getColumnModel().removeColumn(idColumn);
-        String mechanicNamesQuery = "SELECT username, user_id FROM garitsdb.User "
+        String mechanicNamesQuery = "SELECT username, user_id FROM user "
                 + "WHERE user_role = 'Mechanic'";
         ResultSet rs;
         
@@ -533,6 +533,24 @@ public class CreateJobForm extends javax.swing.JFrame {
             }
             conn.commit();
             conn.setAutoCommit(true);
+            
+            if (fpMenuForm != null) {
+                JobForm jobForm = new JobForm(control, fpMenuForm);
+                jobForm.setVisible(true);
+                this.dispose();
+            }
+            
+            if (franchiseeMenuForm != null) {
+                JobForm jobForm = new JobForm(control, franchiseeMenuForm);
+                jobForm.setVisible(true);
+                this.dispose();
+            }
+            
+            if (receptionMenuForm != null) {
+                JobForm jobForm = new JobForm(control, receptionMenuForm);
+                jobForm.setVisible(true);
+                this.dispose();
+            }
             
         }
         catch (Exception exc) {

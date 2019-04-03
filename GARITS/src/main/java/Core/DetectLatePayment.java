@@ -20,11 +20,17 @@ import javax.swing.JOptionPane;
  */
 public class DetectLatePayment extends Thread {
     DBConnect dbConnect;
+    Control control;
     ArrayList<Invoice> unpaidInvoices = new ArrayList<Invoice>();
     boolean reminderSnoozed = false;
 
     public DetectLatePayment() {
         dbConnect = new DBConnect();
+    }
+    
+    public DetectLatePayment(Control c) {
+        control = c;
+        dbConnect = control.getDatabaseConnector();
     }
     
     
@@ -67,7 +73,7 @@ public class DetectLatePayment extends Thread {
                         "Do you want to view unpaid jobs?",
                         "Unpaid Jobs reminder", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
-                  RemindersForm reminders = new RemindersForm(
+                  RemindersForm reminders = new RemindersForm(control, 
                           unpaidInvoices);
                   reminders.setVisible(true);
                   unpaidInvoices.clear();

@@ -83,10 +83,12 @@ public class NumOfVehicles extends Reports {
             try {
                 PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
                 document.open();
-                Font font1 = new Font(Font.FontFamily.HELVETICA, 21, Font.BOLD);
+                Font font1 = new Font(Font.FontFamily.HELVETICA, 18, Font.BOLD);
                 
-                document.add(new Paragraph("Report\nNumber Of Vehicles" + " - " + reportDate, font1));
+                document.add(new Paragraph("Report\nNumber Of Vehicles " + "(" + filter + ")" + " - " + reportDate, font1));
 
+                document.add(new Paragraph("\nNumber of Vehicles Count: " + vehicles.size()));
+                
                 PdfPTable table = new PdfPTable(7);
                 table.setWidthPercentage(100);
                 table.setSpacingBefore(30f);

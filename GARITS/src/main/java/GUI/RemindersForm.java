@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import DatabaseConnect.DBConnect;
 import static GUI.UpdateJobForm.BOLD;
 import Processing.Invoice;
@@ -42,6 +43,7 @@ import javax.swing.table.DefaultTableModel;
 public class RemindersForm extends javax.swing.JFrame {
     ArrayList<Invoice> unpaidInvoices = new ArrayList<Invoice>();
     DBConnect dbConnect;
+    Control control;
     DefaultTableModel invoiceModel;
 
     /**
@@ -51,10 +53,44 @@ public class RemindersForm extends javax.swing.JFrame {
         initComponents();
         this.unpaidInvoices.addAll(unpaidInvoices);
         dbConnect = new DBConnect();
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public RemindersForm(Control c) {
+        initComponents();
+        control = c;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    private RemindersForm() {
+    public RemindersForm(Control c, ArrayList<Invoice> unpaidInvoices) {
         initComponents();
+        control = c;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.unpaidInvoices.addAll(unpaidInvoices);
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public RemindersForm() {
+        initComponents();
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
+    }
+    
+    public void setUpaidInvoices(ArrayList<Invoice> unpaidInvoices) {
+        this.unpaidInvoices = unpaidInvoices;
     }
 
     /**
@@ -66,11 +102,9 @@ public class RemindersForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
-        jButton4 = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         jButton7 = new javax.swing.JButton();
         jComboBox1 = new javax.swing.JComboBox();
@@ -79,13 +113,12 @@ public class RemindersForm extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setAlwaysOnTop(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
         });
-
-        jButton3.setText("Logout");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Display and Print");
@@ -107,8 +140,6 @@ public class RemindersForm extends javax.swing.JFrame {
             }
         });
         jScrollPane1.setViewportView(jTable1);
-
-        jButton4.setText("Back");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel2.setText("Reminders");
@@ -161,12 +192,6 @@ public class RemindersForm extends javax.swing.JFrame {
                     .addComponent(jLabel2))
                 .addGap(330, 330, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
-                .addGap(22, 22, 22))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(52, 52, 52)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
@@ -179,11 +204,7 @@ public class RemindersForm extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4))
-                .addGap(16, 16, 16)
+                .addGap(54, 54, 54)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -241,7 +262,7 @@ public class RemindersForm extends javax.swing.JFrame {
                     invoice.setCustomerName(rs.getString("customer_name"));
                     invoice.setCustomerAddress(rs.getString("customer_address"));
                     invoice.setCustomerPostCode(rs.getString("customer_postcode"));
-                    invoice.setCustomerPhone(rs.getInt("customer_tel"));
+                    invoice.setCustomerPhone(rs.getString("customer_tel"));
                     invoice.setCustomerEmail(rs.getString("customer_email"));
                     invoice.setAccountHolder(rs.getBoolean(
                             "customer_account_holder"));
@@ -658,8 +679,6 @@ public class RemindersForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton7;
     private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;

@@ -296,8 +296,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
                 && model_txt.getText() != ""
                 && engine_serial_no_txt.getText() != ""
                 && chassisNo_txt.getText() != ""
-                && colour_txt.getText() != ""
-                && purchaseDate_txt.getText().matches("[0-9]{2}[0-9]{2}[0-9]{4}")) {
+                && colour_txt.getText() != "") {
             
             Date date = null;
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -321,14 +320,17 @@ public class AddVehicleForm extends javax.swing.JFrame {
                 if (custForm != null && vehicle != null) {
                     custForm.getVehicleList().add(vehicle);
                     custForm.getVehicleComboBox().addItem(vehicle.getReg_num() + "," + vehicle.getMake() + "," + vehicle.getModel());
-                    this.setVisible(false);
+                    this.dispose();
                 }
 
                 if (updateCustForm != null && vehicle != null) {
                     updateCustForm.getVehicleList().add(vehicle);
                     updateCustForm.getVehicleComboBox().addItem(vehicle.getReg_num() + "," + vehicle.getMake() + "," + vehicle.getModel());
-                    this.setVisible(false);
+                    this.dispose();
                 }
+            }
+            else {
+                
             }
 
         }

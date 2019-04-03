@@ -110,6 +110,11 @@ public class AdminMenuForm extends javax.swing.JFrame {
         });
 
         logout_btn.setText("Logout");
+        logout_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_btnActionPerformed(evt);
+            }
+        });
 
         restore_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         restore_btn.setText("Restore");
@@ -199,6 +204,11 @@ public class AdminMenuForm extends javax.swing.JFrame {
         createEmployeeForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_addUser_btnActionPerformed
+
+    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
+        control.logout();
+        this.dispose();
+    }//GEN-LAST:event_logout_btnActionPerformed
 
     /**
      * @param args the command line arguments

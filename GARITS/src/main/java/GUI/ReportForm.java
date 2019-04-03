@@ -64,6 +64,9 @@ public class ReportForm extends javax.swing.JFrame {
 
         xext_filter_cmbo.setVisible(false);
         filter_txt.setVisible(false);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public ReportForm(Control c, ForepersonMenuForm fpmf) {
@@ -83,6 +86,9 @@ public class ReportForm extends javax.swing.JFrame {
 
         xext_filter_cmbo.setVisible(false);
         filter_txt.setVisible(false);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public ReportForm(Control c, ReceptionistMenuForm rmf) {
@@ -99,12 +105,16 @@ public class ReportForm extends javax.swing.JFrame {
 
         filter_cmbo.setSelectedItem("Spare Parts");
         filter_cmbo.setEnabled(false);
+        ext_filter_cmbo.setVisible(false);
 
         selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
         exSelectedCmbo = String.valueOf(ext_filter_cmbo.getSelectedItem());
 
         xext_filter_cmbo.setVisible(false);
         filter_txt.setVisible(false);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     @Override
@@ -290,7 +300,7 @@ public class ReportForm extends javax.swing.JFrame {
     }//GEN-LAST:event_sort_btnActionPerformed
 
     private void filter_cmboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_filter_cmboItemStateChanged
-        if (receptionMenuForm != null) {
+        if (fpMenuForm != null || franchiseeMenuForm != null) {
             if (!selectedCmbo.equals(filter_cmbo.getSelectedItem())) {
                 selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
                 if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
@@ -325,11 +335,14 @@ public class ReportForm extends javax.swing.JFrame {
                 filter_txt.setVisible(false);
             }
         }
-
+        
+        if (receptionMenuForm != null) {
+            
+        }
     }//GEN-LAST:event_filter_cmboItemStateChanged
 
     private void ext_filter_cmboItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_ext_filter_cmboItemStateChanged
-        if (receptionMenuForm != null) {
+        if (fpMenuForm != null || franchiseeMenuForm != null) {
             if (!selectedCmbo.equals(ext_filter_cmbo.getSelectedItem())) {
                 if (filter_cmbo.getSelectedItem() == "No. of Vehicles") {
                     if (ext_filter_cmbo.getSelectedItem() == "By Job Type") {

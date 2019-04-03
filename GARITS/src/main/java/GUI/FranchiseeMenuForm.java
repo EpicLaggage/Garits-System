@@ -88,7 +88,7 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
         createJob_btn = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         displayUpdateJobs_btn = new javax.swing.JButton();
-        displayReminders_btn = new javax.swing.JButton();
+        jobReminders_btn = new javax.swing.JButton();
         displayUpdateParts_btn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         orderParts_btn = new javax.swing.JButton();
@@ -97,10 +97,10 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         displayAlerts_btn = new javax.swing.JButton();
         displayPrintInvoice_btn = new javax.swing.JButton();
-        createInvoice_btn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         addParts_btn = new javax.swing.JButton();
+        paymentReminders_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(1000, 600));
@@ -155,11 +155,11 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
             }
         });
 
-        displayReminders_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        displayReminders_btn.setText("Display Reminders");
-        displayReminders_btn.addActionListener(new java.awt.event.ActionListener() {
+        jobReminders_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        jobReminders_btn.setText("Job Reminders");
+        jobReminders_btn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                displayReminders_btnActionPerformed(evt);
+                jobReminders_btnActionPerformed(evt);
             }
         });
 
@@ -217,14 +217,6 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
             }
         });
 
-        createInvoice_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
-        createInvoice_btn.setText("Create Invoice");
-        createInvoice_btn.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                createInvoice_btnActionPerformed(evt);
-            }
-        });
-
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Invoice/Alerts");
 
@@ -236,26 +228,23 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
             }
         });
 
+        paymentReminders_btn.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        paymentReminders_btn.setText("Payment Reminders");
+        paymentReminders_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                paymentReminders_btnActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout panelLayout = new javax.swing.GroupLayout(panel);
         panel.setLayout(panelLayout);
         panelLayout.setHorizontalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                .addComponent(logout_btn)
+                .addGap(78, 78, 78))
             .addGroup(panelLayout.createSequentialGroup()
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(180, 180, 180)
-                        .addComponent(jLabel4)
-                        .addGap(210, 210, 210)
-                        .addComponent(jLabel2)
-                        .addGap(226, 226, 226)
-                        .addComponent(jLabel3)
-                        .addGap(197, 197, 197)
-                        .addComponent(jLabel5)
-                        .addGap(156, 156, 156)
-                        .addComponent(jLabel1))
-                    .addGroup(panelLayout.createSequentialGroup()
-                        .addGap(60, 60, 60)
-                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1440, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(panelLayout.createSequentialGroup()
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLayout.createSequentialGroup()
@@ -265,7 +254,7 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
                                 .addComponent(displayUpdateJobs_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGap(390, 390, 390)
-                                .addComponent(displayReminders_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jobReminders_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGap(120, 120, 120)
                                 .addComponent(createCust_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -273,28 +262,36 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
                                 .addComponent(createJob_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(27, 27, 27)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(panelLayout.createSequentialGroup()
-                                .addComponent(addParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(301, 301, 301)
-                                .addComponent(createInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(addSupplier_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(addParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(displayUpdateParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(orderParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(addSupplier_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(orderParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(29, 29, 29)
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(panelLayout.createSequentialGroup()
-                                        .addGap(31, 31, 31)
-                                        .addComponent(reports_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(29, 29, 29)
-                                        .addComponent(displayPrintInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(panelLayout.createSequentialGroup()
-                                        .addGap(301, 301, 301)
-                                        .addComponent(displayAlerts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
+                                    .addComponent(displayPrintInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(displayAlerts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addComponent(paymentReminders_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGap(26, 26, 26)
+                                .addComponent(reports_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(180, 180, 180)
+                        .addComponent(jLabel4)
+                        .addGap(210, 210, 210)
+                        .addComponent(jLabel2)
+                        .addGap(226, 226, 226)
+                        .addComponent(jLabel3)
+                        .addGap(164, 164, 164)
+                        .addComponent(jLabel1)
+                        .addGap(151, 151, 151)
+                        .addComponent(jLabel5))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 1440, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(110, 110, 110))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLayout.createSequentialGroup()
-                .addComponent(logout_btn)
-                .addGap(78, 78, 78))
         );
         panelLayout.setVerticalGroup(
             panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -305,8 +302,8 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3)
                     .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel3)
                         .addComponent(jLabel1)
                         .addComponent(jLabel5)))
                 .addGap(19, 19, 19)
@@ -318,30 +315,34 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
                             .addComponent(createCust_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                 .addComponent(createJob_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(addParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(createInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(addParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(9, 9, 9)
                         .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(customer_suad_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(displayUpdateJobs_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(displayPrintInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addComponent(displayUpdateJobs_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGap(10, 10, 10)
-                                .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(displayReminders_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(displayAlerts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(jobReminders_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(panelLayout.createSequentialGroup()
                                 .addComponent(displayUpdateParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(9, 9, 9)
                                 .addComponent(orderParts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(10, 10, 10)
                                 .addComponent(addSupplier_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                    .addComponent(reports_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(panelLayout.createSequentialGroup()
+                        .addGroup(panelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(displayPrintInvoice_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(reports_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(paymentReminders_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(13, 13, 13)
+                        .addComponent(displayAlerts_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
 
         getContentPane().add(panel);
-        panel.setBounds(0, 0, 1570, 680);
+        panel.setBounds(0, 0, 1560, 680);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -381,9 +382,9 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_displayUpdateJobs_btnActionPerformed
 
-    private void displayReminders_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayReminders_btnActionPerformed
+    private void jobReminders_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jobReminders_btnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_displayReminders_btnActionPerformed
+    }//GEN-LAST:event_jobReminders_btnActionPerformed
 
     private void displayUpdateParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayUpdateParts_btnActionPerformed
         displayAllParts = new DisplayAllParts(control, this);
@@ -407,10 +408,6 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_reports_btnActionPerformed
 
-    private void createInvoice_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_createInvoice_btnActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_createInvoice_btnActionPerformed
-
     private void displayPrintInvoice_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayPrintInvoice_btnActionPerformed
         displayInvoiceForm = new DisplayInvoiceForm(control, this);
         displayInvoiceForm.setVisible(true);
@@ -419,6 +416,10 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     private void displayAlerts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayAlerts_btnActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_displayAlerts_btnActionPerformed
+
+    private void paymentReminders_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentReminders_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_paymentReminders_btnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -474,12 +475,10 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     private javax.swing.JButton addParts_btn;
     private javax.swing.JButton addSupplier_btn;
     private javax.swing.JButton createCust_btn;
-    private javax.swing.JButton createInvoice_btn;
     private javax.swing.JButton createJob_btn;
     private javax.swing.JButton customer_suad_btn;
     private javax.swing.JButton displayAlerts_btn;
     private javax.swing.JButton displayPrintInvoice_btn;
-    private javax.swing.JButton displayReminders_btn;
     private javax.swing.JButton displayUpdateJobs_btn;
     private javax.swing.JButton displayUpdateParts_btn;
     private javax.swing.JLabel jLabel1;
@@ -488,9 +487,11 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JButton jobReminders_btn;
     private javax.swing.JButton logout_btn;
     private javax.swing.JButton orderParts_btn;
     private javax.swing.JPanel panel;
+    private javax.swing.JButton paymentReminders_btn;
     private javax.swing.JButton reports_btn;
     // End of variables declaration//GEN-END:variables
 }

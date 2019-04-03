@@ -43,6 +43,7 @@ public class LoginForm extends javax.swing.JFrame {
         this.setPreferredSize(new Dimension(640, 510));
 
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public LoginForm(Control c) {
@@ -60,6 +61,7 @@ public class LoginForm extends javax.swing.JFrame {
         this.setPreferredSize(new Dimension(640, 510));
 
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     @Override
@@ -85,13 +87,18 @@ public class LoginForm extends javax.swing.JFrame {
         usernameField = new javax.swing.JTextField();
         passwordField = new javax.swing.JPasswordField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         getContentPane().setLayout(null);
 
         panel.setBackground(new java.awt.Color(255, 255, 255));
 
         loginButton.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         loginButton.setText("Enter");
+        loginButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginButtonActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 36)); // NOI18N
         jLabel1.setText("Login");
@@ -249,6 +256,26 @@ public class LoginForm extends javax.swing.JFrame {
 
         usernameField.setMargin(new Insets(2, 8, 2, 8));
     }//GEN-LAST:event_usernameFieldFocusGained
+
+    private void loginButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginButtonActionPerformed
+        String username = usernameField.getText();
+        String password = new String(passwordField.getPassword());
+        
+        Login login = new Login();
+        
+        // add code here to go to main menu, allow access to methods for features etc
+        try {
+            if (login.validateLogin(username, password)) {
+                // returns the staff member that logged in for access to the appropriate methods
+                control.setStaff(login.createStaffObject(username));
+                control.OpenMenu();
+                this.dispose();
+            }
+        }
+        catch(SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }//GEN-LAST:event_loginButtonActionPerformed
 
     /**
      * @param args the command line arguments

@@ -6,6 +6,7 @@
  */
 package GUI;
 
+import Core.Control;
 import DatabaseConnect.DBConnect;
 import static GUI.UpdateJobForm.BOLD;
 import Processing.Invoice;
@@ -38,6 +39,11 @@ import javax.swing.table.DefaultTableModel;
  * @author jly09
  */
 public class DisplayInvoiceForm extends javax.swing.JFrame {
+    Control control;
+    ForepersonMenuForm fpMenuForm;
+    FranchiseeMenuForm franchiseeMenuForm;
+    ReceptionistMenuForm receptionMenuForm;
+    
     ArrayList<Invoice> invoiceList = new ArrayList<Invoice>();
     DBConnect dbConnect;
     DefaultTableModel invoiceModel;
@@ -49,6 +55,64 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
         initComponents();
         dbConnect = new DBConnect();
     }
+    
+    public DisplayInvoiceForm(Control c) {
+        initComponents();
+        
+        control = c;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    DisplayInvoiceForm(Control c, ForepersonMenuForm fpmf) {
+        initComponents();
+        
+        control = c;
+        fpMenuForm = fpmf;
+        
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    DisplayInvoiceForm(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+        
+        control = c;
+        franchiseeMenuForm = fmf;
+        
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    DisplayInvoiceForm(Control c, ReceptionistMenuForm rmf) {
+        initComponents();
+        
+        control = c;
+        receptionMenuForm = rmf;
+        
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -211,7 +275,7 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
                     invoice.setCustomerName(rs.getString("customer_name"));
                     invoice.setCustomerAddress(rs.getString("customer_address"));
                     invoice.setCustomerPostCode(rs.getString("customer_postcode"));
-                    invoice.setCustomerPhone(rs.getInt("customer_tel"));
+                    invoice.setCustomerPhone(rs.getString("customer_tel"));
                     invoice.setCustomerEmail(rs.getString("customer_email"));
                     invoice.setAccountHolder(rs.getBoolean(
                             "customer_account_holder"));

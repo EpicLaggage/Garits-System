@@ -36,6 +36,7 @@ public class UpdatePartForm extends javax.swing.JFrame {
         this.control = c;
         control.getWindowList().add(this);
         this.part = part;
+        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         populateFields();
     }
@@ -46,6 +47,7 @@ public class UpdatePartForm extends javax.swing.JFrame {
         this.displayAllParts = dap;
         control.getWindowList().add(this);
         this.part = part;
+        this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         populateFields();
     }
