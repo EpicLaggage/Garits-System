@@ -86,7 +86,12 @@ public class PDFCreator {
                 table.addCell(createCell(part.getQty()+""));
                 float markUpSpares = part.getPrice()*part.getQty();
                 table.addCell(createCell(invoice.calcMarkUpSpares(markUpSpares)+""));
-                totalDue += invoice.calcMarkUpSpares(markUpSpares);
+                if(part.getName().equals("Oil Filter") ||
+                    part.getName().equals("Air Filter") ||
+                    part.getName().equals("Motor Oil")) {
+                } else {
+                    totalDue += invoice.calcMarkUpSpares(markUpSpares);
+                }
             }
             //WHITESPACE
             table.addCell(createCell("\n"));
@@ -97,7 +102,7 @@ public class PDFCreator {
             
             if(selectedJob.getFixedCost() > 0) {
                 //Adding Fixed cost
-                table.addCell(createCell(selectedJob.getType()));
+                table.addCell(createCell(selectedJob.getType()+""));
                 table.addCell(createCell(""));
                 table.addCell(createCell(""));
                 table.addCell(createCell(""));

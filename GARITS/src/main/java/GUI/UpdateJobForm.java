@@ -1527,9 +1527,15 @@ public class UpdateJobForm extends javax.swing.JFrame {
         //ONE AT A TIME, spares, labour, VAT
         float sparesTotal = 0;
         for (int i = 0; i < jTable6.getRowCount(); i++) {
-            float qty = Float.parseFloat(modelParts.getValueAt(i, 1) + "");
-            float price = Float.parseFloat(modelParts.getValueAt(i, 4) + "");
-            sparesTotal += price * qty;
+            if(modelParts.getValueAt(i, 0).equals("Oil Filter") ||
+                    modelParts.getValueAt(i, 0).equals("Air Filter") ||
+                    modelParts.getValueAt(i, 0).equals("Motor Oil")) {
+                System.out.println("Cost not added");
+            } else {
+                float qty = Float.parseFloat(modelParts.getValueAt(i, 1) + "");
+                float price = Float.parseFloat(modelParts.getValueAt(i, 4) + "");
+                sparesTotal += price * qty;
+            }
         }
         sparesCost = invoice.calcMarkUpSpares(sparesTotal);
 
@@ -1573,10 +1579,10 @@ public class UpdateJobForm extends javax.swing.JFrame {
         invoice.setPaymentReminder(false);
         // TODO ADD INVOICE TO DB
         String insertInvoice = "INSERT INTO `garitsdb`.`Invoice` (`job_id`,"
-                + " `invoice_date`, `payment_due_date`, `invoice_total`, fixed_cost)"
+                + " `invoice_date`, `payment_due_date`, `invoice_total`, `fixed_cost`)"
                 + " VALUES ('" + invoice.getJobId() + "', '" + invoice.getJobEnd()
                 + "', '" + invoice.getPaymentDueDate() + "', '"
-                + invoice.getAmountDue() + selectedJob.getFixedCost() +"');";
+                + invoice.getAmountDue() + "', '" + selectedJob.getFixedCost() +"');";
         int invoiceId = 0;
         try {
             Connection conn = dbConnect.connect();
