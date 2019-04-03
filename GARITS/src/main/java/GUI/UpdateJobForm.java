@@ -21,6 +21,8 @@ import com.itextpdf.layout.Document;
 import com.itextpdf.layout.element.Paragraph;
 import com.itextpdf.layout.element.Text;
 import com.itextpdf.layout.property.TextAlignment;
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.sql.Connection;
@@ -1553,8 +1555,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
             exc.printStackTrace();
         }
         // TODO OPEN INVOICE IN PDF
-        String dest = "/Users/paul/Uni/GARITS/software/Garits/GARITS"
-                + "/resources/InvoiceNo" + invoiceId + ".pdf";       
+        String dest = "resources/InvoiceNo" + invoiceId + ".pdf";       
         PdfWriter writer = null; 
         try {
             writer = new PdfWriter(dest);
@@ -1647,6 +1648,23 @@ public class UpdateJobForm extends javax.swing.JFrame {
         document.close();
                          
         System.out.println("PDF Created");
+        
+        try {
+            File pdfFile = new File(dest);
+            if (pdfFile.exists()) {
+                if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(pdfFile);
+                } else {
+                        System.out.println("Awt Desktop is not supported!");
+                }
+            } else {
+                    System.out.println("File is not exists!");
+            }
+            System.out.println("Done");
+
+        } catch (Exception ex) {
+              ex.printStackTrace();
+        }
         // TODO open display invoice form
         DisplayInvoiceForm allInvoices = new DisplayInvoiceForm();
             allInvoices.setVisible(true);

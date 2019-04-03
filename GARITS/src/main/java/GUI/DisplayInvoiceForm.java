@@ -328,8 +328,7 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             }
             
             // TODO OPEN INVOICE IN PDF
-            String dest = "/Users/paul/Uni/GARITS/software/Garits/GARITS"
-                    + "/resources/InvoiceNo" + invoice.getInvoiceId() + ".pdf";       
+            String dest = "resources/InvoiceNo" + invoice.getInvoiceId() + ".pdf";       
             PdfWriter writer = null; 
             try {
                 writer = new PdfWriter(dest);

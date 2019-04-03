@@ -279,8 +279,7 @@ public class RemindersForm extends javax.swing.JFrame {
             String currDate = dateFormat.format(date);
             
             // TODO OPEN INVOICE IN PDF
-            String dest = "/Users/paul/Uni/GARITS/software/Garits/GARITS"
-                    + "/resources/Invoice" + invoice.getInvoiceId() +
+            String dest = "resources/Invoice" + invoice.getInvoiceId() +
                     "Reminder" + invoice.isReminderSent() + ".pdf";       
             PdfWriter writer = null; 
             try {
@@ -438,8 +437,7 @@ public class RemindersForm extends javax.swing.JFrame {
             String currDate = dateFormat.format(date);
 
             // TODO OPEN INVOICE IN PDF
-            String dest = "/Users/paul/Uni/GARITS/software/Garits/GARITS"
-                    + "/resources/Invoice" + invoice.getInvoiceId() +
+            String dest = "resources/Invoice" + invoice.getInvoiceId() +
                     "Reminder" + invoice.isReminderSent() + ".pdf";       
             PdfWriter writer = null; 
             try {
