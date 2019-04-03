@@ -10,6 +10,7 @@ import Core.Control;
 import DatabaseConnect.DBConnect;
 import static GUI.UpdateJobForm.BOLD;
 import Processing.Invoice;
+import Processing.Job;
 import static Processing.PDFCreator.getAddressTable;
 import static Processing.PDFCreator.getLineItemTable;
 import StockControl.Part;
@@ -230,6 +231,7 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
                     invoice.setPaymentDueDate(rs.getString("payment_due_date"));
                     invoice.setAmountDue(rs.getFloat("invoice_total"));
                     invoice.setIsPaid(rs.getBoolean("invoice_paid"));
+                    invoice.setFixedCost(rs.getFloat("fixed_cost"));
                     invoiceList.add(invoice);
                 }
                 conn.commit();
@@ -460,8 +462,10 @@ public class DisplayInvoiceForm extends javax.swing.JFrame {
             document.add(new Paragraph().add("\n"));
 
             //Adding Items and calculating costs
+            Job dummyJob = new Job();
+            dummyJob.setFixedCost(invoice.getFixedCost());
             //USED PARTS
-            document.add(getLineItemTable(invoice, sparesUsed, bold));
+            document.add(getLineItemTable(invoice, sparesUsed, dummyJob, bold));
 
             //Ending
             document.add(new Paragraph()
