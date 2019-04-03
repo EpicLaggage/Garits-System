@@ -40,16 +40,16 @@ public class Control {
         
         windowList = new ArrayList<>();
 
-        /*adminMenuForm = new AdminMenuForm(this);
+        adminMenuForm = new AdminMenuForm(this);
         fpMenuForm = new ForepersonMenuForm(this);
         franchiseeMenuForm = new FranchiseeMenuForm(this);
         mechanicMenuForm = new MechanicMenuForm(this);
-        receptionMenuForm = new ReceptionistMenuForm(this);*/
+        receptionMenuForm = new ReceptionistMenuForm(this);
         
-        //loginForm = new LoginForm(this);
-       // loginForm.setVisible(true);
+        loginForm = new LoginForm(this);
+       loginForm.setVisible(true);
 
-        staff = new Staff("Jack", "1", "Franchisee", "Jack");
+        //staff = new Staff("Jack", "1", "Franchisee", "Jack");
 
         
         OpenMenu();
