@@ -47,9 +47,6 @@ public class Control {
         receptionMenuForm = new ReceptionistMenuForm(this);*/
         loginForm = new LoginForm(this);
 
-        getTime = new DetectLatePayment();
-        getTime.start();
-
         //disposeForms();
 
         //staff = new Staff("Jack", "1", "Administrator", "Jack");
@@ -1074,6 +1071,9 @@ public class Control {
                 adminMenuForm.setVisible(true);
                 break;
             case "Franchisee":
+                //Starting thread which checks for late payments
+                getTime = new DetectLatePayment();
+                getTime.start();
                 franchiseeMenuForm = new FranchiseeMenuForm(this);
                 franchiseeMenuForm.setVisible(true);
                 break;
