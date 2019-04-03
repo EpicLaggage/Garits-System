@@ -8,7 +8,6 @@ import GUI.*;
 import DatabaseConnect.DBConnect;
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -1069,6 +1068,7 @@ public class Control {
 
     //Opens the menu and delegates which menu buttons are available by checking the role
     public void OpenMenu() {
+        Alert alert = new Alert();
         //disposeForms();
         switch (CheckRole()) {
             case "Administrator":
@@ -1083,14 +1083,17 @@ public class Control {
                 franchiseeMenuForm.setVisible(true);
                 break;
             case "Receptionist":
+                alert.start();
                 receptionMenuForm = new ReceptionistMenuForm(this);
                 receptionMenuForm.setVisible(true);
                 break;
             case "Mechanic":
+                alert.start();
                 mechanicMenuForm = new MechanicMenuForm(this);
                 mechanicMenuForm.setVisible(true);
                 break;
             case "Foreperson":
+                alert.start();
                 fpMenuForm = new ForepersonMenuForm(this);
                 fpMenuForm.setVisible(true);
                 break;

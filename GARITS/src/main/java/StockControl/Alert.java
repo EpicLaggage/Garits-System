@@ -69,11 +69,7 @@ public class Alert extends Thread {
         }
     }
     }
-    
-    public static void main(String[] args) {
-        Alert alert = new Alert();
-        alert.run();
-    }
+
     
     
 }
