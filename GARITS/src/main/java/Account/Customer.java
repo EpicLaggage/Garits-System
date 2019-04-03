@@ -8,6 +8,7 @@ public class Customer extends Account {
     private int customerId;
     private List<Vehicle> vehicles;
     private String postcode;
+    private String customer_contact;
 
     public Customer() {
     }
@@ -37,6 +38,19 @@ public class Customer extends Account {
         super(n, email, phone, addr);
         this.postcode = pc;
         this.customerId = id;
+    }
+    
+    public Customer(String n, String email, String phone, String addr, String pc, int id, String contact) {
+        super(n, email, phone, addr);
+        this.postcode = pc;
+        this.customerId = id;
+        this.customer_contact = contact;
+    }
+    
+    public Customer(String n, String email, String phone, String addr, String pc, String contact) {
+        super(n, email, phone, addr);
+        this.postcode = pc;
+        this.customer_contact = contact;
     }
 
     public boolean isAccountHolder() {
@@ -69,6 +83,14 @@ public class Customer extends Account {
     
     public void setPostcode(String pc) {
         this.postcode = pc;
+    }
+    
+    public String getCustomerContact() {
+        return customer_contact;
+    }
+    
+    public void setCustomerContact(String contact) {
+        this.customer_contact = contact;
     }
 
 }

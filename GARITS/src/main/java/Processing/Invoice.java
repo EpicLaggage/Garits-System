@@ -13,7 +13,7 @@ public class Invoice {
         private String customerName;
         private boolean accountHolder;
         private String customerEmail;
-        private int customerPhone;
+        private String customerPhone;
         private String customerAddress;
         private boolean paymentReminder;
         private String paymentDueDate;
@@ -193,11 +193,11 @@ public class Invoice {
             this.customerEmail = customerEmail;
         }
 
-        public int getCustomerPhone() {
+        public String getCustomerPhone() {
             return customerPhone;
         }
 
-        public void setCustomerPhone(int customerPhone) {
+        public void setCustomerPhone(String customerPhone) {
             this.customerPhone = customerPhone;
         }
 

@@ -297,7 +297,7 @@ public class CustomerForm extends javax.swing.JFrame {
                 if (!vList.isEmpty()) {
                     for (int j = 0; j < vList.size(); j++) {
                         vehicleString = vehicleString + "[" + vList.get(j).getReg_num() + "," + vList.get(j).getMake() + "," + vList.get(j).getModel() + ","
-                                + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + vList.get(j).getPurchase_date() + "]\n";
+                                + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + "," + vList.get(j).getPurchase_date() + "]\n";
                     }
 
                 }
@@ -379,7 +379,7 @@ public class CustomerForm extends javax.swing.JFrame {
             if (!vList.isEmpty()) {
                 for (int j = 0; j < vList.size(); j++) {
                     vehicleString = vehicleString + "[" + vList.get(j).getReg_num() + "," + vList.get(j).getMake() + "," + vList.get(j).getModel() + ","
-                            + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + vList.get(j).getPurchase_date() + "]\n";
+                            + vList.get(j).getColour() + "," + vList.get(j).getEngine_serial_no() + "," + vList.get(j).getChassis_no() + "," + vList.get(j).getPurchase_date() + "]\n";
                 }
 
             }

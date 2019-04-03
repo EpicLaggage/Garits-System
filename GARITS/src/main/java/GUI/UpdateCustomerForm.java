@@ -55,6 +55,7 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
 
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public UpdateCustomerForm(Control c, CustomerForm cf) {
@@ -78,6 +79,7 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
 
         this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     @Override

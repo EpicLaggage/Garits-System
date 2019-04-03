@@ -28,6 +28,9 @@ public class RestoreForm extends javax.swing.JFrame {
     public RestoreForm() {
         initComponents();
         populateTable();
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public RestoreForm(Control c) {
@@ -35,6 +38,9 @@ public class RestoreForm extends javax.swing.JFrame {
         control = c;
         control.getWindowList().add(this);
         populateTable();
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public RestoreForm(Control c, AdminMenuForm amf) {
@@ -43,6 +49,9 @@ public class RestoreForm extends javax.swing.JFrame {
         adminMenuForm = amf;
         control.getWindowList().add(this);
         populateTable();
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     private void populateTable() {

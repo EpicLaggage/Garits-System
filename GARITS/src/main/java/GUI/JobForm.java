@@ -42,6 +42,9 @@ public class JobForm extends javax.swing.JFrame {
         control = c;
         dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
     public JobForm(Control c, ForepersonMenuForm fpmf) {
@@ -51,6 +54,9 @@ public class JobForm extends javax.swing.JFrame {
         
         dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     public JobForm(Control c, FranchiseeMenuForm fmf) {
@@ -60,6 +66,9 @@ public class JobForm extends javax.swing.JFrame {
         
         dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     public JobForm(Control c, ReceptionistMenuForm rmf) {
@@ -69,6 +78,9 @@ public class JobForm extends javax.swing.JFrame {
         
         dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     public JobForm(Control c, MechanicMenuForm mmf) {
@@ -78,6 +90,9 @@ public class JobForm extends javax.swing.JFrame {
         
         dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     @Override

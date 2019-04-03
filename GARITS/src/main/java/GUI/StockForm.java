@@ -24,6 +24,9 @@ public class StockForm extends javax.swing.JFrame {
         initComponents();
         control = c;
         control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
     @Override

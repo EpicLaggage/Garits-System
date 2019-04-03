@@ -6,6 +6,7 @@
 package GUI;
 
 import Account.Mechanic;
+import Core.Control;
 import DatabaseConnect.DBConnect;
 import Processing.Invoice;
 import Processing.Job;
@@ -44,10 +45,12 @@ import javax.swing.table.TableColumn;
  * @author jly09
  */
 public class UpdateJobForm extends javax.swing.JFrame {
+
     public static final String BOLD = "resources/fonts/OpenSans-Bold.ttf";
     Job selectedJob;
     String searchText;
     String searchFilter;
+    Control control;
     DBConnect dbConnect;
     ArrayList<Mechanic> mechanics = new ArrayList<Mechanic>();
     ArrayList<Part> spareParts = new ArrayList<Part>();
@@ -58,7 +61,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
     int clearTaskDone = 0;
     int MAX_QUANTITY = 0;
     JobForm allJobs;
-    
+
     /**
      * Creates new form MenuForm
      */
@@ -67,11 +70,28 @@ public class UpdateJobForm extends javax.swing.JFrame {
         dbConnect = new DBConnect();
     }
     
+    public UpdateJobForm(Control c) {
+        initComponents();
+        control = c;
+        dbConnect = control.getDatabaseConnector();
+    }
+
     public UpdateJobForm(Job selectedJob, String searchText,
             String searchFilter, JobForm allJobs) {
         initComponents();
         this.selectedJob = selectedJob;
         dbConnect = new DBConnect();
+        this.searchFilter = searchFilter;
+        this.searchText = searchText;
+        this.allJobs = allJobs;
+    }
+    
+    public UpdateJobForm(Control control, Job selectedJob, String searchText,
+            String searchFilter, JobForm allJobs) {
+        initComponents();
+        this.control = control;
+        this.selectedJob = selectedJob;
+        dbConnect = control.getDatabaseConnector();
         this.searchFilter = searchFilter;
         this.searchText = searchText;
         this.allJobs = allJobs;
@@ -638,17 +658,16 @@ public class UpdateJobForm extends javax.swing.JFrame {
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         int[] selectedRow = jTable6.getSelectedRows();
-        if(selectedRow.length == 0) {
+        if (selectedRow.length == 0) {
             //Display window requiring user to select a job to update first
             JOptionPane.showMessageDialog(UpdateJobForm.this,
                     "Select a part to delete first");
-            
+
         } else {
-            int qtyUsed = (int) modelParts.getValueAt(selectedRow[0],1);
-            int partId = (int) modelParts.getValueAt(selectedRow[0],3);
+            int qtyUsed = (int) modelParts.getValueAt(selectedRow[0], 1);
+            int partId = (int) modelParts.getValueAt(selectedRow[0], 3);
             String deletePartQuery = "DELETE FROM Part_Used WHERE "
-                    + "part_used_id=" + modelParts.getValueAt
-                    (selectedRow[0], 2);
+                    + "part_used_id=" + modelParts.getValueAt(selectedRow[0], 2);
             try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
@@ -656,12 +675,12 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 statement.execute();
                 conn.commit();
                 conn.setAutoCommit(true);
-            }catch (Exception exc) {
+            } catch (Exception exc) {
                 exc.printStackTrace();
             }
-            
+
             String updateQuantityQuery = "UPDATE Parts SET part_quantity="
-                    + "part_quantity+" + qtyUsed + " WHERE part_id=" + partId;   
+                    + "part_quantity+" + qtyUsed + " WHERE part_id=" + partId;
             try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
@@ -669,40 +688,40 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 statement.execute();
                 conn.commit();
                 conn.setAutoCommit(true);
-            }catch (Exception exc) {
+            } catch (Exception exc) {
                 exc.printStackTrace();
             }
-            
+
             for (Part part : spareParts) {
-                if(part.getPartId() == partId) {
+                if (part.getPartId() == partId) {
                     int maxQty = part.getQty();
-                    part.setQty(maxQty+qtyUsed);
+                    part.setQty(maxQty + qtyUsed);
                     jSlider1.setMaximum(part.getQty());
                 }
             }
-            
+
             //UPDATE QTY AND REQUERY
             modelParts.setRowCount(0);
-            String partUsedQuery = "SELECT parts.part_price, Part_Used.part_id, parts.part_name, Part_Used.part_used_id, Part_Used.quantity_used \n" +
-                    "FROM garitsdb.Parts, garitsdb.Part_Used " +
-                    "WHERE garitsdb.Part_Used.part_id = garitsdb.Parts.part_id " +
-                    "AND garitsdb.Part_Used.job_id = '" + selectedJob.getJobId() + "';";
+            String partUsedQuery = "SELECT parts.part_price, Part_Used.part_id, parts.part_name, Part_Used.part_used_id, Part_Used.quantity_used \n"
+                    + "FROM garitsdb.Parts, garitsdb.Part_Used "
+                    + "WHERE garitsdb.Part_Used.part_id = garitsdb.Parts.part_id "
+                    + "AND garitsdb.Part_Used.job_id = '" + selectedJob.getJobId() + "';";
             try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
                 PreparedStatement statement = conn.prepareStatement(partUsedQuery);
                 ResultSet rs = statement.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
                     Part part = new Part();
                     part.setPartId(rs.getInt("part_id"));
                     part.setPartUsedId(rs.getInt("part_used_id"));
                     part.setQty(rs.getInt("quantity_used"));
                     part.setName(rs.getString("part_name"));
                     part.setPrice(rs.getFloat("part_price"));
-                    Object[] row = { part.getName(),
-                    part.getQty(), part.getPartUsedId(),
-                    part.getPartId(), part.getPrice()};
-                    modelParts.addRow(row);        
+                    Object[] row = {part.getName(),
+                        part.getQty(), part.getPartUsedId(),
+                        part.getPartId(), part.getPrice()};
+                    modelParts.addRow(row);
                 }
                 conn.commit();
                 conn.setAutoCommit(true);
@@ -720,36 +739,35 @@ public class UpdateJobForm extends javax.swing.JFrame {
         // Getting input values
         Job updatedJob = new Job();
         Mechanic selectedMechanic = new Mechanic();
-        for(Mechanic mechanic : mechanics) {
-            if(mechanic.getName().equals(jComboBox6.getSelectedItem())){
+        for (Mechanic mechanic : mechanics) {
+            if (mechanic.getName().equals(jComboBox6.getSelectedItem())) {
                 selectedMechanic.setId(mechanic.getId());
                 selectedMechanic.setName(mechanic.getName());
             }
         }
         //Extremely convoluted way to update my Job object due to some string processing isues
         int job_duration = Integer.parseInt(jTextField3.getText());
-        String job_status = (String) jComboBox2.getSelectedItem();         
+        String job_status = (String) jComboBox2.getSelectedItem();
         String job_type = (String) jComboBox1.getSelectedItem();
         updatedJob.setMechanicId(selectedMechanic.getId());
         updatedJob.setDuration(job_duration);
         updatedJob.setStatus(job_status);
         updatedJob.setType(job_type);
         updatedJob.setJobId(selectedJob.getJobId());
-        
+
         String insertJobQuery = "UPDATE garitsdb.Job SET"
                 + " mechanic_assigned = '" + updatedJob.getMechanicId()
-                + "', job_duration = '" + updatedJob.getDuration() +"', job_status = '"
+                + "', job_duration = '" + updatedJob.getDuration() + "', job_status = '"
                 + updatedJob.getStatus() + "', job_type = '" + updatedJob.getType()
                 + "' WHERE (job_id = '" + updatedJob.getJobId() + "');";
-        
+
         try {
-            dbConnect.write(insertJobQuery);            
-        }
-        catch (Exception exc) {
+            dbConnect.write(insertJobQuery);
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
         // TODO display window with success message and requery JobForm
-        if(evt.getActionCommand().equals("Complete Job")) {
+        if (evt.getActionCommand().equals("Complete Job")) {
             JOptionPane.showMessageDialog(UpdateJobForm.this,
                     "Invoice Generated");
             allJobs.dispose();
@@ -762,99 +780,99 @@ public class UpdateJobForm extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         setDefaultCloseOperation(UpdateJobForm.DISPOSE_ON_CLOSE);
         jComboBox2.setSelectedItem(selectedJob.getStatus());
-        jTextField3.setText(selectedJob.getDuration()+"");
+        jTextField3.setText(selectedJob.getDuration() + "");
         jComboBox1.setSelectedItem(selectedJob.getType());
-        
+
         //SPARE PARTS
         modelParts = (DefaultTableModel) jTable6.getModel();
         TableColumn partUsedIdColumn = jTable6.getColumnModel().getColumn(2);
         TableColumn partIdColumn = jTable6.getColumnModel().getColumn(3);
-        jTable6.getColumnModel().removeColumn(partUsedIdColumn);        
+        jTable6.getColumnModel().removeColumn(partUsedIdColumn);
         jTable6.getColumnModel().removeColumn(partIdColumn);
         modelParts.setRowCount(0);
-        String partUsedQuery = "SELECT parts.part_price, Part_Used.part_id, parts.part_name, Part_Used.part_used_id, Part_Used.quantity_used \n" +
-                "FROM garitsdb.Parts, garitsdb.Part_Used " +
-                "WHERE garitsdb.Part_Used.part_id = garitsdb.Parts.part_id " +
-                "AND garitsdb.Part_Used.job_id = '" + selectedJob.getJobId() + "';";
+        String partUsedQuery = "SELECT parts.part_price, Part_Used.part_id, parts.part_name, Part_Used.part_used_id, Part_Used.quantity_used \n"
+                + "FROM garitsdb.Parts, garitsdb.Part_Used "
+                + "WHERE garitsdb.Part_Used.part_id = garitsdb.Parts.part_id "
+                + "AND garitsdb.Part_Used.job_id = '" + selectedJob.getJobId() + "';";
         try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(partUsedQuery);
             ResultSet rs = statement.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 Part part = new Part();
                 part.setPartId(rs.getInt("part_id"));
                 part.setPartUsedId(rs.getInt("part_used_id"));
                 part.setQty(rs.getInt("quantity_used"));
                 part.setName(rs.getString("part_name"));
                 part.setPrice(rs.getFloat("part_price"));
-                Object[] row = { part.getName(),
-                part.getQty(), part.getPartUsedId(),
-                part.getPartId(), part.getPrice()};
-                modelParts.addRow(row);        
+                Object[] row = {part.getName(),
+                    part.getQty(), part.getPartUsedId(),
+                    part.getPartId(), part.getPrice()};
+                modelParts.addRow(row);
             }
             conn.commit();
             conn.setAutoCommit(true);
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-        
+
         //GETTING Uncompleted TASKS
         TableColumn jobIdColumn = jTable3.getColumnModel().getColumn(3);
         TableColumn taskIdColumn = jTable3.getColumnModel().getColumn(2);
-        jTable3.getColumnModel().removeColumn(jobIdColumn);        
+        jTable3.getColumnModel().removeColumn(jobIdColumn);
         jTable3.getColumnModel().removeColumn(taskIdColumn);
         jobIdColumn = jTable4.getColumnModel().getColumn(3);
         taskIdColumn = jTable4.getColumnModel().getColumn(2);
-        jTable4.getColumnModel().removeColumn(jobIdColumn);        
+        jTable4.getColumnModel().removeColumn(jobIdColumn);
         jTable4.getColumnModel().removeColumn(taskIdColumn);
         modelUncompleted = (DefaultTableModel) jTable4.getModel();
         String uncompletedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
                 + " WHERE (task_completed = false AND job_id = "
-                + "" + selectedJob.getJobId() +");";
+                + "" + selectedJob.getJobId() + ");";
         try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(uncompletedTasksQuery);
             ResultSet rs = statement.executeQuery();
             Task requiredTask = new Task();
-            while(rs.next()) {
+            while (rs.next()) {
                 requiredTask.setJobId(rs.getInt("job_id"));
                 requiredTask.setTaskId(rs.getInt("task_id"));
                 requiredTask.setTaskContent(rs.getString("task_content"));
                 requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
-                
-                Object[] row = { requiredTask.getTaskContent(), 
-                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                requiredTask.getJobId()};
-                modelUncompleted.addRow(row);        
+
+                Object[] row = {requiredTask.getTaskContent(),
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
+                modelUncompleted.addRow(row);
             }
             conn.commit();
             conn.setAutoCommit(true);
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-        
+
         //GETTING COMPLETED TASKS
         modelCompleted = (DefaultTableModel) jTable3.getModel();
         String completedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
                 + " WHERE (task_completed = true AND job_id = "
-                + "" + selectedJob.getJobId() +");";
+                + "" + selectedJob.getJobId() + ");";
         try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(completedTasksQuery);
             ResultSet rs = statement.executeQuery();
             Task requiredTask = new Task();
-            while(rs.next()) {
+            while (rs.next()) {
                 requiredTask.setJobId(rs.getInt("job_id"));
                 requiredTask.setTaskId(rs.getInt("task_id"));
                 requiredTask.setTaskContent(rs.getString("task_content"));
                 requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
-                
-                Object[] row = { requiredTask.getTaskContent(), 
-                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                requiredTask.getJobId()};
+
+                Object[] row = {requiredTask.getTaskContent(),
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
                 modelCompleted.addRow(row);
             }
             conn.commit();
@@ -862,30 +880,29 @@ public class UpdateJobForm extends javax.swing.JFrame {
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-                
+
         //Getting all mechanics from db and selecting the correct one
         String mechanicNamesQuery = "SELECT username, user_id FROM garitsdb.User "
                 + "WHERE user_role = 'Mechanic'";
         ResultSet rs;
-        
+
         try {
             rs = dbConnect.read(mechanicNamesQuery);
-            
-            while(rs.next()) {
+
+            while (rs.next()) {
                 Mechanic mechanic = new Mechanic();
                 mechanic.setId(rs.getInt("user_id"));
                 mechanic.setName(rs.getString("username"));
                 mechanics.add(mechanic);
                 jComboBox6.addItem(rs.getString("username"));
-                if(mechanic.getId() == selectedJob.getMechanicId()) {
+                if (mechanic.getId() == selectedJob.getMechanicId()) {
                     jComboBox6.setSelectedItem(rs.getString("username"));
                 }
             }
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
-        
+
         //Populating dropdown with parts
         String partsQuery = "SELECT * FROM garitsdb.Parts;";
         try {
@@ -893,7 +910,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(partsQuery);
             ResultSet partsResults = statement.executeQuery();
-            while(partsResults.next()) {
+            while (partsResults.next()) {
                 Part part = new Part();
                 part.setPartId(partsResults.getInt("part_id"));
                 part.setSupplierId(partsResults.getInt("part_supplier_id"));
@@ -910,7 +927,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-        
+
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -931,12 +948,12 @@ public class UpdateJobForm extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO Update database with changes FROM WORK REQUIRED
-        if(jTable4.getCellEditor() != null){
+        if (jTable4.getCellEditor() != null) {
             jTable4.getCellEditor().stopCellEditing();
         }
-        DefaultTableModel model = (DefaultTableModel)jTable4.getModel();
-        
-        for (int row = 0; row < jTable4.getRowCount(); row++){
+        DefaultTableModel model = (DefaultTableModel) jTable4.getModel();
+
+        for (int row = 0; row < jTable4.getRowCount(); row++) {
             Task currentTask = new Task();
             currentTask.setTaskContent((String) model.getValueAt(row, 0));
             currentTask.setTaskCompleted((boolean) model.getValueAt(row, 1));
@@ -948,40 +965,40 @@ public class UpdateJobForm extends javax.swing.JFrame {
                     + "`task_content` = '" + currentTask.getTaskContent() + "',"
                     + "task_completed = '" + isCompleted
                     + "' WHERE (`task_id` = '" + currentTask.getTaskId() + "');";
-            
-            try { 
+
+            try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
                 PreparedStatement statement = conn.prepareStatement(updateTask);
                 statement.execute();
                 conn.commit();
                 conn.setAutoCommit(true);
-                
+
             } catch (Exception exc) {
                 exc.printStackTrace();
             }
         }
-        
+
         modelUncompleted.setRowCount(0);
         String uncompletedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
                 + " WHERE (task_completed = false AND job_id = "
-                + "" + selectedJob.getJobId() +");";
-        
+                + "" + selectedJob.getJobId() + ");";
+
         try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(uncompletedTasksQuery);
             ResultSet rs = statement.executeQuery();
             Task requiredTask = new Task();
-            while(rs.next()) {
+            while (rs.next()) {
                 requiredTask.setJobId(rs.getInt("job_id"));
                 requiredTask.setTaskId(rs.getInt("task_id"));
                 requiredTask.setTaskContent(rs.getString("task_content"));
                 requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
-                
-                Object[] row = { requiredTask.getTaskContent(), 
-                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                requiredTask.getJobId()};
+
+                Object[] row = {requiredTask.getTaskContent(),
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
                 modelUncompleted.addRow(row);
             }
         } catch (Exception exc) {
@@ -994,23 +1011,23 @@ public class UpdateJobForm extends javax.swing.JFrame {
         modelCompleted = (DefaultTableModel) jTable3.getModel();
         String completedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
                 + " WHERE (task_completed = true AND job_id = "
-                + "" + selectedJob.getJobId() +");";
+                + "" + selectedJob.getJobId() + ");";
         try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(completedTasksQuery);
             ResultSet rs = statement.executeQuery();
             Task requiredTask = new Task();
-            while(rs.next()) {
+            while (rs.next()) {
                 requiredTask.setJobId(rs.getInt("job_id"));
                 requiredTask.setTaskId(rs.getInt("task_id"));
                 requiredTask.setTaskContent(rs.getString("task_content"));
                 requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
-                
-                Object[] row = { requiredTask.getTaskContent(), 
-                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                requiredTask.getJobId()};
-                modelCompleted.addRow(row);                
+
+                Object[] row = {requiredTask.getTaskContent(),
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
+                modelCompleted.addRow(row);
             }
             conn.commit();
             conn.setAutoCommit(true);
@@ -1020,14 +1037,14 @@ public class UpdateJobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
+
         //TODO check if getCellEditor is null and don't stop cell editing otherwise null pointer exception
         //do this for jbutton2 as well
-        if(jTable3.getCellEditor() != null){
+        if (jTable3.getCellEditor() != null) {
             jTable3.getCellEditor().stopCellEditing();
         }
-        DefaultTableModel model = (DefaultTableModel)jTable3.getModel();
-        for (int row = 0; row < jTable3.getRowCount(); row++){
+        DefaultTableModel model = (DefaultTableModel) jTable3.getModel();
+        for (int row = 0; row < jTable3.getRowCount(); row++) {
             Task currentTask = new Task();
             currentTask.setTaskContent((String) model.getValueAt(row, 0));
             currentTask.setTaskCompleted((boolean) model.getValueAt(row, 1));
@@ -1038,81 +1055,79 @@ public class UpdateJobForm extends javax.swing.JFrame {
                     + "`task_content` = '" + currentTask.getTaskContent() + "',"
                     + "task_completed = '" + isCompleted
                     + "' WHERE (`task_id` = '" + currentTask.getTaskId() + "');";
-            
-            try { 
+
+            try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
                 PreparedStatement statement = conn.prepareStatement(updateTask);
                 statement.execute();
                 conn.commit();
                 conn.setAutoCommit(true);
-                
-                
+
             } catch (Exception exc) {
                 exc.printStackTrace();
             }
         }
-        
+
         modelCompleted.setRowCount(0);
         String completedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
                 + " WHERE (task_completed = true AND job_id = "
-                + "" + selectedJob.getJobId() +");";
-        
+                + "" + selectedJob.getJobId() + ");";
+
         try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(completedTasksQuery);
             ResultSet rs = statement.executeQuery();
             Task requiredTask = new Task();
-            while(rs.next()) {
+            while (rs.next()) {
                 requiredTask.setJobId(rs.getInt("job_id"));
                 requiredTask.setTaskId(rs.getInt("task_id"));
                 requiredTask.setTaskContent(rs.getString("task_content"));
                 requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
-                
-                Object[] row = { requiredTask.getTaskContent(), 
-                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                requiredTask.getJobId()};
+
+                Object[] row = {requiredTask.getTaskContent(),
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
                 modelCompleted.addRow(row);
-                
+
             }
             conn.commit();
             conn.setAutoCommit(true);
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-        
-        
+
         //QUERY LIST TO REFLECT CHANGES
         modelUncompleted.setRowCount(0);
         String uncompletedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
                 + " WHERE (task_completed = false AND job_id = "
-                + "" + selectedJob.getJobId() +");";
+                + "" + selectedJob.getJobId() + ");";
         try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(uncompletedTasksQuery);
             ResultSet rs = statement.executeQuery();
             Task requiredTask = new Task();
-            while(rs.next()) {
+            while (rs.next()) {
                 requiredTask.setJobId(rs.getInt("job_id"));
                 requiredTask.setTaskId(rs.getInt("task_id"));
                 requiredTask.setTaskContent(rs.getString("task_content"));
                 requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
-                
-                Object[] row = { requiredTask.getTaskContent(), 
-                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                requiredTask.getJobId()};
+
+                Object[] row = {requiredTask.getTaskContent(),
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
                 modelUncompleted.addRow(row);
-                
+
             }
             conn.commit();
             conn.setAutoCommit(true);
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-               
-        
+
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jTextField2FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField2FocusGained
@@ -1126,7 +1141,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
     private void jTextField4FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField4FocusGained
         // TODO add your handling code here:
         clearTaskDone++;
-        if(clearTaskDone==1) {
+        if (clearTaskDone == 1) {
             jTextField4.setText("");
         }
     }//GEN-LAST:event_jTextField4FocusGained
@@ -1134,56 +1149,56 @@ public class UpdateJobForm extends javax.swing.JFrame {
     private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
         // TODO add your handling code here:
         String taskDone = jTextField4.getText();
-        try{
+        try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             String insertTaskQuery = "INSERT INTO `garitsdb`.`Job_Tasks`"
-                    + " (`job_id`, `task_content`, `task_completed`) VALUES ('" + 
-                    selectedJob.getJobId() + "', '" + taskDone + "', '"
+                    + " (`job_id`, `task_content`, `task_completed`) VALUES ('"
+                    + selectedJob.getJobId() + "', '" + taskDone + "', '"
                     + 1 + "');";
             PreparedStatement statement = conn.prepareStatement(insertTaskQuery);
             statement.execute();
-            
+
             conn.commit();
             conn.setAutoCommit(true);
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-        
+
         //GETTING COMPLETED TASKS
         modelCompleted = (DefaultTableModel) jTable3.getModel();
         modelCompleted.setRowCount(0);
         String completedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
                 + " WHERE (task_completed = true AND job_id = "
-                + "" + selectedJob.getJobId() +");";
+                + "" + selectedJob.getJobId() + ");";
         try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(completedTasksQuery);
             ResultSet rs = statement.executeQuery();
             Task requiredTask = new Task();
-            while(rs.next()) {
+            while (rs.next()) {
                 requiredTask.setJobId(rs.getInt("job_id"));
                 requiredTask.setTaskId(rs.getInt("task_id"));
                 requiredTask.setTaskContent(rs.getString("task_content"));
                 requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
-                
-                Object[] row = { requiredTask.getTaskContent(), 
-                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                requiredTask.getJobId()};
+
+                Object[] row = {requiredTask.getTaskContent(),
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
                 modelCompleted.addRow(row);
             }
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-                
+
         jTextField4.setText("");
     }//GEN-LAST:event_jTextField4ActionPerformed
 
     private void jTextField5FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField5FocusGained
         // TODO add your handling code here:
         clearTaskRequired++;
-        if(clearTaskRequired==1) {
+        if (clearTaskRequired == 1) {
             jTextField5.setText("");
         }
     }//GEN-LAST:event_jTextField5FocusGained
@@ -1191,59 +1206,59 @@ public class UpdateJobForm extends javax.swing.JFrame {
     private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
         // TODO add your handling code here:
         String taskRequired = jTextField5.getText();
-        try{
+        try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             String insertTaskQuery = "INSERT INTO `garitsdb`.`Job_Tasks`"
-                    + " (`job_id`, `task_content`, `task_completed`) VALUES ('" + 
-                    selectedJob.getJobId() + "', '" + taskRequired + "', '"
+                    + " (`job_id`, `task_content`, `task_completed`) VALUES ('"
+                    + selectedJob.getJobId() + "', '" + taskRequired + "', '"
                     + 0 + "');";
             PreparedStatement statement = conn.prepareStatement(insertTaskQuery);
             statement.execute();
-            
+
             conn.commit();
             conn.setAutoCommit(true);
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-        
+
         modelUncompleted.setRowCount(0);
         String uncompletedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
                 + " WHERE (task_completed = false AND job_id = "
-                + "" + selectedJob.getJobId() +");";
-        
+                + "" + selectedJob.getJobId() + ");";
+
         try {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(uncompletedTasksQuery);
             ResultSet rs = statement.executeQuery();
             Task requiredTask = new Task();
-            while(rs.next()) {
+            while (rs.next()) {
                 requiredTask.setJobId(rs.getInt("job_id"));
                 requiredTask.setTaskId(rs.getInt("task_id"));
                 requiredTask.setTaskContent(rs.getString("task_content"));
                 requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
-                
-                Object[] row = { requiredTask.getTaskContent(), 
-                requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                requiredTask.getJobId()};
+
+                Object[] row = {requiredTask.getTaskContent(),
+                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                    requiredTask.getJobId()};
                 modelUncompleted.addRow(row);
             }
         } catch (Exception exc) {
             exc.printStackTrace();
         }
-                
+
         jTextField5.setText("");
     }//GEN-LAST:event_jTextField5ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO DELETE TASK
         int[] selectedRow = jTable4.getSelectedRows();
-        if(selectedRow.length == 0) {
+        if (selectedRow.length == 0) {
             //Display window requiring user to select a job to update first
             JOptionPane.showMessageDialog(UpdateJobForm.this,
                     "Select a task to delete first");
-            
+
         } else {
             String deleteTaskQuery = "DELETE FROM `garitsdb`.`Job_Tasks` "
                     + "WHERE (`task_id` = '" + modelUncompleted.getValueAt(selectedRow[0], 2)
@@ -1255,31 +1270,31 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 statement.execute();
                 conn.commit();
                 conn.setAutoCommit(true);
-            }catch (Exception exc) {
+            } catch (Exception exc) {
                 exc.printStackTrace();
             }
-            
+
             //REQUERY DB TO DISPLAY CHANGE
             modelUncompleted.setRowCount(0);
             String uncompletedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
-                + " WHERE (task_completed = false AND job_id = "
-                + "" + selectedJob.getJobId() +");";
-        
+                    + " WHERE (task_completed = false AND job_id = "
+                    + "" + selectedJob.getJobId() + ");";
+
             try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
                 PreparedStatement statement = conn.prepareStatement(uncompletedTasksQuery);
                 ResultSet rs = statement.executeQuery();
                 Task requiredTask = new Task();
-                while(rs.next()) {
+                while (rs.next()) {
                     requiredTask.setJobId(rs.getInt("job_id"));
                     requiredTask.setTaskId(rs.getInt("task_id"));
                     requiredTask.setTaskContent(rs.getString("task_content"));
                     requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
 
-                    Object[] row = { requiredTask.getTaskContent(), 
-                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                    requiredTask.getJobId()};
+                    Object[] row = {requiredTask.getTaskContent(),
+                        requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                        requiredTask.getJobId()};
                     modelUncompleted.addRow(row);
                 }
             } catch (Exception exc) {
@@ -1291,11 +1306,11 @@ public class UpdateJobForm extends javax.swing.JFrame {
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
         int[] selectedRow = jTable3.getSelectedRows();
-        if(selectedRow.length == 0) {
+        if (selectedRow.length == 0) {
             //Display window requiring user to select a job to update first
             JOptionPane.showMessageDialog(UpdateJobForm.this,
                     "Select a task to delete first");
-            
+
         } else {
             String deleteTaskQuery = "DELETE FROM `garitsdb`.`Job_Tasks` "
                     + "WHERE (`task_id` = '" + modelCompleted.getValueAt(selectedRow[0], 2)
@@ -1307,31 +1322,31 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 statement.execute();
                 conn.commit();
                 conn.setAutoCommit(true);
-            }catch (Exception exc) {
+            } catch (Exception exc) {
                 exc.printStackTrace();
             }
-            
+
             //REQUERY DB TO DISPLAY CHANGE
             modelCompleted.setRowCount(0);
             String CompletedTasksQuery = "SELECT * FROM garitsdb.Job_Tasks"
-                + " WHERE (task_completed = true AND job_id = "
-                + "" + selectedJob.getJobId() +");";
-        
+                    + " WHERE (task_completed = true AND job_id = "
+                    + "" + selectedJob.getJobId() + ");";
+
             try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
                 PreparedStatement statement = conn.prepareStatement(CompletedTasksQuery);
                 ResultSet rs = statement.executeQuery();
                 Task requiredTask = new Task();
-                while(rs.next()) {
+                while (rs.next()) {
                     requiredTask.setJobId(rs.getInt("job_id"));
                     requiredTask.setTaskId(rs.getInt("task_id"));
                     requiredTask.setTaskContent(rs.getString("task_content"));
                     requiredTask.setTaskCompleted(rs.getBoolean("task_completed"));
 
-                    Object[] row = { requiredTask.getTaskContent(), 
-                    requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
-                    requiredTask.getJobId()};
+                    Object[] row = {requiredTask.getTaskContent(),
+                        requiredTask.isTaskCompleted(), requiredTask.getTaskId(),
+                        requiredTask.getJobId()};
                     modelCompleted.addRow(row);
                 }
             } catch (Exception exc) {
@@ -1342,10 +1357,10 @@ public class UpdateJobForm extends javax.swing.JFrame {
 
     private void jComboBox4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox4ActionPerformed
         for (Part part : spareParts) {
-            if(jComboBox4.getSelectedItem().equals(part.getName())) {
+            if (jComboBox4.getSelectedItem().equals(part.getName())) {
                 jSlider1.setMaximum(part.getQty());
                 jSlider1.setValue(part.getQty());
-                jLabel2.setText(jSlider1.getMaximum()+"");
+                jLabel2.setText(jSlider1.getMaximum() + "");
             }
         }
         MAX_QUANTITY = jSlider1.getMaximum();
@@ -1353,13 +1368,13 @@ public class UpdateJobForm extends javax.swing.JFrame {
 
     private void jSlider1StateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_jSlider1StateChanged
         // TODO add your handling code here:
-        jLabel2.setText(jSlider1.getValue()+"");
+        jLabel2.setText(jSlider1.getValue() + "");
     }//GEN-LAST:event_jSlider1StateChanged
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         Part selectedPart = new Part();
         for (Part part : spareParts) {
-            if(jComboBox4.getSelectedItem().equals(part.getName())) {
+            if (jComboBox4.getSelectedItem().equals(part.getName())) {
                 selectedPart = part;
             }
         }
@@ -1369,7 +1384,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
                     + " (`part_id`, `job_id`, `quantity_used`) VALUES ('"
                     + selectedPart.getPartId() + "', '" + selectedJob.getJobId()
                     + "', '" + jSlider1.getValue() + "');";
-            try { 
+            try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
                 PreparedStatement statement = conn.prepareStatement(addSpareQuery);
@@ -1378,14 +1393,14 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 conn.setAutoCommit(true);
 
             } catch (Exception exc) {
-               exc.printStackTrace();
+                exc.printStackTrace();
             }
             int newQuantity = MAX_QUANTITY - jSlider1.getValue();
             //TODO Subtract part used qty
             String subtractQtyQuery = "UPDATE Parts SET part_quantity = '"
                     + newQuantity + "' WHERE Parts.part_id = '" + selectedPart.getPartId() + "';";
 
-            try { 
+            try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
                 PreparedStatement statement = conn.prepareStatement(subtractQtyQuery);
@@ -1394,38 +1409,38 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 conn.setAutoCommit(true);
 
             } catch (Exception exc) {
-               exc.printStackTrace();
+                exc.printStackTrace();
             }
-            
+
             for (Part part : spareParts) {
-                if(part.getPartId() == selectedPart.getPartId()) {
+                if (part.getPartId() == selectedPart.getPartId()) {
                     part.setQty(newQuantity);
                     jSlider1.setMaximum(part.getQty());
                 }
             }
-            
+
             //REQUERY PARTS TABLE
             modelParts.setRowCount(0);
-            String partUsedQuery = "SELECT parts.part_price, Part_Used.part_id, parts.part_name, Part_Used.part_used_id, Part_Used.quantity_used \n" +
-                    "FROM garitsdb.Parts, garitsdb.Part_Used " +
-                    "WHERE garitsdb.Part_Used.part_id = garitsdb.Parts.part_id " +
-                    "AND garitsdb.Part_Used.job_id = '" + selectedJob.getJobId() + "';";
+            String partUsedQuery = "SELECT parts.part_price, Part_Used.part_id, parts.part_name, Part_Used.part_used_id, Part_Used.quantity_used \n"
+                    + "FROM garitsdb.Parts, garitsdb.Part_Used "
+                    + "WHERE garitsdb.Part_Used.part_id = garitsdb.Parts.part_id "
+                    + "AND garitsdb.Part_Used.job_id = '" + selectedJob.getJobId() + "';";
             try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
                 PreparedStatement statement = conn.prepareStatement(partUsedQuery);
                 ResultSet rs = statement.executeQuery();
-                while(rs.next()) {
+                while (rs.next()) {
                     Part part = new Part();
                     part.setPartId(rs.getInt("part_id"));
                     part.setPartUsedId(rs.getInt("part_used_id"));
                     part.setQty(rs.getInt("quantity_used"));
                     part.setName(rs.getString("part_name"));
                     part.setPrice(rs.getFloat("part_price"));
-                    Object[] row = { part.getName(),
-                    part.getQty(), part.getPartUsedId(),
-                    part.getPartId(), part.getPrice()};
-                    modelParts.addRow(row);        
+                    Object[] row = {part.getName(),
+                        part.getQty(), part.getPartUsedId(),
+                        part.getPartId(), part.getPrice()};
+                    modelParts.addRow(row);
                 }
                 conn.commit();
                 conn.setAutoCommit(true);
@@ -1433,7 +1448,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 exc.printStackTrace();
             }
         }
-        
+
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -1446,7 +1461,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         invoice.setJobId(selectedJob.getJobId());
         invoice.setJobStart(selectedJob.getDate_start());
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-	java.util.Date date = new java.util.Date();
+        java.util.Date date = new java.util.Date();
         invoice.setJobEnd(dateFormat.format(date));
         LocalDate futureDate = LocalDate.now().plusMonths(1);
         invoice.setPaymentDueDate(futureDate.toString());
@@ -1454,38 +1469,36 @@ public class UpdateJobForm extends javax.swing.JFrame {
         String customerNameQuery = "SELECT customer_name, customer_email, "
                 + "customer_tel, customer_address, customer_account_holder, customer_postcode FROM"
                 + " garitsdb.Customer WHERE customer_id = " + selectedJob.getCustomerId();
-        ResultSet rs; 
+        ResultSet rs;
         try {
             rs = dbConnect.read(customerNameQuery);
-            
-            while(rs.next()) {
+
+            while (rs.next()) {
                 invoice.setCustomerName(rs.getString("customer_name"));
                 invoice.setCustomerAddress(rs.getString("customer_address"));
                 invoice.setCustomerEmail(rs.getString("customer_email"));
-                invoice.setCustomerPhone(rs.getInt("customer_tel"));
+                invoice.setCustomerPhone(rs.getString("customer_tel"));
                 invoice.setAccountHolder(rs.getBoolean("customer_account_holder"));
                 invoice.setCustomerPostCode(rs.getString("customer_postcode"));
             }
 
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
 
         //Getting vehicle information
         String vehicleQuery = "SELECT car_make, car_model FROM garitsdb.Vehicle"
-                + " WHERE reg_no = '" + selectedJob.getRegistrationNum() + "';"; 
+                + " WHERE reg_no = '" + selectedJob.getRegistrationNum() + "';";
         ResultSet results;
         try {
             results = dbConnect.read(vehicleQuery);
-            
-            while(results.next()) {
+
+            while (results.next()) {
                 invoice.setVehicleMake(results.getString("car_make"));
                 invoice.setVehicleModel(results.getString("car_model"));
             }
 
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
         //Calculate amount due using helper functions
@@ -1494,42 +1507,42 @@ public class UpdateJobForm extends javax.swing.JFrame {
         float amountDue = 0;
         //ONE AT A TIME, spares, labour, VAT
         float sparesTotal = 0;
-        for(int i = 0; i < jTable6.getRowCount(); i++) {
-            float qty = Float.parseFloat(modelParts.getValueAt(i, 1)+"");
-            float price = Float.parseFloat(modelParts.getValueAt(i, 4)+"");
-            sparesTotal += price * qty;            
+        for (int i = 0; i < jTable6.getRowCount(); i++) {
+            float qty = Float.parseFloat(modelParts.getValueAt(i, 1) + "");
+            float price = Float.parseFloat(modelParts.getValueAt(i, 4) + "");
+            sparesTotal += price * qty;
         }
         sparesCost = invoice.calcMarkUpSpares(sparesTotal);
-        
+
         //labour
         Mechanic selectedMechanic = new Mechanic();
-        for(Mechanic mechanic : mechanics) {
-            if(mechanic.getName().equals(jComboBox6.getSelectedItem())){
+        for (Mechanic mechanic : mechanics) {
+            if (mechanic.getName().equals(jComboBox6.getSelectedItem())) {
                 selectedMechanic.setId(mechanic.getId());
                 selectedMechanic.setName(mechanic.getName());
             }
         }
         String wageQuery = "SELECT hourly_rate FROM garitsdb.Mechanic"
                 + " WHERE user_id = " + selectedMechanic.getId();
-        try { 
-                Connection conn = dbConnect.connect();
-                conn.setAutoCommit(false);
-                PreparedStatement statement = conn.prepareStatement(wageQuery);
-                ResultSet resultWage = statement.executeQuery();
-                resultWage.next();
-                float hourlyRate = resultWage.getFloat("hourly_rate");
-                invoice.setMechanicWage(hourlyRate);
-                labourCost = invoice.calcLabourCost(
-                        invoice.getJobDuration(), hourlyRate);
-                conn.commit();
-                conn.setAutoCommit(true);
+        try {
+            Connection conn = dbConnect.connect();
+            conn.setAutoCommit(false);
+            PreparedStatement statement = conn.prepareStatement(wageQuery);
+            ResultSet resultWage = statement.executeQuery();
+            resultWage.next();
+            float hourlyRate = resultWage.getFloat("hourly_rate");
+            invoice.setMechanicWage(hourlyRate);
+            labourCost = invoice.calcLabourCost(
+                    invoice.getJobDuration(), hourlyRate);
+            conn.commit();
+            conn.setAutoCommit(true);
 
-            } catch (Exception exc) {
-               exc.printStackTrace();
+        } catch (Exception exc) {
+            exc.printStackTrace();
         }
         amountDue = invoice.calcTotalWithVat(labourCost, sparesCost);
-        invoice.setAmountDue(amountDue);      
-        
+        invoice.setAmountDue(amountDue);
+
         //SET REMINDER TO FALSE
         invoice.setPaymentReminder(false);
         // TODO ADD INVOICE TO DB
@@ -1543,20 +1556,19 @@ public class UpdateJobForm extends javax.swing.JFrame {
             Connection conn = dbConnect.connect();
             conn.setAutoCommit(false);
             PreparedStatement statement = conn.prepareStatement(insertInvoice,
-                    Statement.RETURN_GENERATED_KEYS); 
+                    Statement.RETURN_GENERATED_KEYS);
             statement.execute();
             ResultSet generatedKeys = statement.getGeneratedKeys();
             generatedKeys.next();
             invoiceId = generatedKeys.getInt(1);
             conn.commit();
             conn.setAutoCommit(true);
-        }
-        catch (Exception exc) {
+        } catch (Exception exc) {
             exc.printStackTrace();
         }
         // TODO OPEN INVOICE IN PDF
-        String dest = "resources/InvoiceNo" + invoiceId + ".pdf";       
-        PdfWriter writer = null; 
+        String dest = "resources/InvoiceNo" + invoiceId + ".pdf";
+        PdfWriter writer = null;
         try {
             writer = new PdfWriter(dest);
         } catch (FileNotFoundException ex) {
@@ -1564,8 +1576,8 @@ public class UpdateJobForm extends javax.swing.JFrame {
         }
 
         // Creating a PdfDocument       
-        PdfDocument pdfDoc = new PdfDocument(writer); 
-        
+        PdfDocument pdfDoc = new PdfDocument(writer);
+
         PdfFont bold = null;
         try {
             bold = PdfFontFactory.createFont(BOLD, true);
@@ -1574,7 +1586,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         }
 
         // Adding a new page 
-        pdfDoc.addNewPage();               
+        pdfDoc.addNewPage();
 
         // Creating a Document
         Document document = new Document(pdfDoc);
@@ -1585,7 +1597,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
                         .setMultipliedLeading(1)
                         .add(new Text(String.format("INVOICE NO.: %s\n", invoiceId))
                                 .setFontSize(14))
-                        .add(invoice.getJobEnd()));    
+                        .add(invoice.getJobEnd()));
         //Adding adresses
         document.add(getAddressTable(invoice.getCustomerName(),
                 invoice.getCustomerAddress(), invoice.getCustomerPostCode(),
@@ -1600,11 +1612,10 @@ public class UpdateJobForm extends javax.swing.JFrame {
                         .add(new Text("\n"))
                         .add(new Text(String.format("Vehicle Registraion No:"
                                 + "%s\n", selectedJob.getRegistrationNum())))
-                        .add(new Text(String.format("Make: %s\n", 
+                        .add(new Text(String.format("Make: %s\n",
                                 invoice.getVehicleMake())))
-                        .add(new Text(String.format("Model: %s\n", 
+                        .add(new Text(String.format("Model: %s\n",
                                 invoice.getVehicleModel())))
-                        
         );
         document.add(new Paragraph().add("\n"));
         //Adding Work done
@@ -1612,19 +1623,19 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 new Paragraph()
                         .setTextAlignment(TextAlignment.LEFT)
                         .setMultipliedLeading(1)
-                        .add(new Text("Description of work: \n"))                       
+                        .add(new Text("Description of work: \n"))
         );
-        for(int row = 0; row < modelCompleted.getRowCount(); row++) {
+        for (int row = 0; row < modelCompleted.getRowCount(); row++) {
             document.add(new Paragraph().add(
-                    row+1+")"+ modelCompleted.getValueAt(row, 0))
+                    row + 1 + ")" + modelCompleted.getValueAt(row, 0))
                     .setMultipliedLeading(1));
         }
         document.add(new Paragraph().add("\n"));
-        
+
         //Adding Items and calculating costs
         //USED PARTS
         ArrayList<Part> sparesUsed = new ArrayList<Part>();
-        for(int row = 0; row < modelParts.getRowCount(); row++) {
+        for (int row = 0; row < modelParts.getRowCount(); row++) {
             Part part = new Part();
             part.setName((String) modelParts.getValueAt(row, 0));
             part.setPartId((int) modelParts.getValueAt(row, 3));
@@ -1633,7 +1644,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
             sparesUsed.add(part);
         }
         document.add(getLineItemTable(invoice, sparesUsed, bold));
-        
+
         //Ending
         document.add(new Paragraph()
                 .add(new Text("Thank you for your valued custom."
@@ -1646,28 +1657,28 @@ public class UpdateJobForm extends javax.swing.JFrame {
         );
         // Closing the document
         document.close();
-                         
+
         System.out.println("PDF Created");
-        
+
         try {
             File pdfFile = new File(dest);
             if (pdfFile.exists()) {
                 if (Desktop.isDesktopSupported()) {
-                        Desktop.getDesktop().open(pdfFile);
+                    Desktop.getDesktop().open(pdfFile);
                 } else {
-                        System.out.println("Awt Desktop is not supported!");
+                    System.out.println("Awt Desktop is not supported!");
                 }
             } else {
-                    System.out.println("File is not exists!");
+                System.out.println("File is not exists!");
             }
             System.out.println("Done");
 
         } catch (Exception ex) {
-              ex.printStackTrace();
+            ex.printStackTrace();
         }
         // TODO open display invoice form
-        DisplayInvoiceForm allInvoices = new DisplayInvoiceForm();
-            allInvoices.setVisible(true);
+        DisplayInvoiceForm allInvoices = new DisplayInvoiceForm(control);
+        allInvoices.setVisible(true);
     }//GEN-LAST:event_jButton9ActionPerformed
 
     /**

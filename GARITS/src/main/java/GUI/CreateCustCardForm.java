@@ -47,11 +47,10 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         this.setPreferredSize(new Dimension(770, 685));
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        
+
         customerType_cmbo.addItemListener(new CustomerTypeItemListener());
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
-        addVehicleForm = new AddVehicleForm(this);
         vehicleList = new ArrayList<Vehicle>();
         phone_txt.setDocument(new LengthRestrictedDocument(11));
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
@@ -65,16 +64,15 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         this.setPreferredSize(new Dimension(770, 685));
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        
+
         customerType_cmbo.addItemListener(new CustomerTypeItemListener());
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
         control = c;
         franchiseeMenuForm = fmf;
-        
+
         control.getWindowList().add(this);
-        
-        addVehicleForm = new AddVehicleForm(control, this);
+
         vehicleList = new ArrayList<Vehicle>();
         phone_txt.setDocument(new LengthRestrictedDocument(11));
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
@@ -82,7 +80,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         customerType_cmbo.setSelectedItem("Casual");
         this.setLocationRelativeTo(null);
     }
-    
+
     @Override
     public void dispose() {
         super.dispose();
@@ -143,6 +141,11 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         individualTask_lbl = new javax.swing.JLabel();
         payLater_lbl = new javax.swing.JLabel();
         payLater_cmbo = new javax.swing.JComboBox<>();
+        postcode_lbl1 = new javax.swing.JLabel();
+        contact_txt = new javax.swing.JTextField();
+        flexible_discount_cmbo = new javax.swing.JComboBox<>();
+        flexible_discount_add_btn = new javax.swing.JButton();
+        flexible_discount_delete_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Create Customer");
@@ -283,7 +286,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         vehicle_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         vehicle_lbl.setText("Vehicle");
         getContentPane().add(vehicle_lbl);
-        vehicle_lbl.setBounds(52, 488, 55, 22);
+        vehicle_lbl.setBounds(50, 520, 55, 22);
 
         vehicle_add_btn.setText("Add");
         vehicle_add_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -292,7 +295,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(vehicle_add_btn);
-        vehicle_add_btn.setBounds(167, 484, 60, 30);
+        vehicle_add_btn.setBounds(170, 520, 60, 30);
 
         vehicle_delete_btn.setText("Delete");
         vehicle_delete_btn.addActionListener(new java.awt.event.ActionListener() {
@@ -301,10 +304,10 @@ public class CreateCustCardForm extends javax.swing.JFrame {
             }
         });
         getContentPane().add(vehicle_delete_btn);
-        vehicle_delete_btn.setBounds(239, 484, 70, 30);
+        vehicle_delete_btn.setBounds(240, 520, 70, 30);
 
         getContentPane().add(vehicle_cmbo);
-        vehicle_cmbo.setBounds(52, 532, 265, 27);
+        vehicle_cmbo.setBounds(50, 570, 265, 27);
 
         postcode_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         postcode_lbl.setText("Postcode");
@@ -356,6 +359,41 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         getContentPane().add(payLater_cmbo);
         payLater_cmbo.setBounds(532, 250, 150, 27);
 
+        postcode_lbl1.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
+        postcode_lbl1.setText("Contact");
+        getContentPane().add(postcode_lbl1);
+        postcode_lbl1.setBounds(50, 450, 60, 22);
+
+        contact_txt.setToolTipText("Customer postcode");
+        contact_txt.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                contact_txtActionPerformed(evt);
+            }
+        });
+        getContentPane().add(contact_txt);
+        contact_txt.setBounds(170, 450, 150, 29);
+
+        getContentPane().add(flexible_discount_cmbo);
+        flexible_discount_cmbo.setBounds(530, 450, 150, 27);
+
+        flexible_discount_add_btn.setText("Add");
+        flexible_discount_add_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                flexible_discount_add_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(flexible_discount_add_btn);
+        flexible_discount_add_btn.setBounds(530, 410, 60, 30);
+
+        flexible_discount_delete_btn.setText("Delete");
+        flexible_discount_delete_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                flexible_discount_delete_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(flexible_discount_delete_btn);
+        flexible_discount_delete_btn.setBounds(610, 410, 70, 30);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -380,9 +418,8 @@ public class CreateCustCardForm extends javax.swing.JFrame {
     }//GEN-LAST:event_discountType_cmboItemStateChanged
 
     private void vehicle_add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicle_add_btnActionPerformed
-        if (addVehicleForm != null) {
-            addVehicleForm.setVisible(true);
-        }
+        addVehicleForm = new AddVehicleForm(control, this);
+        addVehicleForm.setVisible(true);
     }//GEN-LAST:event_vehicle_add_btnActionPerformed
 
     private void vehicle_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicle_delete_btnActionPerformed
@@ -408,8 +445,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         if (name_txt.getText() == ""
                 || email_txt.getText() == ""
                 || !phone_txt.getText().matches("[0-9]{11}")
-                || address_txt.getText() == ""
-                || !postcode_txt.getText().matches("^[A-Z]{1,2}[0-9R][0-9A-Z]?[ ]{0,1}[0-9][A-Z]{2}$")) {
+                || address_txt.getText() == "") {
             JOptionPane.showMessageDialog(new JFrame("Error"), "Incorrect format for text fields.");
         } else {
             try {
@@ -417,7 +453,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
                     System.out.println("Account Holder");
                     if (accHolder == null) {
                         accHolder = new AccountHolder(name_txt.getText(), email_txt.getText(),
-                                phone_txt.getText(), address_txt.getText(), postcode_txt.getText());
+                                phone_txt.getText(), address_txt.getText(), postcode_txt.getText(), contact_txt.getText());
 
                         if (payLater_cmbo.getSelectedItem().equals("Yes")) {
                             accHolder.setPay_later(true);
@@ -431,7 +467,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
                         }
                         if (discountType_cmbo.getSelectedItem().equals("Variable Discount")) {
                             VariableDiscount vd = new VariableDiscount(Float.parseFloat(discountPercent_txt.getText()), Float.parseFloat(motPercent_txt.getText()),
-                                     Float.parseFloat(individualTask_txt.getText()), Float.parseFloat(spareParts_txt.getText()));
+                                    Float.parseFloat(individualTask_txt.getText()), Float.parseFloat(spareParts_txt.getText()));
                             accHolder.setDiscount_plan(vd);
 
                         }
@@ -441,25 +477,19 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
                         control.AddCustomer(accHolder, vehicleList);
 
-                        if (franchiseeMenuForm != null) {
-                            franchiseeMenuForm.hideGUI();
-                        }
                     }
                 } else {
                     if (cust == null) {
                         cust = new Customer(name_txt.getText(), email_txt.getText(),
-                                phone_txt.getText(), address_txt.getText(), postcode_txt.getText());
+                                phone_txt.getText(), address_txt.getText(), postcode_txt.getText(), contact_txt.getText());
                         control.AddCustomer(cust, vehicleList);
 
-                        if (franchiseeMenuForm != null) {
-                            franchiseeMenuForm.hideGUI();
-                        }
                     }
                 }
-
+                control.OpenMenu();
+                this.dispose();
                 JOptionPane.showMessageDialog(new JFrame("Created Customer"), "Customer successfully created.");
                 reset();
-                control.OpenMenu();
             } catch (Exception e) {
                 e.printStackTrace();
                 JOptionPane.showMessageDialog(new JFrame("Creating Customer"), "Creation failed.");
@@ -484,6 +514,18 @@ public class CreateCustCardForm extends javax.swing.JFrame {
     private void postcode_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_postcode_txtActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_postcode_txtActionPerformed
+
+    private void contact_txtActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_contact_txtActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_contact_txtActionPerformed
+
+    private void flexible_discount_add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flexible_discount_add_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_flexible_discount_add_btnActionPerformed
+
+    private void flexible_discount_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flexible_discount_delete_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_flexible_discount_delete_btnActionPerformed
 
     public void reset() {
         name_txt.setText("");
@@ -572,6 +614,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
     private javax.swing.JLabel address_lbl;
     private javax.swing.JTextField address_txt;
     private javax.swing.JButton back_btn;
+    private javax.swing.JTextField contact_txt;
     private javax.swing.JLabel createCustomer_lbl;
     private javax.swing.JButton create_btn;
     private javax.swing.JComboBox<String> customerType_cmbo;
@@ -583,6 +626,9 @@ public class CreateCustCardForm extends javax.swing.JFrame {
     private javax.swing.JLabel discount_lbl;
     private javax.swing.JLabel email_lbl;
     private javax.swing.JTextField email_txt;
+    private javax.swing.JButton flexible_discount_add_btn;
+    private javax.swing.JComboBox<String> flexible_discount_cmbo;
+    private javax.swing.JButton flexible_discount_delete_btn;
     private javax.swing.JLabel individualTask_lbl;
     private javax.swing.JTextField individualTask_txt;
     private javax.swing.JButton logout_btn;
@@ -595,6 +641,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
     private javax.swing.JLabel phone_lbl;
     private javax.swing.JTextField phone_txt;
     private javax.swing.JLabel postcode_lbl;
+    private javax.swing.JLabel postcode_lbl1;
     private javax.swing.JTextField postcode_txt;
     private javax.swing.JLabel spareParts_lbl;
     private javax.swing.JTextField spareParts_txt;
