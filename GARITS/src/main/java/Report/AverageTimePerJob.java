@@ -13,9 +13,8 @@ public class AverageTimePerJob extends Reports {
 	 * @param date
 	 * @param jobs
 	 */
-	public AverageTimePerJob AverageTimePerJob(String report_name, Date date, Job[] jobs) {
-		// TODO - implement AverageTimePerJob.AverageTimePerJob
-		throw new UnsupportedOperationException();
+	public AverageTimePerJob(String report_name, Date date, Job[] jobs) {
+            super(report_name, date);
 	}
 
 	public void GenerateReport() {

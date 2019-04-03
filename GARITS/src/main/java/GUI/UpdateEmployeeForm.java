@@ -5,17 +5,32 @@
  */
 package GUI;
 
+import Core.Control;
+
 /**
  *
  * @author jly09
  */
 public class UpdateEmployeeForm extends javax.swing.JFrame {
-
+    Control control;
+    
     /**
      * Creates new form MenuForm
      */
     public UpdateEmployeeForm() {
         initComponents();
+    }
+    
+    public UpdateEmployeeForm(Control c) {
+        initComponents();
+        control = c;
+        control.getWindowList().add(this);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**

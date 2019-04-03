@@ -8,6 +8,7 @@ package GUI;
 import Account.Customer;
 import Account.Mechanic;
 import Account.Vehicle;
+import Core.Control;
 import java.sql.*;
 import DatabaseConnect.DBConnect;
 import DatabaseConnect.DBConnectivity;
@@ -28,8 +29,12 @@ import javax.swing.table.TableColumn;
  * @author jly09
  */
 public class CreateJobForm extends javax.swing.JFrame {
+    Control control;
+    ForepersonMenuForm fpMenuForm;
+    FranchiseeMenuForm franchiseeMenuForm;
+    ReceptionistMenuForm receptionMenuForm;
     
-    DBConnectivity dbConnect;
+    DBConnect dbConnect;
     Vehicle selectedVehicle;
     Customer selectedCustomer = new Customer();
     int tickedRow = -1;
@@ -46,6 +51,65 @@ public class CreateJobForm extends javax.swing.JFrame {
     public CreateJobForm() {
         initComponents();
         dbConnect = new DBConnect();
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public CreateJobForm(Control c) {
+        initComponents();
+        
+        control = c;
+        control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    CreateJobForm(Control c, ForepersonMenuForm fpmf) {
+        initComponents();
+        
+        control = c;
+        fpMenuForm = fpmf;
+        
+        control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    CreateJobForm(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+        
+        control = c;
+        franchiseeMenuForm = fmf;
+        
+        control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    CreateJobForm(Control c, ReceptionistMenuForm rmf) {
+        initComponents();
+        
+        control = c;
+        receptionMenuForm = rmf;
+        
+        control.getDatabaseConnector();
+        control.getWindowList().add(this);
+        
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
     }
 
     /**
@@ -57,16 +121,16 @@ public class CreateJobForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jButton3 = new javax.swing.JButton();
+        logout_btn = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jButton5 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        back_btn = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<String>();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<String>();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jButton6 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -87,7 +151,12 @@ public class CreateJobForm extends javax.swing.JFrame {
             }
         });
 
-        jButton3.setText("Logout");
+        logout_btn.setText("Logout");
+        logout_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                logout_btnActionPerformed(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 24)); // NOI18N
         jLabel1.setText("Create Job");
@@ -99,7 +168,12 @@ public class CreateJobForm extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Back");
+        back_btn.setText("Back");
+        back_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_btnActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel3.setText("Customer Lookup");
@@ -107,7 +181,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel10.setText("Type");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MOT", "Annual Service", "Repair" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MOT", "Annual Service", "Repair" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -265,9 +339,9 @@ public class CreateJobForm extends javax.swing.JFrame {
                 .addContainerGap())
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addComponent(back_btn)
                 .addGap(7, 7, 7)
-                .addComponent(jButton3)
+                .addComponent(logout_btn)
                 .addGap(12, 12, 12))
         );
         layout.setVerticalGroup(
@@ -277,8 +351,8 @@ public class CreateJobForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(13, 13, 13)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton4)
-                            .addComponent(jButton3)))
+                            .addComponent(back_btn)
+                            .addComponent(logout_btn)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(36, 36, 36)
                         .addComponent(jLabel4)))
@@ -569,6 +643,30 @@ public class CreateJobForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jTextField2FocusGained
 
+    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
+        if (fpMenuForm != null) {
+            fpMenuForm = new ForepersonMenuForm(control);
+            fpMenuForm.setVisible(true);
+        }
+        
+        if (franchiseeMenuForm != null) {
+            franchiseeMenuForm = new FranchiseeMenuForm(control);
+            franchiseeMenuForm.setVisible(true);
+        }
+        
+        if (receptionMenuForm != null) {
+            receptionMenuForm = new ReceptionistMenuForm(control);
+            receptionMenuForm.setVisible(true);
+        }
+        
+        this.dispose();
+    }//GEN-LAST:event_back_btnActionPerformed
+
+    private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
+        control.logout();
+        this.dispose();
+    }//GEN-LAST:event_logout_btnActionPerformed
+
     
     /**
      * @param args the command line arguments
@@ -637,8 +735,7 @@ public class CreateJobForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton back_btn;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JComboBox<String> jComboBox1;
@@ -659,5 +756,7 @@ public class CreateJobForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
+    private javax.swing.JButton logout_btn;
     // End of variables declaration//GEN-END:variables
 }
+

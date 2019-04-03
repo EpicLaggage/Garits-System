@@ -13,9 +13,8 @@ public class GenerateStock extends Reports {
 	 * @param date
 	 * @param stock
 	 */
-	public GenerateStock GenerateStock(String report_name, Date date, Stock stock) {
-		// TODO - implement GenerateStock.GenerateStock
-		throw new UnsupportedOperationException();
+	public GenerateStock(String report_name, Date date, Stock stock) {
+		super(report_name, date);
 	}
 
 	public void GenerateReport() {

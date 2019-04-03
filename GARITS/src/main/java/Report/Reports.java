@@ -12,9 +12,8 @@ public abstract class Reports {
 	 * @param report_name
 	 * @param date
 	 */
-	public Reports Reports(String report_name, Date date) {
-		// TODO - implement Reports.Reports
-		throw new UnsupportedOperationException();
+	public Reports(String report_name, Date date) {
+
 	}
 
 	/**
