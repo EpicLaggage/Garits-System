@@ -25,6 +25,7 @@ public class Invoice {
         private int mechanicAssigned;
         private float jobDuration;
         private int reminderSent;
+        private float fixedCost;
         
 
 	/**
@@ -115,6 +116,16 @@ public class Invoice {
     public void setReminderSent(int reminderSent) {
         this.reminderSent = reminderSent;
     }
+
+    public float getFixedCost() {
+        return fixedCost;
+    }
+
+    public void setFixedCost(float fixedCost) {
+        this.fixedCost = fixedCost;
+    }
+    
+    
     
     
         
