@@ -128,9 +128,9 @@ public class CreateJobForm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jTextField3 = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        jComboBox1 = new javax.swing.JComboBox<String>();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<>();
+        jComboBox2 = new javax.swing.JComboBox<String>();
         jButton6 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTable1 = new javax.swing.JTable();
@@ -181,7 +181,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         jLabel10.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel10.setText("Type");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MOT", "Annual Service", "Repair" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MOT Car", "Annual Service", "Repair", "MOT Van" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -597,7 +597,7 @@ public class CreateJobForm extends javax.swing.JFrame {
                 String engineSerial = car.getEngine_serial_no();
                 String chassisNumber = car.getChassis_no();
                 String colour = car.getColour();
-                
+
                 Object[] row = { regNum, carMake, carModel, colour,
                     engineSerial, chassisNumber };
 
@@ -631,6 +631,7 @@ public class CreateJobForm extends javax.swing.JFrame {
                     rowData.get(3).toString(), rowData.get(4).toString(),
                     rowData.get(5).toString());
             selectedVehicle = car;
+            System.out.println(selectedVehicle.getReg_num()+"REGNNUM");
             if(tickedRow != -1) {
                 carTable.setValueAt(false, tickedRow, 6);
             } 
