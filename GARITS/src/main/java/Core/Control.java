@@ -1209,10 +1209,10 @@ public class Control {
                     getTime.start();
                 }
 
-                if (getMot == null) {
+                
                     getMot = new DetectMOTDue(this);
                     getMot.start();
-                }
+                
 
                 franchiseeMenuForm = new FranchiseeMenuForm(this);
                 franchiseeMenuForm.setVisible(true);
