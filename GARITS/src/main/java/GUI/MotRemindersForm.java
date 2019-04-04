@@ -57,11 +57,13 @@ public class MotRemindersForm extends javax.swing.JFrame {
         initComponents();
     }
 
-    public MotRemindersForm(ArrayList<Customer> MOTReminders, String motDate) {
+    public MotRemindersForm(ArrayList<Customer> MOTReminders, String motDate, Control c) {
         initComponents();
         this.MOTReminders.addAll(MOTReminders);
         this.motDate = motDate;
-        dbConnect = new DBConnect();
+        control = c;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
     }
 
     public MotRemindersForm(Control c) {
