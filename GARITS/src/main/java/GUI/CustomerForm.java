@@ -24,6 +24,8 @@ public class CustomerForm extends javax.swing.JFrame {
     Control control;
     UpdateCustomerForm updateCustomerForm;
     FranchiseeMenuForm franchiseeMenuForm;
+    ForepersonMenuForm fpMenuForm;
+    ReceptionistMenuForm receptionMenuForm;
 
     //Temporary list of accounts
     List<AccountHolder> accHolderList;
@@ -47,6 +49,38 @@ public class CustomerForm extends javax.swing.JFrame {
 
         control = c;
         franchiseeMenuForm = fmf;
+        
+        control.getWindowList().add(this);
+        
+        accHolderList = new ArrayList<AccountHolder>();
+
+        customer_tbl.setRowHeight(20);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public CustomerForm(Control c, ForepersonMenuForm fpmf) {
+        initComponents();
+
+        control = c;
+        fpMenuForm = fpmf;
+        
+        control.getWindowList().add(this);
+        
+        accHolderList = new ArrayList<AccountHolder>();
+
+        customer_tbl.setRowHeight(20);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public CustomerForm(Control c, ReceptionistMenuForm rmf) {
+        initComponents();
+
+        control = c;
+        receptionMenuForm = rmf;
         
         control.getWindowList().add(this);
         

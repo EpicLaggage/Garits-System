@@ -61,7 +61,7 @@ public class PDFCreator {
     }
     
     public static Table getLineItemTable(Invoice invoice, ArrayList<Part>
-            partsUsed, PdfFont bold) {
+            partsUsed, Job selectedJob, PdfFont bold) {
         Table table = new Table(
             new UnitValue[]{
                 new UnitValue(UnitValue.PERCENT, 34f),
@@ -82,11 +82,16 @@ public class PDFCreator {
             for(Part part : partsUsed) {
                 table.addCell(createCell(part.getName()));
                 table.addCell(createCell(part.getPartId()+""));
-                table.addCell(createCell(part.getPrice()+""));
+                table.addCell(createCell(part.getPrice()*1.3+""));
                 table.addCell(createCell(part.getQty()+""));
                 float markUpSpares = part.getPrice()*part.getQty();
                 table.addCell(createCell(invoice.calcMarkUpSpares(markUpSpares)+""));
-                totalDue += invoice.calcMarkUpSpares(markUpSpares);
+                if(part.getName().equals("Oil Filter") ||
+                    part.getName().equals("Air Filter") ||
+                    part.getName().equals("Motor Oil")) {
+                } else {
+                    totalDue += invoice.calcMarkUpSpares(markUpSpares);
+                }
             }
             //WHITESPACE
             table.addCell(createCell("\n"));
@@ -94,6 +99,16 @@ public class PDFCreator {
             table.addCell(createCell("\n"));
             table.addCell(createCell("\n"));
             table.addCell(createCell("\n"));
+            
+            if(selectedJob.getFixedCost() > 0) {
+                //Adding Fixed cost
+                table.addCell(createCell(selectedJob.getType()+""));
+                table.addCell(createCell(""));
+                table.addCell(createCell(""));
+                table.addCell(createCell(""));
+                table.addCell(createCell(selectedJob.getFixedCost()+""));
+                totalDue += selectedJob.getFixedCost();
+            }
 
             table.addCell(createCell("Labour"));
             table.addCell(createCell(""));

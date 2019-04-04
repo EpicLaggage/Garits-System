@@ -37,6 +37,7 @@ public class Control {
     List<JFrame> windowList;
 
     Thread getTime;
+    Thread getMot;
 
     public Control() {
         dbConnect = new DBConnect();
@@ -1174,6 +1175,11 @@ public class Control {
             getTime.stop();
             getTime = null;
         }
+        
+        if (getMot != null) {
+            getMot.stop();
+            getMot = null;
+        }
 
         loginForm = new LoginForm(this);
         loginForm.setVisible(true);
@@ -1201,6 +1207,11 @@ public class Control {
                 if (getTime == null) {
                     getTime = new DetectLatePayment(this);
                     getTime.start();
+                }
+
+                if (getMot == null) {
+                    getMot = new DetectMOTDue(this);
+                    getMot.start();
                 }
 
                 franchiseeMenuForm = new FranchiseeMenuForm(this);
@@ -1266,6 +1277,12 @@ public class Control {
             if (!exists) {
                 if (getTime != null) {
                     getTime.stop();
+                    getTime = null;
+                }
+                
+                if (getMot != null) {
+                    getMot.stop();
+                    getMot = null;
                 }
             }
         }

@@ -34,6 +34,8 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
     Control control = null;
     FranchiseeMenuForm franchiseeMenuForm = null;
+    ForepersonMenuForm fpMenuForm = null;
+    ReceptionistMenuForm receptionMenuForm = null;
     AddVehicleForm addVehicleForm = null;
     AddFlexibleDiscountForm addFlexibleDiscountForm = null;
     List<Vehicle> vehicleList = null;
@@ -74,6 +76,54 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
         control = c;
         franchiseeMenuForm = fmf;
+
+        control.getWindowList().add(this);
+
+        vehicleList = new ArrayList<Vehicle>();
+        fdContainerList = new ArrayList<>();
+        phone_txt.setDocument(new LengthRestrictedDocument(11));
+        postcode_txt.setDocument(new LengthRestrictedDocument(8));
+
+        customerType_cmbo.setSelectedItem("Casual");
+        this.setLocationRelativeTo(null);
+    }
+    
+    public CreateCustCardForm(Control c, ForepersonMenuForm fpmf) {
+        initComponents();
+        this.setSize(new Dimension(770, 685));
+        this.setPreferredSize(new Dimension(770, 685));
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        customerType_cmbo.addItemListener(new CustomerTypeItemListener());
+        discountType_cmbo.addItemListener(new DiscountTypeItemListener());
+
+        control = c;
+        fpMenuForm = fpmf;
+
+        control.getWindowList().add(this);
+
+        vehicleList = new ArrayList<Vehicle>();
+        fdContainerList = new ArrayList<>();
+        phone_txt.setDocument(new LengthRestrictedDocument(11));
+        postcode_txt.setDocument(new LengthRestrictedDocument(8));
+
+        customerType_cmbo.setSelectedItem("Casual");
+        this.setLocationRelativeTo(null);
+    }
+    
+    public CreateCustCardForm(Control c, ReceptionistMenuForm rmf) {
+        initComponents();
+        this.setSize(new Dimension(770, 685));
+        this.setPreferredSize(new Dimension(770, 685));
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        customerType_cmbo.addItemListener(new CustomerTypeItemListener());
+        discountType_cmbo.addItemListener(new DiscountTypeItemListener());
+
+        control = c;
+        receptionMenuForm = rmf;
 
         control.getWindowList().add(this);
 
@@ -576,21 +626,6 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         fdContainerList.clear();
         cust = null;
         accHolder = null;
-    }
-
-    @Override
-    public void setVisible(boolean v) {
-        super.setVisible(v);
-
-        if (v) {
-            if (franchiseeMenuForm != null) {
-                franchiseeMenuForm.dispose();
-                //franchiseeMenuForm.setVisible(false);
-            }
-        } else {
-            addVehicleForm.setVisible(false);
-        }
-
     }
 
     /**

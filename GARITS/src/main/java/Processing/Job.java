@@ -20,6 +20,7 @@ public class Job {
         private String workRequired;
         private String workDone;
         private int jobId;
+        private float fixedCost;
           
 
 	/**
@@ -185,6 +186,14 @@ public class Job {
 
         public void setJobId(int jobId) {
             this.jobId = jobId;
+        }
+
+        public float getFixedCost() {
+            return fixedCost;
+        }
+
+        public void setFixedCost(float fixedCost) {
+            this.fixedCost = fixedCost;
         }
         
         

@@ -155,6 +155,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         jSlider1 = new javax.swing.JSlider();
         jLabel2 = new javax.swing.JLabel();
         jButton9 = new javax.swing.JButton();
+        jTextField6 = new javax.swing.JTextField();
 
         javax.swing.GroupLayout jDialog1Layout = new javax.swing.GroupLayout(jDialog1.getContentPane());
         jDialog1.getContentPane().setLayout(jDialog1Layout);
@@ -504,6 +505,12 @@ public class UpdateJobForm extends javax.swing.JFrame {
             }
         });
 
+        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField6ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -514,9 +521,6 @@ public class UpdateJobForm extends javax.swing.JFrame {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGap(120, 120, 120)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLabel6)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -546,12 +550,19 @@ public class UpdateJobForm extends javax.swing.JFrame {
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLabel3)
                                 .addComponent(jLabel9))
-                            .addGap(71, 71, 71)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGap(47, 47, 47)
-                            .addComponent(jLabel7)
-                            .addGap(34, 34, 34)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(71, 71, 71)
+                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(47, 47, 47)
+                                    .addComponent(jLabel7)
+                                    .addGap(34, 34, 34)
+                                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(18, 18, 18)
+                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(12, 12, 12)
+                                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE))))
                         .addGroup(layout.createSequentialGroup()
                             .addComponent(jScrollPane6, javax.swing.GroupLayout.PREFERRED_SIZE, 289, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGap(36, 36, 36)
@@ -602,7 +613,8 @@ public class UpdateJobForm extends javax.swing.JFrame {
                     .addComponent(jLabel9)
                     .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel11)
-                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
@@ -754,7 +766,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         updatedJob.setStatus(job_status);
         updatedJob.setType(job_type);
         updatedJob.setJobId(selectedJob.getJobId());
-
+        System.out.println(updatedJob.getMechanicId()+ "MECHANIC ID + " + jComboBox6.getSelectedItem());
         String insertJobQuery = "UPDATE garitsdb.Job SET"
                 + " mechanic_assigned = '" + updatedJob.getMechanicId()
                 + "', job_duration = '" + updatedJob.getDuration() + "', job_status = '"
@@ -883,7 +895,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
 
         //Getting all mechanics from db and selecting the correct one
         String mechanicNamesQuery = "SELECT username, user_id FROM garitsdb.User "
-                + "WHERE user_role = 'Mechanic'";
+                + "WHERE user_role = 'Mechanic' OR user_role = 'Foreperson';";
         ResultSet rs;
 
         try {
@@ -1453,6 +1465,13 @@ public class UpdateJobForm extends javax.swing.JFrame {
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO CHANGE job status to DONE
+        selectedJob.setType(jComboBox1.getSelectedItem()+"");
+        if(jTextField6.getText().isEmpty()) {
+            selectedJob.setFixedCost(0);
+        } else {
+            //ADDING FIXED COST
+            selectedJob.setFixedCost((Float.parseFloat(jTextField6.getText())));
+        }
         selectedJob.setStatus("Done");
         jComboBox2.setSelectedItem("Done");
         this.jButton5ActionPerformed(evt);
@@ -1508,9 +1527,15 @@ public class UpdateJobForm extends javax.swing.JFrame {
         //ONE AT A TIME, spares, labour, VAT
         float sparesTotal = 0;
         for (int i = 0; i < jTable6.getRowCount(); i++) {
-            float qty = Float.parseFloat(modelParts.getValueAt(i, 1) + "");
-            float price = Float.parseFloat(modelParts.getValueAt(i, 4) + "");
-            sparesTotal += price * qty;
+            if(modelParts.getValueAt(i, 0).equals("Oil Filter") ||
+                    modelParts.getValueAt(i, 0).equals("Air Filter") ||
+                    modelParts.getValueAt(i, 0).equals("Motor Oil")) {
+                System.out.println("Cost not added");
+            } else {
+                float qty = Float.parseFloat(modelParts.getValueAt(i, 1) + "");
+                float price = Float.parseFloat(modelParts.getValueAt(i, 4) + "");
+                sparesTotal += price * qty;
+            }
         }
         sparesCost = invoice.calcMarkUpSpares(sparesTotal);
 
@@ -1522,7 +1547,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 selectedMechanic.setName(mechanic.getName());
             }
         }
-        String wageQuery = "SELECT hourly_rate FROM garitsdb.Mechanic"
+        String wageQuery = "SELECT user_pay FROM garitsdb.user"
                 + " WHERE user_id = " + selectedMechanic.getId();
         try {
             Connection conn = dbConnect.connect();
@@ -1530,8 +1555,9 @@ public class UpdateJobForm extends javax.swing.JFrame {
             PreparedStatement statement = conn.prepareStatement(wageQuery);
             ResultSet resultWage = statement.executeQuery();
             resultWage.next();
-            float hourlyRate = resultWage.getFloat("hourly_rate");
+            float hourlyRate = resultWage.getFloat("user_pay");
             invoice.setMechanicWage(hourlyRate);
+            invoice.setJobDuration(Float.parseFloat(jTextField3.getText()));
             labourCost = invoice.calcLabourCost(
                     invoice.getJobDuration(), hourlyRate);
             conn.commit();
@@ -1540,17 +1566,23 @@ public class UpdateJobForm extends javax.swing.JFrame {
         } catch (Exception exc) {
             exc.printStackTrace();
         }
+        //Adding fixed cost for Jobs that have flat rate
+        if(jComboBox1.getSelectedItem() == "MOT" || jComboBox1.getSelectedItem()
+                == "Annual Service") {
+            //WITH VAT
+            amountDue += selectedJob.getFixedCost() * 1.2;
+        }
         amountDue = invoice.calcTotalWithVat(labourCost, sparesCost);
         invoice.setAmountDue(amountDue);
-
+           
         //SET REMINDER TO FALSE
         invoice.setPaymentReminder(false);
         // TODO ADD INVOICE TO DB
         String insertInvoice = "INSERT INTO `garitsdb`.`Invoice` (`job_id`,"
-                + " `invoice_date`, `payment_due_date`, `invoice_total`)"
+                + " `invoice_date`, `payment_due_date`, `invoice_total`, `fixed_cost`)"
                 + " VALUES ('" + invoice.getJobId() + "', '" + invoice.getJobEnd()
                 + "', '" + invoice.getPaymentDueDate() + "', '"
-                + invoice.getAmountDue() + "');";
+                + invoice.getAmountDue() + "', '" + selectedJob.getFixedCost() +"');";
         int invoiceId = 0;
         try {
             Connection conn = dbConnect.connect();
@@ -1643,7 +1675,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
             part.setQty((int) modelParts.getValueAt(row, 1));
             sparesUsed.add(part);
         }
-        document.add(getLineItemTable(invoice, sparesUsed, bold));
+        document.add(getLineItemTable(invoice, sparesUsed, selectedJob, bold));
 
         //Ending
         document.add(new Paragraph()
@@ -1677,9 +1709,13 @@ public class UpdateJobForm extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         // TODO open display invoice form
-        DisplayInvoiceForm allInvoices = new DisplayInvoiceForm(control);
+        DisplayInvoiceForm allInvoices = new DisplayInvoiceForm(control);//FIX NULL CONTROL
         allInvoices.setVisible(true);
     }//GEN-LAST:event_jButton9ActionPerformed
+
+    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1828,6 +1864,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
+    private javax.swing.JTextField jTextField6;
     private java.awt.PopupMenu popupMenu1;
     // End of variables declaration//GEN-END:variables
 }

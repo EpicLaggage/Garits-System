@@ -27,9 +27,11 @@ public class DetectMOTDue extends Thread {
     ArrayList<Customer> motReminders = new ArrayList<Customer>();
     boolean reminderSnoozed = false;
     String motDate;
+    Control control;
 
-    public DetectMOTDue() {
+    public DetectMOTDue(Control c) {
         dbConnect = new DBConnect();
+        this.control = c;
     }
     
     

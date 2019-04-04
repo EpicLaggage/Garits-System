@@ -27,6 +27,8 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     DisplayInvoiceForm displayInvoiceForm;
     DisplayAlertForm displayAlertForm;
     AlertForm alertForm;
+    MotRemindersForm motRemindersForm;
+    RemindersForm remindersForm;
 
     /**
      * Creates new form MenuForm
@@ -383,7 +385,9 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     }//GEN-LAST:event_displayUpdateJobs_btnActionPerformed
 
     private void jobReminders_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jobReminders_btnActionPerformed
-        // TODO add your handling code here:
+        motRemindersForm = new MotRemindersForm(control, this);
+        motRemindersForm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jobReminders_btnActionPerformed
 
     private void displayUpdateParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayUpdateParts_btnActionPerformed
@@ -393,7 +397,7 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     }//GEN-LAST:event_displayUpdateParts_btnActionPerformed
 
     private void orderParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_orderParts_btnActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_orderParts_btnActionPerformed
 
     private void addSupplier_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addSupplier_btnActionPerformed
@@ -419,7 +423,9 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     }//GEN-LAST:event_displayAlerts_btnActionPerformed
 
     private void paymentReminders_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paymentReminders_btnActionPerformed
-        // TODO add your handling code here:
+       remindersForm = new RemindersForm(control, this);
+       remindersForm.setVisible(true);
+       this.dispose();
     }//GEN-LAST:event_paymentReminders_btnActionPerformed
 
     /**

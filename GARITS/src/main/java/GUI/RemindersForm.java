@@ -41,9 +41,13 @@ import javax.swing.table.DefaultTableModel;
  * @author jly09
  */
 public class RemindersForm extends javax.swing.JFrame {
+
     ArrayList<Invoice> unpaidInvoices = new ArrayList<Invoice>();
     DBConnect dbConnect;
     Control control;
+    ForepersonMenuForm fpMenuForm;
+    FranchiseeMenuForm franchiseeMenuForm;
+    ReceptionistMenuForm receptionMenuForm;
     DefaultTableModel invoiceModel;
 
     /**
@@ -53,17 +57,17 @@ public class RemindersForm extends javax.swing.JFrame {
         initComponents();
         this.unpaidInvoices.addAll(unpaidInvoices);
         dbConnect = new DBConnect();
-        
+
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
-    
+
     public RemindersForm(Control c) {
         initComponents();
         control = c;
         dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
-        
+
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -73,24 +77,121 @@ public class RemindersForm extends javax.swing.JFrame {
         control = c;
         dbConnect = control.getDatabaseConnector();
         control.getWindowList().add(this);
-        
+
         this.unpaidInvoices.addAll(unpaidInvoices);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
+    public RemindersForm(Control c, ForepersonMenuForm fpmf) {
+        initComponents();
+        control = c;
+        fpMenuForm = fpmf;
+        
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public RemindersForm(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+        control = c;
+        franchiseeMenuForm = fmf;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+    
+    public RemindersForm(Control c, ReceptionistMenuForm rmf) {
+        initComponents();
+        control = c;
+        receptionMenuForm = rmf;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
     public RemindersForm() {
         initComponents();
     }
-    
+
     @Override
     public void dispose() {
         super.dispose();
         control.terminateThread();
     }
-    
+
     public void setUpaidInvoices(ArrayList<Invoice> unpaidInvoices) {
         this.unpaidInvoices = unpaidInvoices;
+        createInvoiceList();
+    }
+
+    public void createInvoiceList() {
+        // TODO Create list of invoice objects with all necessary data         
+        //Query Job table
+        if (!unpaidInvoices.isEmpty()) {
+            for (Invoice invoice : unpaidInvoices) {
+                String jobQuery = "SELECT * FROM garitsdb.Job WHERE job_id = '"
+                        + invoice.getJobId() + "';";
+                try {
+                    Connection conn = dbConnect.connect();
+                    conn.setAutoCommit(false);
+                    PreparedStatement statement = conn.prepareStatement(jobQuery);
+                    ResultSet rs = statement.executeQuery();
+                    while (rs.next()) {
+                        invoice.setJobStart(rs.getString("job_date"));
+                        invoice.setRegNum(rs.getString("reg_no"));
+                        invoice.setCustomerId(rs.getInt("customer_id"));
+                        invoice.setMechanicAssigned(rs.getInt("mechanic_assigned"));
+                        invoice.setJobDuration(rs.getInt("job_duration"));
+                    }
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+            }
+
+            //Query Customer table
+            for (Invoice invoice : unpaidInvoices) {
+                String customerQuery = "SELECT * FROM garitsdb.Customer WHERE "
+                        + "customer_id = '" + invoice.getCustomerId() + "';";
+                try {
+                    Connection conn = dbConnect.connect();
+                    conn.setAutoCommit(false);
+                    PreparedStatement statement = conn.prepareStatement(customerQuery);
+                    ResultSet rs = statement.executeQuery();
+                    while (rs.next()) {
+                        invoice.setCustomerName(rs.getString("customer_name"));
+                        invoice.setCustomerAddress(rs.getString("customer_address"));
+                        invoice.setCustomerPostCode(rs.getString("customer_postcode"));
+                        invoice.setCustomerPhone(rs.getString("customer_tel"));
+                        invoice.setCustomerEmail(rs.getString("customer_email"));
+                        invoice.setAccountHolder(rs.getBoolean(
+                                "customer_account_holder"));
+                    }
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                } catch (Exception exc) {
+                    exc.printStackTrace();
+                }
+            }
+
+            invoiceModel = (DefaultTableModel) jTable1.getModel();
+            invoiceModel.setRowCount(0);
+            for (Invoice invoice : unpaidInvoices) {
+                Object[] row = {invoice.getJobId(), invoice.getPaymentDueDate(),
+                    invoice.getCustomerName(), invoice.getCustomerEmail(),
+                    invoice.isReminderSent(), invoice.getInvoiceId(), invoice};
+                invoiceModel.addRow(row);
+            }
+        }
     }
 
     /**
@@ -225,84 +326,29 @@ public class RemindersForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO Create list of invoice objects with all necessary data         
-        //Query Job table
-        for(Invoice invoice : unpaidInvoices) {
-            String jobQuery = "SELECT * FROM garitsdb.Job WHERE job_id = '"
-                    + invoice.getJobId() +"';";
-            try {
-                Connection conn = dbConnect.connect();
-                conn.setAutoCommit(false);
-                PreparedStatement statement = conn.prepareStatement(jobQuery);
-                ResultSet rs = statement.executeQuery();
-                while(rs.next()) {
-                    invoice.setJobStart(rs.getString("job_date"));
-                    invoice.setRegNum(rs.getString("reg_no"));
-                    invoice.setCustomerId(rs.getInt("customer_id"));
-                    invoice.setMechanicAssigned(rs.getInt("mechanic_assigned"));
-                    invoice.setJobDuration(rs.getInt("job_duration"));
-                }
-                conn.commit();
-                conn.setAutoCommit(true);
-            } catch (Exception exc) {
-                exc.printStackTrace();
-            }
-        }
-        
-        //Query Customer table
-        for(Invoice invoice : unpaidInvoices) {
-            String customerQuery = "SELECT * FROM garitsdb.Customer WHERE "
-                    + "customer_id = '" + invoice.getCustomerId() + "';";
-            try {
-                Connection conn = dbConnect.connect();
-                conn.setAutoCommit(false);
-                PreparedStatement statement = conn.prepareStatement(customerQuery);
-                ResultSet rs = statement.executeQuery();
-                while(rs.next()) {
-                    invoice.setCustomerName(rs.getString("customer_name"));
-                    invoice.setCustomerAddress(rs.getString("customer_address"));
-                    invoice.setCustomerPostCode(rs.getString("customer_postcode"));
-                    invoice.setCustomerPhone(rs.getString("customer_tel"));
-                    invoice.setCustomerEmail(rs.getString("customer_email"));
-                    invoice.setAccountHolder(rs.getBoolean(
-                            "customer_account_holder"));
-                }
-                conn.commit();
-                conn.setAutoCommit(true);
-            } catch (Exception exc) {
-                exc.printStackTrace();
-            }
-        }
-        
-        invoiceModel = (DefaultTableModel) jTable1.getModel();
-        invoiceModel.setRowCount(0);
-        for(Invoice invoice : unpaidInvoices) {
-            Object[] row = { invoice.getJobId(), invoice.getPaymentDueDate(),
-                invoice.getCustomerName(), invoice.getCustomerEmail(), 
-            invoice.isReminderSent(), invoice.getInvoiceId(), invoice};
-            invoiceModel.addRow(row);
-        }
+        createInvoiceList();
+
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         int[] selectedRow = jTable1.getSelectedRows();
-        if(selectedRow.length == 0) {
+        if (selectedRow.length == 0) {
             //Display window requiring user to select a job to update first
             JOptionPane.showMessageDialog(RemindersForm.this,
                     "Select an invoice reminder to print first");
-            
+
         } else {
             Invoice invoice = (Invoice) jTable1.getValueAt(selectedRow[0], 6);
             //GETTING MISSING INVOICE DATA
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
             java.util.Date date = new java.util.Date();
             String currDate = dateFormat.format(date);
-            
+
             // TODO OPEN INVOICE IN PDF
-            String dest = "resources/Invoice" + invoice.getInvoiceId() +
-                    "Reminder" + invoice.isReminderSent() + ".pdf";       
-            PdfWriter writer = null; 
+            String dest = "resources/Invoice" + invoice.getInvoiceId()
+                    + "Reminder" + invoice.isReminderSent() + ".pdf";
+            PdfWriter writer = null;
             try {
                 writer = new PdfWriter(dest);
             } catch (FileNotFoundException ex) {
@@ -310,7 +356,7 @@ public class RemindersForm extends javax.swing.JFrame {
             }
 
             // Creating a PdfDocument       
-            PdfDocument pdfDoc = new PdfDocument(writer); 
+            PdfDocument pdfDoc = new PdfDocument(writer);
 
             PdfFont bold = null;
             try {
@@ -320,7 +366,7 @@ public class RemindersForm extends javax.swing.JFrame {
             }
 
             // Adding a new page 
-            pdfDoc.addNewPage();               
+            pdfDoc.addNewPage();
 
             // Creating a Document
             Document document = new Document(pdfDoc);
@@ -329,11 +375,11 @@ public class RemindersForm extends javax.swing.JFrame {
                     new Paragraph()
                             .setTextAlignment(TextAlignment.RIGHT)
                             .setMultipliedLeading(1)
-                            .add(new Text(String.format("REMINDER " + 
-                                    invoice.isReminderSent()+
-                                    "- INVOICE NO.: %s\n",
+                            .add(new Text(String.format("REMINDER "
+                                    + invoice.isReminderSent()
+                                    + "- INVOICE NO.: %s\n",
                                     invoice.getInvoiceId())).setFontSize(14))
-                            .add(currDate));    
+                            .add(currDate));
             //Adding adresses
             document.add(getAddressTable(invoice.getCustomerName(),
                     invoice.getCustomerAddress(), invoice.getCustomerPostCode(),
@@ -348,7 +394,7 @@ public class RemindersForm extends javax.swing.JFrame {
                             .add(new Text("\n"))
                             .add(new Text(String.format("Vehicle Registraion No: "
                                     + "%s\n", invoice.getRegNum())))
-                            .add(new Text(String.format("Amount Due:  %s\n", 
+                            .add(new Text(String.format("Amount Due:  %s\n",
                                     invoice.getAmountDue())))
             );
             document.add(new Paragraph().add("\n"));
@@ -358,10 +404,10 @@ public class RemindersForm extends javax.swing.JFrame {
                     + "payment of the above invoice, which was posted "
                     + "to you on " + invoice.getJobEnd() + " for workd done on the "
                     + "vehicle listed above.")));
-            
+
             document.add(new Paragraph().add("We would appreaciate payment "
                     + "at your earliest convenience."));
-            
+
             document.add(new Paragraph().add("If you have already sent a "
                     + "payment to us recently, please accept our apologies."));
 
@@ -376,36 +422,36 @@ public class RemindersForm extends javax.swing.JFrame {
             document.close();
 
             System.out.println("PDF Created");
-            
+
             try {
 
-		File pdfFile = new File(dest);
-		if (pdfFile.exists()) {
+                File pdfFile = new File(dest);
+                if (pdfFile.exists()) {
 
-			if (Desktop.isDesktopSupported()) {
-				Desktop.getDesktop().open(pdfFile);
-			} else {
-				System.out.println("Awt Desktop is not supported!");
-			}
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(pdfFile);
+                    } else {
+                        System.out.println("Awt Desktop is not supported!");
+                    }
 
-		} else {
-			System.out.println("File is not exists!");
-		}
+                } else {
+                    System.out.println("File is not exists!");
+                }
 
-		System.out.println("Done");
+                System.out.println("Done");
 
             } catch (Exception ex) {
-                  ex.printStackTrace();
+                ex.printStackTrace();
             }
             //UPDATING PAYMENT DUE DATE AND REMINDER COUNT
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
             LocalDate paymentDueDate = LocalDate.parse(
                     invoice.getPaymentDueDate(), formatter);
-            
+
             String reminderUpdate = "UPDATE Invoice SET "
                     + "payment_due_date = '" + paymentDueDate.plusMonths(1) + "', "
                     + "invoice_reminder=invoice_reminder+1 " + "WHERE "
-                    + "(`invoice_id` = '" + invoice.getInvoiceId() + "');"; 
+                    + "(`invoice_id` = '" + invoice.getInvoiceId() + "');";
             try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
@@ -413,8 +459,7 @@ public class RemindersForm extends javax.swing.JFrame {
                 statement.execute();
                 conn.commit();
                 conn.setAutoCommit(true);
-            }
-            catch (Exception exc) {
+            } catch (Exception exc) {
                 exc.printStackTrace();
             }
         }
@@ -424,11 +469,11 @@ public class RemindersForm extends javax.swing.JFrame {
         // TODO SORT BY REMINDER COUNT
         invoiceModel = (DefaultTableModel) jTable1.getModel();
         invoiceModel.setRowCount(0);
-        for(Invoice invoice : unpaidInvoices) {
-            if(invoice.isReminderSent() == Integer.parseInt(
-                    jComboBox1.getSelectedItem().toString())){
-                Object[] row = { invoice.getJobId(), invoice.getPaymentDueDate(),
-                    invoice.getCustomerName(), invoice.getCustomerEmail(), 
+        for (Invoice invoice : unpaidInvoices) {
+            if (invoice.isReminderSent() == Integer.parseInt(
+                    jComboBox1.getSelectedItem().toString())) {
+                Object[] row = {invoice.getJobId(), invoice.getPaymentDueDate(),
+                    invoice.getCustomerName(), invoice.getCustomerEmail(),
                     invoice.isReminderSent(), invoice.getInvoiceId(), invoice};
                 invoiceModel.addRow(row);
             }
@@ -439,18 +484,18 @@ public class RemindersForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         invoiceModel = (DefaultTableModel) jTable1.getModel();
         invoiceModel.setRowCount(0);
-        for(Invoice invoice : unpaidInvoices) {
-            Object[] row = { invoice.getJobId(), invoice.getPaymentDueDate(),
-                invoice.getCustomerName(), invoice.getCustomerEmail(), 
-            invoice.isReminderSent(), invoice.getInvoiceId(), invoice};
+        for (Invoice invoice : unpaidInvoices) {
+            Object[] row = {invoice.getJobId(), invoice.getPaymentDueDate(),
+                invoice.getCustomerName(), invoice.getCustomerEmail(),
+                invoice.isReminderSent(), invoice.getInvoiceId(), invoice};
             invoiceModel.addRow(row);
         }
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO All reminders to PDF's
-        for(int rows = 0; rows < invoiceModel.getRowCount(); rows++) {
+        for (int rows = 0; rows < invoiceModel.getRowCount(); rows++) {
             Invoice invoice = (Invoice) jTable1.getValueAt(rows, 6);
             //GETTING MISSING INVOICE DATA
             DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
@@ -458,9 +503,9 @@ public class RemindersForm extends javax.swing.JFrame {
             String currDate = dateFormat.format(date);
 
             // TODO OPEN INVOICE IN PDF
-            String dest = "resources/Invoice" + invoice.getInvoiceId() +
-                    "Reminder" + invoice.isReminderSent() + ".pdf";       
-            PdfWriter writer = null; 
+            String dest = "resources/Invoice" + invoice.getInvoiceId()
+                    + "Reminder" + invoice.isReminderSent() + ".pdf";
+            PdfWriter writer = null;
             try {
                 writer = new PdfWriter(dest);
             } catch (FileNotFoundException ex) {
@@ -468,7 +513,7 @@ public class RemindersForm extends javax.swing.JFrame {
             }
 
             // Creating a PdfDocument       
-            PdfDocument pdfDoc = new PdfDocument(writer); 
+            PdfDocument pdfDoc = new PdfDocument(writer);
 
             PdfFont bold = null;
             try {
@@ -478,7 +523,7 @@ public class RemindersForm extends javax.swing.JFrame {
             }
 
             // Adding a new page 
-            pdfDoc.addNewPage();               
+            pdfDoc.addNewPage();
 
             // Creating a Document
             Document document = new Document(pdfDoc);
@@ -487,11 +532,11 @@ public class RemindersForm extends javax.swing.JFrame {
                     new Paragraph()
                             .setTextAlignment(TextAlignment.RIGHT)
                             .setMultipliedLeading(1)
-                            .add(new Text(String.format("REMINDER " + 
-                                    invoice.isReminderSent()+
-                                    "- INVOICE NO.: %s\n",
+                            .add(new Text(String.format("REMINDER "
+                                    + invoice.isReminderSent()
+                                    + "- INVOICE NO.: %s\n",
                                     invoice.getInvoiceId())).setFontSize(14))
-                            .add(currDate));    
+                            .add(currDate));
             //Adding adresses
             document.add(getAddressTable(invoice.getCustomerName(),
                     invoice.getCustomerAddress(), invoice.getCustomerPostCode(),
@@ -506,7 +551,7 @@ public class RemindersForm extends javax.swing.JFrame {
                             .add(new Text("\n"))
                             .add(new Text(String.format("Vehicle Registraion No: "
                                     + "%s\n", invoice.getRegNum())))
-                            .add(new Text(String.format("Amount Due:  %s\n", 
+                            .add(new Text(String.format("Amount Due:  %s\n",
                                     invoice.getAmountDue())))
             );
             document.add(new Paragraph().add("\n"));
@@ -540,20 +585,20 @@ public class RemindersForm extends javax.swing.JFrame {
                 File pdfFile = new File(dest);
                 if (pdfFile.exists()) {
 
-                        if (Desktop.isDesktopSupported()) {
-                                Desktop.getDesktop().open(pdfFile);
-                        } else {
-                                System.out.println("Awt Desktop is not supported!");
-                        }
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(pdfFile);
+                    } else {
+                        System.out.println("Awt Desktop is not supported!");
+                    }
 
                 } else {
-                        System.out.println("File is not exists!");
+                    System.out.println("File is not exists!");
                 }
 
                 System.out.println("Done");
 
             } catch (Exception ex) {
-                  ex.printStackTrace();
+                ex.printStackTrace();
             }
             //UPDATING PAYMENT DUE DATE AND REMINDER COUNT
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -563,7 +608,7 @@ public class RemindersForm extends javax.swing.JFrame {
             String reminderUpdate = "UPDATE Invoice SET "
                     + "payment_due_date = '" + paymentDueDate.plusMonths(1) + "', "
                     + "invoice_reminder=invoice_reminder+1 " + "WHERE "
-                    + "(`invoice_id` = '" + invoice.getInvoiceId() + "');"; 
+                    + "(`invoice_id` = '" + invoice.getInvoiceId() + "');";
             try {
                 Connection conn = dbConnect.connect();
                 conn.setAutoCommit(false);
@@ -571,8 +616,7 @@ public class RemindersForm extends javax.swing.JFrame {
                 statement.execute();
                 conn.commit();
                 conn.setAutoCommit(true);
-            }
-            catch (Exception exc) {
+            } catch (Exception exc) {
                 exc.printStackTrace();
             }
         }

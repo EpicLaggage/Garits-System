@@ -458,7 +458,7 @@ public class CreateJobForm extends javax.swing.JFrame {
         TableColumn idColumn = jTable1.getColumnModel().getColumn(5);
         jTable1.getColumnModel().removeColumn(idColumn);
         String mechanicNamesQuery = "SELECT username, user_id FROM user "
-                + "WHERE user_role = 'Mechanic'";
+                + "WHERE user_role = 'Mechanic' OR user_role = 'Foreperson';";
         ResultSet rs;
         
         try {

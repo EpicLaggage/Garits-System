@@ -6,6 +6,7 @@
 package GUI;
 
 import Account.Customer;
+import Core.Control;
 import DatabaseConnect.DBConnect;
 import static GUI.UpdateJobForm.BOLD;
 import static Processing.PDFCreator.getAddressTable;
@@ -31,6 +32,7 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -39,23 +41,97 @@ import javax.swing.table.DefaultTableModel;
  */
 public class MotRemindersForm extends javax.swing.JFrame {
 
+    Control control;
     DBConnect dbConnect;
+    ForepersonMenuForm fpMenuForm;
+    FranchiseeMenuForm franchiseeMenuForm;
+    ReceptionistMenuForm receptionMenuForm;
     ArrayList<Customer> MOTReminders = new ArrayList<Customer>();
     String motDate;
     DefaultTableModel motModel;
-    
+
     /**
      * Creates new form MotRemindersForm
      */
     public MotRemindersForm() {
         initComponents();
     }
-    
+
     public MotRemindersForm(ArrayList<Customer> MOTReminders, String motDate) {
         initComponents();
         this.MOTReminders.addAll(MOTReminders);
         this.motDate = motDate;
         dbConnect = new DBConnect();
+    }
+
+    public MotRemindersForm(Control c) {
+        initComponents();
+        control = c;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    public MotRemindersForm(Control c, ForepersonMenuForm fpmf) {
+        initComponents();
+        control = c;
+        fpMenuForm = fpmf;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    public MotRemindersForm(Control c, FranchiseeMenuForm fmf) {
+        initComponents();
+        control = c;
+        franchiseeMenuForm = fmf;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    public MotRemindersForm(Control c, ReceptionistMenuForm rmf) {
+        initComponents();
+        control = c;
+        receptionMenuForm = rmf;
+        dbConnect = control.getDatabaseConnector();
+        control.getWindowList().add(this);
+
+        this.setLocationRelativeTo(null);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
+    }
+
+    public void initMotTable() {
+        if (!MOTReminders.isEmpty()) {
+            // TODO add your handling code here:
+            motModel = (DefaultTableModel) jTable1.getModel();
+            motModel.setRowCount(0);
+            System.out.println(MOTReminders.size() + "MARIME");
+            for (Customer customer : MOTReminders) {
+                Object[] row = {customer.getName(), customer.getVehicles().get(0).getReg_num(),
+                    motDate, customer};
+                motModel.addRow(row);
+            }
+        }
+    }
+
+    public void setValues() {
+        this.MOTReminders.addAll(MOTReminders);
+        this.motDate = motDate;
+        
+        initMotTable();
     }
 
     /**
@@ -140,15 +216,7 @@ public class MotRemindersForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
-        // TODO add your handling code here:
-        motModel = (DefaultTableModel) jTable1.getModel();
-        motModel.setRowCount(0);
-        System.out.println(MOTReminders.size() + "MARIME");
-        for(Customer customer : MOTReminders) {
-            Object[] row = { customer.getName(), customer.getVehicles().get(0).getReg_num(),
-            motDate, customer};
-            motModel.addRow(row);
-        }
+        initMotTable();
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
@@ -157,15 +225,14 @@ public class MotRemindersForm extends javax.swing.JFrame {
         DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
         date = new java.util.Date();
         String currDate = dateFormat.format(date);;
-        for(int rows = 0; rows < motModel.getRowCount(); rows++) {
+        for (int rows = 0; rows < motModel.getRowCount(); rows++) {
             Customer customer = (Customer) jTable1.getValueAt(rows, 3);
             //GETTING MISSING INVOICE DATA
-            
-            
+
             // TODO OPEN INVOICE IN PDF
             String dest = "resources/MOTReminder" + customer.getVehicles()
-                    .get(0).getReg_num() + ".pdf";       
-            PdfWriter writer = null; 
+                    .get(0).getReg_num() + ".pdf";
+            PdfWriter writer = null;
             try {
                 writer = new PdfWriter(dest);
             } catch (FileNotFoundException ex) {
@@ -173,7 +240,7 @@ public class MotRemindersForm extends javax.swing.JFrame {
             }
 
             // Creating a PdfDocument       
-            PdfDocument pdfDoc = new PdfDocument(writer); 
+            PdfDocument pdfDoc = new PdfDocument(writer);
 
             PdfFont bold = null;
             try {
@@ -183,7 +250,7 @@ public class MotRemindersForm extends javax.swing.JFrame {
             }
 
             // Adding a new page 
-            pdfDoc.addNewPage();               
+            pdfDoc.addNewPage();
 
             // Creating a Document
             Document document = new Document(pdfDoc);
@@ -194,7 +261,7 @@ public class MotRemindersForm extends javax.swing.JFrame {
                             .setMultipliedLeading(1)
                             .add(new Text(String.format("REMINDER - MoT TEST "
                                     + "DUE \n")).setFontSize(14))
-                            .add(currDate));    
+                            .add(currDate));
             //Adding adresses
             document.add(getAddressTable(customer.getName(),
                     customer.getAddress(), customer.getPostcode(),
@@ -209,7 +276,7 @@ public class MotRemindersForm extends javax.swing.JFrame {
                             .add(new Text("\n"))
                             .add(new Text(String.format("Vehicle Registraion No: "
                                     + "%s\n", customer.getVehicles().get(0).getReg_num())))
-                            .add(new Text(String.format("Renewal Test Date:  %s\n", 
+                            .add(new Text(String.format("Renewal Test Date:  %s\n",
                                     motDate)))
             );
             document.add(new Paragraph().add("\n"));
@@ -222,7 +289,7 @@ public class MotRemindersForm extends javax.swing.JFrame {
                     + "that you will use our services on this occasion "
                     + "in order to have the necessary test carried "
                     + "out on your vehicle. \n")));
-            
+
             //Ending
             document.add(new Paragraph()
                     .add(new Text("\n"))
@@ -234,29 +301,29 @@ public class MotRemindersForm extends javax.swing.JFrame {
             document.close();
 
             System.out.println("PDF Created");
-            
+
             try {
 
-		File pdfFile = new File(dest);
-		if (pdfFile.exists()) {
+                File pdfFile = new File(dest);
+                if (pdfFile.exists()) {
 
-			if (Desktop.isDesktopSupported()) {
-				Desktop.getDesktop().open(pdfFile);
-			} else {
-				System.out.println("Awt Desktop is not supported!");
-			}
+                    if (Desktop.isDesktopSupported()) {
+                        Desktop.getDesktop().open(pdfFile);
+                    } else {
+                        System.out.println("Awt Desktop is not supported!");
+                    }
 
-		} else {
-			System.out.println("File is not exists!");
-		}
+                } else {
+                    System.out.println("File is not exists!");
+                }
 
-		System.out.println("Done");
+                System.out.println("Done");
 
             } catch (Exception ex) {
-                  ex.printStackTrace();
+                ex.printStackTrace();
             }
         }
-            //UPDATE MOT DATE INSIDE DB TO PREVENT FURTHER REMINDERS TODAY
+        //UPDATE MOT DATE INSIDE DB TO PREVENT FURTHER REMINDERS TODAY
 //            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 //            LocalDate tommorow = LocalDate.parse(
 //                    currDate, formatter);
@@ -275,7 +342,7 @@ public class MotRemindersForm extends javax.swing.JFrame {
 //            catch (Exception exc) {
 //                exc.printStackTrace();
 //            }
-        
+
     }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
