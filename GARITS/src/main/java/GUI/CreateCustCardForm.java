@@ -9,6 +9,7 @@ import Account.AccountHolder;
 import Account.Customer;
 import Account.FixedDiscount;
 import Account.FlexibleDiscount;
+import Account.FlexibleDiscountContainer;
 import Account.VariableDiscount;
 import Account.Vehicle;
 import Core.*;
@@ -34,7 +35,9 @@ public class CreateCustCardForm extends javax.swing.JFrame {
     Control control = null;
     FranchiseeMenuForm franchiseeMenuForm = null;
     AddVehicleForm addVehicleForm = null;
+    AddFlexibleDiscountForm addFlexibleDiscountForm = null;
     List<Vehicle> vehicleList = null;
+    List<FlexibleDiscountContainer> fdContainerList = null;
     Customer cust = null;
     AccountHolder accHolder = null;
 
@@ -52,6 +55,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
         vehicleList = new ArrayList<Vehicle>();
+        fdContainerList = new ArrayList<>();
         phone_txt.setDocument(new LengthRestrictedDocument(11));
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
 
@@ -74,6 +78,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         control.getWindowList().add(this);
 
         vehicleList = new ArrayList<Vehicle>();
+        fdContainerList = new ArrayList<>();
         phone_txt.setDocument(new LengthRestrictedDocument(11));
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
 
@@ -97,6 +102,14 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
     public JComboBox<String> getVehicleComboBox() {
         return vehicle_cmbo;
+    }
+
+    public List<FlexibleDiscountContainer> getFDContainerList() {
+        return fdContainerList;
+    }
+
+    public JComboBox<String> getFDContainerComboBox() {
+        return flexible_discount_cmbo;
     }
 
     /**
@@ -472,7 +485,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
                         }
                         if (discountType_cmbo.getSelectedItem().equals("Flexible Discount")) {
-                            accHolder.setDiscount_plan(new FlexibleDiscount());
+                            accHolder.setDiscount_plan(new FlexibleDiscount(fdContainerList));
                         }
 
                         control.AddCustomer(accHolder, vehicleList);
@@ -520,11 +533,29 @@ public class CreateCustCardForm extends javax.swing.JFrame {
     }//GEN-LAST:event_contact_txtActionPerformed
 
     private void flexible_discount_add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flexible_discount_add_btnActionPerformed
-        // TODO add your handling code here:
+        addFlexibleDiscountForm = new AddFlexibleDiscountForm(control, this);
+        addFlexibleDiscountForm.setVisible(true);
     }//GEN-LAST:event_flexible_discount_add_btnActionPerformed
 
     private void flexible_discount_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flexible_discount_delete_btnActionPerformed
-        // TODO add your handling code here:
+        if (flexible_discount_cmbo.getSelectedItem() != null) {
+            String[] flexibleDiscountString = null;
+            flexibleDiscountString = String.valueOf(flexible_discount_cmbo.getSelectedItem()).split(",");
+            flexible_discount_cmbo.removeItem(flexible_discount_cmbo.getSelectedItem());
+
+            if (fdContainerList != null) {
+                for (int i = 0; i < fdContainerList.size(); i++) {
+                    if (fdContainerList.get(i).getStartPrice() == Integer.parseInt(flexibleDiscountString[0])
+                            && fdContainerList.get(i).getEndPrice() == Integer.parseInt(flexibleDiscountString[1])
+                            && fdContainerList.get(i).getPercentage() == Float.parseFloat(flexibleDiscountString[2])) {
+                        fdContainerList.remove(i);
+                        System.out.println("Deleted");
+                    }
+                }
+            }
+
+            flexible_discount_cmbo.setSelectedItem(null);
+        }
     }//GEN-LAST:event_flexible_discount_delete_btnActionPerformed
 
     public void reset() {
@@ -537,10 +568,12 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         discountPercent_txt.setText("");
 
         vehicle_cmbo.removeAllItems();
+        flexible_discount_cmbo.removeAllItems();
 
         customerType_cmbo.setSelectedItem("Casual");
 
         vehicleList.clear();
+        fdContainerList.clear();
         cust = null;
         accHolder = null;
     }
@@ -682,6 +715,10 @@ public class CreateCustCardForm extends javax.swing.JFrame {
                     individualTask_txt.setVisible(false);
                     spareParts_txt.setVisible(false);
                     payLater_cmbo.setVisible(false);
+                    
+                    flexible_discount_cmbo.setVisible(false);
+                    flexible_discount_add_btn.setVisible(false);
+                    flexible_discount_delete_btn.setVisible(false);
                 }
             }
         }
@@ -721,6 +758,22 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
                     payLater_lbl.setLocation(395, 253);
                     payLater_cmbo.setLocation(532, 250);
+                }
+
+                if (item == "Flexible Discount") {
+                    flexible_discount_add_btn.setLocation(532, 208);
+                    flexible_discount_delete_btn.setLocation(612, 208);
+                    flexible_discount_cmbo.setLocation(532, 245);
+                    flexible_discount_cmbo.setVisible(true);
+                    flexible_discount_add_btn.setVisible(true);
+                    flexible_discount_delete_btn.setVisible(true);
+                    
+                    payLater_lbl.setLocation(395, 293);
+                    payLater_cmbo.setLocation(532, 290);
+                } else {
+                    flexible_discount_cmbo.setVisible(false);
+                    flexible_discount_add_btn.setVisible(false);
+                    flexible_discount_delete_btn.setVisible(false);
                 }
             }
 

@@ -270,6 +270,7 @@ public class ReportForm extends javax.swing.JFrame {
 
     private void sort_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_sort_btnActionPerformed
         try {
+            checkForDirectory();
             if (filter_cmbo.getSelectedItem() == "Spare Parts") {
                 File odir = new File("Reports/Spare Parts");
                 listFilesFromDirectory(odir);
@@ -411,6 +412,15 @@ public class ReportForm extends javax.swing.JFrame {
 
                 }
 
+            }
+            if (filter_cmbo.getSelectedItem().equals("Spare Parts")) {
+                try {
+                        GenerateStock generateStock = new GenerateStock("", new Date(), control.GenerateStock());
+                        File odir = new File("Reports/Spare Parts");
+                        listFilesFromDirectory(odir);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -604,6 +614,15 @@ public class ReportForm extends javax.swing.JFrame {
 
                 }
 
+            }
+            
+            if (filter_cmbo.getSelectedItem().equals("Spare Parts")) {
+                if (!f.exists()) {
+                    f.mkdir();
+                }
+                
+                File vdir = new File("Reports/Spare Parts");
+                vdir.mkdir();
             }
         } catch (Exception e) {
             e.printStackTrace();

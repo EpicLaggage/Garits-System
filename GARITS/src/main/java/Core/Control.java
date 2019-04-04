@@ -24,20 +24,20 @@ public class Control {
 
     //GUI Forms
     LoginForm loginForm;
-    
+
     AdminMenuForm adminMenuForm;
     ForepersonMenuForm fpMenuForm;
     FranchiseeMenuForm franchiseeMenuForm;
     MechanicMenuForm mechanicMenuForm;
     ReceptionistMenuForm receptionMenuForm;
-    
+
     List<JFrame> windowList;
-    
+
     Thread getTime;
 
     public Control() {
         dbConnect = new DBConnect();
-        
+
         windowList = new ArrayList<>();
 
         /*adminMenuForm = new AdminMenuForm(this);
@@ -45,13 +45,10 @@ public class Control {
         franchiseeMenuForm = new FranchiseeMenuForm(this);
         mechanicMenuForm = new MechanicMenuForm(this);
         receptionMenuForm = new ReceptionistMenuForm(this);*/
-        
         //loginForm = new LoginForm(this);
-       // loginForm.setVisible(true);
-
+        // loginForm.setVisible(true);
         staff = new Staff("Jack", "1", "Franchisee", "Jack");
 
-        
         OpenMenu();
     }
 
@@ -123,7 +120,7 @@ public class Control {
                         PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO vehicle (reg_no,car_make,car_model,engine_serial,chassis_no,colour,purchase_date,customer_id) VALUES "
                                 + "(?,?,?,?,?,?,?,?)");
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                         Date purchase_date = dateFormat.parse(vList.get(i).getPurchase_date());
                         java.sql.Date sqlDate = new java.sql.Date(purchase_date.getTime());
 
@@ -301,6 +298,7 @@ public class Control {
             }
             if (cust.getDiscount_plan() instanceof FlexibleDiscount) {
                 FlexibleDiscount fd = (FlexibleDiscount) cust.getDiscount_plan();
+
                 ps3.setString(1, "Flexible Discount");
                 ps3.setInt(2, id);
                 ps3.setInt(2, id);
@@ -311,27 +309,35 @@ public class Control {
                 }
                 dbConnect.executeWriteQuery(ps3);
                 ps3.close();
+                ps4.close();
 
-                ps4.setString(1, "Flexible Discount");
-                ps4.setInt(2, id);
-                ResultSet dRS = dbConnect.executeGetIDQuery(ps4);
+                for (int i = 0; i < fd.getFDContainer().size(); i++) {
+                    ps4 = dbConnect.setIDPreparedStatement(dbConnect.connect(), "INSERT INTO discount (discount_type,customer_id) VALUES (?,?)");
+                    ps4.setString(1, "Flexible Discount");
+                    ps4.setInt(2, id);
+                    ResultSet dRS = dbConnect.executeGetIDQuery(ps4);
 
-                if (dRS != null) {
-                    while (dRS.next()) {
-                        discountID = dRS.getInt(1);
+                    if (dRS != null) {
+                        while (dRS.next()) {
+                            discountID = dRS.getInt(1);
+                        }
+                        ps4.close();
                     }
-                    ps4.close();
+
+                    PreparedStatement ps5 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO flexible_discount (discount_id,discount_type,customer_id,discount_value,start_price,end_price,current_month) VALUES (?,?,?,?,?,?,?)");
+                    ps5.setInt(1, discountID);
+                    ps5.setString(2, "Flexible Discount");
+                    ps5.setInt(3, id);
+                    ps5.setFloat(4, fd.getFDContainer().get(i).getPercentage());
+                    ps5.setFloat(5, fd.getFDContainer().get(i).getStartPrice());
+                    ps5.setFloat(6, fd.getFDContainer().get(i).getEndPrice());
+                    ps5.setDate(7, date);
+
+                    dbConnect.executeWriteQuery(ps5);
+
+                    ps5.close();
                 }
 
-                PreparedStatement ps5 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO flexible_discount (discount_id,discount_type,customer_id,discount_value,current_month) VALUES (?,?,?,?,?)");
-                ps5.setInt(1, discountID);
-                ps5.setString(2, "Flexible Discount");
-                ps5.setInt(3, id);
-                ps5.setFloat(4, 0);
-                ps5.setDate(5, date);
-
-                dbConnect.executeWriteQuery(ps5);
-                ps5.close();
             }
         } catch (Exception exc) {
             exc.printStackTrace();
@@ -614,7 +620,7 @@ public class Control {
                     FlexibleDiscount fd = (FlexibleDiscount) acc.getDiscount_plan();
                     ps5.setString(1, "Flexible Discount");
                     ps5.setInt(2, acc.getCustomerId());
-                    ps5.setInt(2, acc.getCustomerId());
+
                     if (acc.getPay_later()) {
                         ps5.setInt(3, 1);
                     } else {
@@ -623,31 +629,39 @@ public class Control {
                     dbConnect.executeWriteQuery(ps5);
                     ps5.close();
 
-                    ps6.setString(1, "Flexible Discount");
-                    ps6.setInt(2, acc.getCustomerId());
-                    ResultSet dRS = dbConnect.executeGetIDQuery(ps6);
+                    ps6.close();
 
-                    if (dRS != null) {
-                        while (dRS.next()) {
-                            discountID = dRS.getInt(1);
+                    for (int i = 0; i < fd.getFDContainer().size(); i++) {
+                        ps6 = dbConnect.setIDPreparedStatement(dbConnect.connect(), "INSERT INTO discount (discount_type,customer_id) VALUES (?,?)");
+                        ps6.setString(1, "Flexible Discount");
+                        ps6.setInt(2, acc.getCustomerId());
+                        ResultSet dRS = dbConnect.executeGetIDQuery(ps6);
+
+                        if (dRS != null) {
+                            while (dRS.next()) {
+                                discountID = dRS.getInt(1);
+                            }
+                            ps6.close();
                         }
-                        ps6.close();
+
+                        PreparedStatement ps7 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO flexible_discount (discount_id,discount_type,customer_id,discount_value,start_price,end_price,current_month) VALUES (?,?,?,?,?,?,?)");
+                        ps7.setInt(1, discountID);
+                        ps7.setString(2, "Flexible Discount");
+                        ps7.setInt(3, acc.getCustomerId());
+                        ps7.setFloat(4, fd.getFDContainer().get(i).getPercentage());
+                        ps7.setFloat(5, fd.getFDContainer().get(i).getStartPrice());
+                        ps7.setFloat(6, fd.getFDContainer().get(i).getEndPrice());
+
+                        if (oldDate != null) {
+                            ps7.setDate(7, oldDate);
+                        } else {
+                            ps7.setDate(7, date);
+                        }
+
+                        dbConnect.executeWriteQuery(ps7);
+                        ps7.close();
                     }
 
-                    PreparedStatement ps7 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO flexible_discount (discount_id,discount_type,customer_id,discount_value,current_month) VALUES (?,?,?,?,?)");
-                    ps7.setInt(1, discountID);
-                    ps7.setString(2, "Flexible Discount");
-                    ps7.setInt(3, acc.getCustomerId());
-                    ps7.setFloat(4, 0);
-
-                    if (oldDate != null) {
-                        ps7.setDate(5, oldDate);
-                    } else {
-                        ps7.setDate(5, date);
-                    }
-
-                    dbConnect.executeWriteQuery(ps7);
-                    ps7.close();
                 }
             }
         } catch (Exception e) {
@@ -734,17 +748,23 @@ public class Control {
 
                             acc.setDiscount_plan(vd);
                             dRs.close();
-
-                            dRs = dbConnect.read("SELECT * FROM variable_discount WHERE customer_id=id");
-                            acc.setDiscount_plan(new VariableDiscount(dRs.getFloat("discount_percentage")));
                         }
                         if (aRs.getString("discount_type") == "Flexible Discount") {
+                            List<FlexibleDiscountContainer> fdContainerList = new ArrayList<>();
+                            String currentMonth = "";
+
                             PreparedStatement ps3 = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM flexible_discount WHERE customer_id=?");
                             ps3.setInt(1, id);
 
                             dRs = dbConnect.executeReadQuery(ps3);
 
-                            acc.setDiscount_plan(new FixedDiscount(dRs.getFloat("discount_value")));
+                            while (dRs.next()) {
+                                fdContainerList.add(new FlexibleDiscountContainer(dRs.getFloat("discount_value"), dRs.getInt("start_price"), dRs.getInt("end_price"), dRs.getInt("discount_id")));
+                                currentMonth = dRs.getString("current_month");
+
+                            }
+
+                            acc.setDiscount_plan(new FlexibleDiscount(fdContainerList, currentMonth));
                             dRs.close();
                         }
 
@@ -858,15 +878,21 @@ public class Control {
                                 }
 
                                 if (discount.equals("Flexible Discount")) {
+                                    List<FlexibleDiscountContainer> fdContainerList = new ArrayList<>();
+                                    String currentMonth = "";
+
                                     PreparedStatement ps3 = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM flexible_discount WHERE customer_id=?");
                                     ps3.setInt(1, id);
 
                                     dRs = dbConnect.executeReadQuery(ps3);
 
                                     while (dRs.next()) {
-                                        acc.setDiscount_plan(new FixedDiscount(dRs.getFloat("discount_value")));
+                                        fdContainerList.add(new FlexibleDiscountContainer(dRs.getFloat("discount_value"), dRs.getInt("start_price"), dRs.getInt("end_price"), dRs.getInt("discount_id")));
+                                        currentMonth = dRs.getString("current_month");
+
                                     }
 
+                                    acc.setDiscount_plan(new FlexibleDiscount(fdContainerList, currentMonth));
                                     dRs.close();
                                 }
                             }
@@ -1029,9 +1055,25 @@ public class Control {
         throw new UnsupportedOperationException();
     }
 
-    public void GenerateStock() {
-        // TODO - implement Control.GenerateStock
-        throw new UnsupportedOperationException();
+    public List<Part> GenerateStock() {
+        List<Part> partsList = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM parts");
+            ResultSet rs = dbConnect.executeReadQuery(ps);
+            
+            if (rs != null) {
+                while (rs.next()) {
+                    partsList.add(new Part(rs.getString("part_name"), rs.getString("part_manufacturer"), rs.getString("vehicle_type"), rs.getInt("year"), rs.getFloat("part_price"), rs.getInt("part_quantity"), rs.getInt("part_threshold")));
+                }
+            }
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        
+        return partsList;
     }
 
     public void DisplayAlerts() {
@@ -1055,9 +1097,14 @@ public class Control {
 
     //logouts out
     public void logout() {
+        if (getTime != null) {
+            getTime.stop();
+            getTime = null;
+        }
+
         loginForm = new LoginForm(this);
         loginForm.setVisible(true);
-        
+
         if (staff != null) {
             staff = null;
         }
@@ -1077,8 +1124,11 @@ public class Control {
                 break;
             case "Franchisee":
                 //Starting thread which checks for late payments
-                getTime = new DetectLatePayment(this);
-                getTime.start();
+                if (getTime == null) {
+                    getTime = new DetectLatePayment(this);
+                    getTime.start();
+                }
+
                 franchiseeMenuForm = new FranchiseeMenuForm(this);
                 franchiseeMenuForm.setVisible(true);
                 break;
@@ -1098,7 +1148,7 @@ public class Control {
                 break;
         }
     }
-    
+
     public void disposeForms() {
         loginForm.dispose();
         adminMenuForm.dispose();
@@ -1120,54 +1170,54 @@ public class Control {
     public DBConnect getDatabaseConnector() {
         return dbConnect;
     }
-    
+
     public void terminateThread() {
-        
+
         if (windowList.isEmpty()) {
             getTime.stop();
-        }
-        else {
+        } else {
             boolean exists = false;
             for (JFrame frame : windowList) {
                 if (frame.isDisplayable()) {
                     //System.out.println("Not Disposed");
                     exists = true;
-                }
-                else {
+                } else {
                     //System.out.println("Disposed");
                 }
             }
-            
+
             if (!exists) {
-                getTime.stop();
+                if (getTime != null) {
+                    getTime.stop();
+                }
             }
         }
     }
-    
+
     public void setAdminMenuForm(AdminMenuForm amf) {
         adminMenuForm = amf;
     }
-    
+
     public void setForepersonMenuForm(ForepersonMenuForm fpmf) {
         fpMenuForm = fpmf;
     }
-    
+
     public void setFranchiseeMenuForm(FranchiseeMenuForm fmf) {
         franchiseeMenuForm = fmf;
     }
-    
+
     public void setReceptionMenuForm(ReceptionistMenuForm rmf) {
         receptionMenuForm = rmf;
     }
-    
+
     public void setMechanicMenuForm(MechanicMenuForm mmf) {
         mechanicMenuForm = mmf;
     }
-    
+
     public void setLoginForm(LoginForm lf) {
         loginForm = lf;
     }
-    
+
     public List<JFrame> getWindowList() {
         return windowList;
     }

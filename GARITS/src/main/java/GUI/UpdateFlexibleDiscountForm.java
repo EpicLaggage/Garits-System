@@ -17,7 +17,7 @@ import javax.swing.text.PlainDocument;
  *
  * @author jly09
  */
-public class AddFlexibleDiscountForm extends javax.swing.JFrame {
+public class UpdateFlexibleDiscountForm extends javax.swing.JFrame {
 
     Control control = null;
     FlexibleDiscountContainer fdContainer = null;
@@ -27,54 +27,48 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
     /**
      * Creates new form MenuForm
      */
-    public AddFlexibleDiscountForm() {
+    public UpdateFlexibleDiscountForm() {
         initComponents();
-
-        startPrice_txt.setDocument(new LengthRestrictedDocument(8));
 
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    public AddFlexibleDiscountForm(Control c) {
+    public UpdateFlexibleDiscountForm(Control c) {
         initComponents();
 
         control = c;
         control.getWindowList().add(this);
 
-        startPrice_txt.setDocument(new LengthRestrictedDocument(8));
-
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    public AddFlexibleDiscountForm(CreateCustCardForm cForm) {
+    public UpdateFlexibleDiscountForm(CreateCustCardForm cForm) {
         initComponents();
 
         custForm = cForm;
     }
 
-    public AddFlexibleDiscountForm(Control c, CreateCustCardForm cForm) {
+    public UpdateFlexibleDiscountForm(Control c, CreateCustCardForm cForm) {
         initComponents();
 
         control = c;
         custForm = cForm;
 
         control = c;
-        startPrice_txt.setDocument(new LengthRestrictedDocument(8));
 
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
 
-    public AddFlexibleDiscountForm(Control c, UpdateCustomerForm cForm) {
+    public UpdateFlexibleDiscountForm(Control c, UpdateCustomerForm cForm) {
         initComponents();
 
         control = c;
         updateCustForm = cForm;
 
         control = c;
-        startPrice_txt.setDocument(new LengthRestrictedDocument(8));
 
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -183,7 +177,6 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(percent_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 129, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(make_lbl2)
                                         .addGap(26, 26, 26)))))))
                 .addContainerGap())
@@ -223,7 +216,10 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_add_btnActionPerformed
-        fdContainer = new FlexibleDiscountContainer();
+        if (fdContainer == null) {
+            fdContainer = new FlexibleDiscountContainer();
+        }
+        
         if (startPrice_txt.getText() != ""
                 && endPrice_txt.getText() != ""
                 && percent_txt.getText() != "") {
@@ -231,7 +227,7 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
             fdContainer.setStartPrice(Integer.parseInt(startPrice_txt.getText()));
             fdContainer.setEndPrice(Integer.parseInt(endPrice_txt.getText()));
             fdContainer.setPercentage(Float.parseFloat(percent_txt.getText()));
-            
+
             if (custForm != null && fdContainer != null) {
                 custForm.getFDContainerList().add(fdContainer);
                 custForm.getFDContainerComboBox().addItem(fdContainer.getStartPrice() + "," + fdContainer.getEndPrice() + "," + fdContainer.getPercentage());
@@ -239,8 +235,7 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
             }
 
             if (updateCustForm != null && fdContainer != null) {
-                updateCustForm.getFDContainerList().add(fdContainer);
-                updateCustForm.getFDContainerComboBox().addItem(fdContainer.getStartPrice() + "," + fdContainer.getEndPrice() + "," + fdContainer.getPercentage());
+                updateCustForm.updateFixedDiscount(fdContainer);
                 this.dispose();
             }
 
@@ -257,9 +252,22 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
     public void setVisible(boolean visible) {
         super.setVisible(visible);
 
-        if (visible) {
-            resetText();
-        }
+        
+    }
+
+    public void setValues(FlexibleDiscountContainer fdc) {
+        fdContainer = fdc;
+
+        System.out.println(String.valueOf(fdContainer.getStartPrice()));
+        System.out.println(fdContainer.getEndPrice());
+        System.out.println(fdContainer.getPercentage());
+
+        startPrice_txt.setText(String.valueOf(fdContainer.getStartPrice()));
+        endPrice_txt.setText(String.valueOf(fdContainer.getEndPrice()));
+        percent_txt.setText(String.valueOf(fdContainer.getPercentage()));
+        
+        startPrice_txt.validate();
+        startPrice_txt.repaint();
     }
 
     public FlexibleDiscountContainer getFlexibleDiscountContainer() {
@@ -291,14 +299,78 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(AddFlexibleDiscountForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateFlexibleDiscountForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(AddFlexibleDiscountForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateFlexibleDiscountForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(AddFlexibleDiscountForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateFlexibleDiscountForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(AddFlexibleDiscountForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(UpdateFlexibleDiscountForm.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
+        //</editor-fold>
         //</editor-fold>
         //</editor-fold>
         //</editor-fold>
@@ -367,7 +439,7 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new AddFlexibleDiscountForm().setVisible(true);
+                new UpdateFlexibleDiscountForm().setVisible(true);
             }
         });
     }

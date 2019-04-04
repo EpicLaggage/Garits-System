@@ -181,7 +181,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
         purchaseDate_lbl.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         purchaseDate_lbl.setText("Purchase Date");
 
-        purchaseDate_txt.setToolTipText("Vehicle purchase date (dd/mm/yyyy)");
+        purchaseDate_txt.setToolTipText("Vehicle purchase date (yyyy-mm-dd)");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -283,7 +283,8 @@ public class AddVehicleForm extends javax.swing.JFrame {
                     .addComponent(purchaseDate_txt, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(purchaseDate_lbl))
                 .addGap(40, 40, 40)
-                .addComponent(add_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(add_btn, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         pack();
@@ -299,7 +300,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
                 && colour_txt.getText() != "") {
             
             Date date = null;
-            SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
             try {
                 date = dateFormat.parse(purchaseDate_txt.getText());
@@ -338,7 +339,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
     }//GEN-LAST:event_add_btnActionPerformed
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
-        this.setVisible(false);
+        this.dispose();
         vehicle = null;
     }//GEN-LAST:event_back_btnActionPerformed
 

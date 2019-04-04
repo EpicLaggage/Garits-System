@@ -297,12 +297,12 @@ public class UpdateVehicleForm extends javax.swing.JFrame {
                 if (custForm != null && vehicle != null) {
                     custForm.getVehicleList().add(vehicle);
                     custForm.getVehicleComboBox().addItem(vehicle.getReg_num() + "," + vehicle.getMake() + "," + vehicle.getModel());
-                    this.setVisible(false);
+                    this.dispose();
                 }
 
                 if (updateCustForm != null && vehicle != null) {
                     updateCustForm.updateVehicle(vehicle);
-                    this.setVisible(false);
+                    this.dispose();
                 }
             }
 

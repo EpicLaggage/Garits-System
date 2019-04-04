@@ -9,6 +9,7 @@ import Account.AccountHolder;
 import Account.Customer;
 import Account.FixedDiscount;
 import Account.FlexibleDiscount;
+import Account.FlexibleDiscountContainer;
 import Account.VariableDiscount;
 import Account.Vehicle;
 import Core.*;
@@ -32,11 +33,15 @@ import javax.swing.text.PlainDocument;
 public class UpdateCustomerForm extends javax.swing.JFrame {
 
     Control control;
-    CustomerForm customerForm = null;
-    AddVehicleForm addVehicleForm = null;
-    UpdateVehicleForm updateVehicleForm = null;
-    List<Vehicle> vehicleList = null;
+    CustomerForm customerForm;
+    AddVehicleForm addVehicleForm;
+    UpdateVehicleForm updateVehicleForm;
+    List<Vehicle> vehicleList;
+    AddFlexibleDiscountForm addFlexibleDiscountForm;
+    UpdateFlexibleDiscountForm updateFlexibleDiscountForm;
+    List<FlexibleDiscountContainer> fdContainerList;
     AccountHolder accHolder;
+    String currentMonth;
 
     /**
      * Creates new form MenuForm
@@ -46,8 +51,6 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
         this.setSize(new Dimension(780, 730));
         this.setPreferredSize(new Dimension(780, 730));
 
-        addVehicleForm = new AddVehicleForm(control, this);
-        updateVehicleForm = new UpdateVehicleForm(control, this);
         customerType_cmbo.addItemListener(new CustomerTypeItemListener());
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
@@ -68,11 +71,9 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
 
         control = c;
         customerForm = cf;
-        
+
         control.getWindowList().add(this);
-        
-        addVehicleForm = new AddVehicleForm(control, this);
-        updateVehicleForm = new UpdateVehicleForm(control, this);
+
         vehicleList = new ArrayList<Vehicle>();
 
         phone_txt.setDocument(new LengthRestrictedDocument(11));
@@ -81,7 +82,7 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
-    
+
     @Override
     public void dispose() {
         super.dispose();
@@ -102,6 +103,15 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
 
     public JComboBox<String> getVehicleComboBox() {
         return vehicle_cmbo;
+    }
+
+    public List<FlexibleDiscountContainer> getFDContainerList() {
+        return fdContainerList;
+    }
+
+    public JComboBox<String> getFDContainerComboBox() {
+        //return flexible_discount_cmbo;
+        return null;
     }
 
     /**
@@ -146,6 +156,10 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
         vehicleDelete_btn = new javax.swing.JButton();
         name_txt = new javax.swing.JTextField();
         name_lbl = new javax.swing.JLabel();
+        flexible_discount_delete_btn = new javax.swing.JButton();
+        flexible_discount_add_btn = new javax.swing.JButton();
+        flexible_discount_cmbo = new javax.swing.JComboBox<>();
+        flexible_discount_update_btn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(null);
@@ -340,6 +354,36 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
         getContentPane().add(name_lbl);
         name_lbl.setBounds(52, 209, 45, 22);
 
+        flexible_discount_delete_btn.setText("Delete");
+        flexible_discount_delete_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                flexible_discount_delete_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(flexible_discount_delete_btn);
+        flexible_discount_delete_btn.setBounds(610, 410, 70, 30);
+
+        flexible_discount_add_btn.setText("Add");
+        flexible_discount_add_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                flexible_discount_add_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(flexible_discount_add_btn);
+        flexible_discount_add_btn.setBounds(530, 410, 60, 30);
+
+        getContentPane().add(flexible_discount_cmbo);
+        flexible_discount_cmbo.setBounds(530, 450, 150, 27);
+
+        flexible_discount_update_btn.setText("Update");
+        flexible_discount_update_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                flexible_discount_update_btnActionPerformed(evt);
+            }
+        });
+        getContentPane().add(flexible_discount_update_btn);
+        flexible_discount_update_btn.setBounds(600, 490, 80, 25);
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
@@ -360,13 +404,14 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_postcode_txtActionPerformed
 
     private void vehicleAdd_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleAdd_btnActionPerformed
-        if (addVehicleForm != null) {
-            addVehicleForm.setVisible(true);
-        }
+        addVehicleForm = new AddVehicleForm(control, this);
+        addVehicleForm.setVisible(true);
     }//GEN-LAST:event_vehicleAdd_btnActionPerformed
 
     private void vehicleUpdate_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleUpdate_btnActionPerformed
         if (vehicle_cmbo.getSelectedItem() != null) {
+            updateVehicleForm = new UpdateVehicleForm(control, this);
+
             String[] vehicleString = String.valueOf(vehicle_cmbo.getSelectedItem()).split(",");
             Vehicle v = null;
             if (vehicle_cmbo.getSelectedItem() != null) {
@@ -407,13 +452,18 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
                         accHolder.setDiscount_plan(new FixedDiscount(Float.parseFloat(discountPercent_txt.getText())));
                     }
                     if (discountType_cmbo.getSelectedItem().equals("Variable Discount")) {
-                        VariableDiscount vd = new VariableDiscount(Float.parseFloat(discountPercent_txt.getText()), Float.parseFloat(motPercent_txt.getText())
-                        , Float.parseFloat(individualTask_txt.getText()), Float.parseFloat(spareParts_txt.getText()));
+                        VariableDiscount vd = new VariableDiscount(Float.parseFloat(discountPercent_txt.getText()), Float.parseFloat(motPercent_txt.getText()),
+                                Float.parseFloat(individualTask_txt.getText()), Float.parseFloat(spareParts_txt.getText()));
                         accHolder.setDiscount_plan(vd);
-                        
+
                     }
                     if (discountType_cmbo.getSelectedItem().equals("Flexible Discount")) {
-                        accHolder.setDiscount_plan(new FlexibleDiscount());
+                        if (currentMonth != "") {
+                            accHolder.setDiscount_plan(new FlexibleDiscount(fdContainerList, currentMonth));
+                        } else {
+                            accHolder.setDiscount_plan(new FlexibleDiscount(fdContainerList));
+                        }
+
                     }
 
                     if (payLater_cmbo.getSelectedItem() == "Yes") {
@@ -428,7 +478,7 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
 
                 try {
                     control.UpdateCustomer(accHolder);
-                    this.setVisible(false);
+                    this.dispose();
                     customerForm.updateTable();
                     JOptionPane.showMessageDialog(new JFrame("Updated Customer"), "Customer successfully updated.");
                 } catch (Exception e) {
@@ -443,7 +493,7 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
     }//GEN-LAST:event_update_btnActionPerformed
 
     private void cancel_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_btnActionPerformed
-        this.setVisible(false);
+        this.dispose();
     }//GEN-LAST:event_cancel_btnActionPerformed
 
     private void vehicleDelete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicleDelete_btnActionPerformed
@@ -465,6 +515,56 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_individualTask_txtActionPerformed
 
+    private void flexible_discount_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flexible_discount_delete_btnActionPerformed
+        if (flexible_discount_cmbo.getSelectedItem() != null) {
+            String[] flexibleDiscountString = null;
+            flexibleDiscountString = String.valueOf(flexible_discount_cmbo.getSelectedItem()).split(",");
+            flexible_discount_cmbo.removeItem(flexible_discount_cmbo.getSelectedItem());
+
+            if (fdContainerList != null) {
+                for (int i = 0; i < fdContainerList.size(); i++) {
+                    if (fdContainerList.get(i).getStartPrice() == Integer.parseInt(flexibleDiscountString[0])
+                            && fdContainerList.get(i).getEndPrice() == Integer.parseInt(flexibleDiscountString[1])
+                            && fdContainerList.get(i).getPercentage() == Float.parseFloat(flexibleDiscountString[2])) {
+                        fdContainerList.remove(i);
+                    }
+                }
+            }
+
+            flexible_discount_cmbo.setSelectedItem(null);
+        }
+    }//GEN-LAST:event_flexible_discount_delete_btnActionPerformed
+
+    private void flexible_discount_add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flexible_discount_add_btnActionPerformed
+        addFlexibleDiscountForm = new AddFlexibleDiscountForm(control, this);
+        addFlexibleDiscountForm.setVisible(true);
+    }//GEN-LAST:event_flexible_discount_add_btnActionPerformed
+
+    private void flexible_discount_update_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_flexible_discount_update_btnActionPerformed
+        if (flexible_discount_cmbo.getSelectedItem() != null) {
+            updateFlexibleDiscountForm = new UpdateFlexibleDiscountForm(control, this);
+
+            String[] flexibleDiscountString = String.valueOf(flexible_discount_cmbo.getSelectedItem()).split(",");
+            FlexibleDiscountContainer fdContainer = null;
+
+            for (int i = 0; i < fdContainerList.size(); i++) {
+                if (fdContainerList.get(i).getStartPrice() == Integer.parseInt(flexibleDiscountString[0])
+                        && fdContainerList.get(i).getEndPrice() == Integer.parseInt(flexibleDiscountString[1])
+                        && fdContainerList.get(i).getPercentage() == Float.parseFloat(flexibleDiscountString[2])) {
+                    fdContainer = fdContainerList.get(i);
+                }
+            }
+
+            if (updateFlexibleDiscountForm != null) {
+                if (fdContainer != null) {
+                    updateFlexibleDiscountForm.setValues(fdContainer);
+                }
+                updateFlexibleDiscountForm.setVisible(true);
+            }
+
+        }
+    }//GEN-LAST:event_flexible_discount_update_btnActionPerformed
+
     public void reset() {
         name_txt.setText("");
         email_txt.setText("");
@@ -481,18 +581,6 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
         //vehicleList.clear();
         vehicleList = new ArrayList<>();
         accHolder = null;
-    }
-
-    @Override
-    public void setVisible(boolean v) {
-        super.setVisible(v);
-
-        if (v) {
-
-        } else {
-            addVehicleForm.setVisible(false);
-            updateVehicleForm.setVisible(false);
-        }
     }
 
     public void setValues(AccountHolder acc) {
@@ -517,9 +605,14 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
             }
 
             if (acc.getDiscount_plan() instanceof FlexibleDiscount) {
-                FlexibleDiscount fd = (FlexibleDiscount) acc.getDiscount_plan();
+                FlexibleDiscount fd = (FlexibleDiscount) accHolder.getDiscount_plan();
+                fdContainerList = fd.getFDContainer();
+                currentMonth = fd.getMonth();
                 discountType_cmbo.setSelectedItem("Flexible Discount");
-                discountPercent_txt.setText(String.valueOf(fd.getPercentage()));
+
+                for (int i = 0; i < fd.getFDContainer().size(); i++) {
+                    flexible_discount_cmbo.addItem(fdContainerList.get(i).getStartPrice() + "," + fdContainerList.get(i).getEndPrice() + "," + fdContainerList.get(i).getPercentage());
+                }
             }
 
             if (acc.getDiscount_plan() instanceof VariableDiscount) {
@@ -570,6 +663,24 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
             vehicle_cmbo.addItem(vehicleList.get(i).getReg_num() + "," + vehicleList.get(i).getMake() + "," + vehicleList.get(i).getModel());
         }
 
+    }
+
+    public void updateFixedDiscount(FlexibleDiscountContainer fdContainer) {
+        for (int i = 0; i < fdContainerList.size(); i++) {
+            System.out.println(fdContainer.getID());
+            System.out.println(fdContainerList.get(i).getID());
+            if (fdContainer.getID() == fdContainerList.get(i).getID()) {
+                fdContainerList.get(i).setStartPrice(fdContainer.getStartPrice());
+                fdContainerList.get(i).setEndPrice(fdContainer.getEndPrice());
+                fdContainerList.get(i).setPercentage(fdContainer.getPercentage());
+            }
+        }
+
+        flexible_discount_cmbo.removeAllItems();
+
+        for (int i = 0; i < fdContainerList.size(); i++) {
+            flexible_discount_cmbo.addItem(fdContainerList.get(i).getStartPrice() + "," + fdContainerList.get(i).getEndPrice() + "," + fdContainerList.get(i).getPercentage());
+        }
     }
 
     /**
@@ -651,6 +762,10 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
     private javax.swing.JLabel discount_lbl;
     private javax.swing.JLabel email_lbl;
     private javax.swing.JTextField email_txt;
+    private javax.swing.JButton flexible_discount_add_btn;
+    private javax.swing.JComboBox<String> flexible_discount_cmbo;
+    private javax.swing.JButton flexible_discount_delete_btn;
+    private javax.swing.JButton flexible_discount_update_btn;
     private javax.swing.JLabel individualTask_lbl;
     private javax.swing.JTextField individualTask_txt;
     private javax.swing.JLabel motPercent_lbl;
@@ -684,17 +799,11 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
                     discount_lbl.setVisible(true);
                     discountType_lbl.setVisible(true);
                     discountPercent_lbl.setVisible(true);
+                    payLater_lbl.setVisible(true);
 
                     discountType_cmbo.setVisible(true);
                     discountPercent_txt.setVisible(true);
-
-                    if (control.CheckRole() == "Franchisee") {
-                        payLater_lbl.setVisible(true);
-                        payLater_cmbo.setVisible(true);
-                    } else {
-                        payLater_lbl.setVisible(false);
-                        payLater_cmbo.setVisible(false);
-                    }
+                    payLater_cmbo.setVisible(true);
 
                 } else {
                     discount_lbl.setVisible(false);
@@ -711,6 +820,11 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
                     individualTask_txt.setVisible(false);
                     spareParts_txt.setVisible(false);
                     payLater_cmbo.setVisible(false);
+
+                    flexible_discount_cmbo.setVisible(false);
+                    flexible_discount_add_btn.setVisible(false);
+                    flexible_discount_delete_btn.setVisible(false);
+                    flexible_discount_update_btn.setVisible(false);
                 }
             }
         }
@@ -740,9 +854,7 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
 
                     payLater_lbl.setLocation(395, 403);
                     payLater_cmbo.setLocation(532, 402);
-                }
-
-                if (item.equals("Fixed Discount")) {
+                } else {
                     motPercent_lbl.setVisible(false);
                     individualTask_lbl.setVisible(false);
                     spareParts_lbl.setVisible(false);
@@ -752,6 +864,25 @@ public class UpdateCustomerForm extends javax.swing.JFrame {
 
                     payLater_lbl.setLocation(395, 253);
                     payLater_cmbo.setLocation(532, 250);
+                }
+
+                if (item == "Flexible Discount") {
+                    flexible_discount_add_btn.setLocation(532, 208);
+                    flexible_discount_delete_btn.setLocation(612, 208);
+                    flexible_discount_cmbo.setLocation(532, 245);
+                    flexible_discount_update_btn.setLocation(602, 280);
+                    flexible_discount_cmbo.setVisible(true);
+                    flexible_discount_add_btn.setVisible(true);
+                    flexible_discount_delete_btn.setVisible(true);
+                    flexible_discount_update_btn.setVisible(true);
+
+                    payLater_lbl.setLocation(395, 327);
+                    payLater_cmbo.setLocation(532, 325);
+                } else {
+                    flexible_discount_cmbo.setVisible(false);
+                    flexible_discount_add_btn.setVisible(false);
+                    flexible_discount_delete_btn.setVisible(false);
+                    flexible_discount_update_btn.setVisible(false);
                 }
             }
 
