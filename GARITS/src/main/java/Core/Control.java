@@ -245,7 +245,7 @@ public class Control {
 
                 ps3.setString(1, "Variable Discount");
                 ps3.setInt(2, id);
-                ps3.setInt(2, id);
+                
                 if (cust.getPay_later()) {
                     ps3.setInt(3, 1);
                 } else {
@@ -254,25 +254,36 @@ public class Control {
                 dbConnect.executeWriteQuery(ps3);
                 ps3.close();
 
+
                 ps4.setString(1, "Variable Discount");
                 ps4.setInt(2, id);
+                
                 ResultSet dRS = dbConnect.executeGetIDQuery(ps4);
 
                 if (dRS != null) {
                     while (dRS.next()) {
                         discountID = dRS.getInt(1);
                     }
-                    ps4.close();
+                    
                 }
 
                 PreparedStatement ps5 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO variable_discount (discount_id,discount_type,customer_id,business_type,discount_percentage) VALUES (?,?,?,?,?)");
                 ps5.setInt(1, discountID);
                 ps5.setString(2, "Variable Discount");
                 ps5.setInt(3, id);
-                ps5.setString(3, "Default");
-                ps5.setFloat(4, vd.getPercentage());
+                ps5.setString(4, "Default");
+                ps5.setFloat(5, vd.getPercentage());
 
                 dbConnect.executeWriteQuery(ps5);
+
+                ResultSet eRS = dbConnect.executeGetIDQuery(ps4);
+
+                if (eRS != null) {
+                    while (eRS.next()) {
+                        discountID = eRS.getInt(1);
+                    }
+                    
+                }
 
                 ps5.setInt(1, discountID);
                 ps5.setString(2, "Variable Discount");
@@ -282,19 +293,37 @@ public class Control {
 
                 dbConnect.executeWriteQuery(ps5);
 
+                ResultSet fRS = dbConnect.executeGetIDQuery(ps4);
+
+                if (fRS != null) {
+                    while (fRS.next()) {
+                        discountID = fRS.getInt(1);
+                    }
+                    
+                }
+
                 ps5.setInt(1, discountID);
                 ps5.setString(2, "Variable Discount");
                 ps5.setInt(3, id);
-                ps5.setString(5, "Individual Tasks");
-                ps5.setFloat(6, vd.getIndividualPercentage());
+                ps5.setString(4, "Individual Tasks");
+                ps5.setFloat(5, vd.getIndividualPercentage());
 
                 dbConnect.executeWriteQuery(ps5);
 
+                ResultSet gRS = dbConnect.executeGetIDQuery(ps4);
+
+                if (gRS != null) {
+                    while (gRS.next()) {
+                        discountID = gRS.getInt(1);
+                    }
+                    
+                }
+
                 ps5.setInt(1, discountID);
                 ps5.setString(2, "Variable Discount");
                 ps5.setInt(3, id);
-                ps5.setString(5, "Spare Parts");
-                ps5.setFloat(6, vd.getSparePartsPercentage());
+                ps5.setString(4, "Spare Parts");
+                ps5.setFloat(5, vd.getSparePartsPercentage());
 
                 dbConnect.executeWriteQuery(ps5);
                 ps5.close();
@@ -417,7 +446,7 @@ public class Control {
             ps.setString(2, acc.getAddress());
             ps.setString(3, acc.getPostcode());
             ps.setString(4, acc.getPhone());
-            ps.setString(5, acc.getAddress());
+            ps.setString(5, acc.getEmail());
             ps.setString(6, acc.getCustomerContact());
             ps.setInt(7, accountHolder);
             ps.setInt(8, acc.getCustomerId());
@@ -1209,9 +1238,10 @@ public class Control {
                     getTime.start();
                 }
 
-                
+                if (getMot == null) {
                     getMot = new DetectMOTDue(this);
                     getMot.start();
+                }
                 
 
                 franchiseeMenuForm = new FranchiseeMenuForm(this);
