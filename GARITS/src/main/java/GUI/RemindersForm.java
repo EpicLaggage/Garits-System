@@ -125,6 +125,7 @@ public class RemindersForm extends javax.swing.JFrame {
     public void dispose() {
         super.dispose();
         control.terminateThread();
+        control.OpenMenu();
     }
 
     public void setUpaidInvoices(ArrayList<Invoice> unpaidInvoices) {

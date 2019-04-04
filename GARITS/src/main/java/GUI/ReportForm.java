@@ -7,10 +7,16 @@ package GUI;
 
 import Core.*;
 import Report.*;
+import com.itextpdf.layout.Document;
+import com.itextpdf.text.pdf.PdfDocument;
+import com.itextpdf.text.pdf.PdfWriter;
 import java.awt.Desktop;
 import java.awt.Dimension;
+import java.awt.print.PrinterJob;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -56,7 +62,7 @@ public class ReportForm extends javax.swing.JFrame {
 
         control = c;
         franchiseeMenuForm = fmf;
-        
+
         control.getWindowList().add(this);
 
         selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
@@ -64,7 +70,7 @@ public class ReportForm extends javax.swing.JFrame {
 
         xext_filter_cmbo.setVisible(false);
         filter_txt.setVisible(false);
-        
+
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -78,7 +84,7 @@ public class ReportForm extends javax.swing.JFrame {
 
         control = c;
         fpMenuForm = fpmf;
-        
+
         control.getWindowList().add(this);
 
         selectedCmbo = String.valueOf(filter_cmbo.getSelectedItem());
@@ -86,7 +92,7 @@ public class ReportForm extends javax.swing.JFrame {
 
         xext_filter_cmbo.setVisible(false);
         filter_txt.setVisible(false);
-        
+
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
@@ -100,7 +106,7 @@ public class ReportForm extends javax.swing.JFrame {
 
         control = c;
         receptionMenuForm = rmf;
-        
+
         control.getWindowList().add(this);
 
         filter_cmbo.setSelectedItem("Spare Parts");
@@ -112,11 +118,11 @@ public class ReportForm extends javax.swing.JFrame {
 
         xext_filter_cmbo.setVisible(false);
         filter_txt.setVisible(false);
-        
+
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
-    
+
     @Override
     public void dispose() {
         super.dispose();
@@ -193,6 +199,11 @@ public class ReportForm extends javax.swing.JFrame {
         jScrollPane1.setBounds(52, 198, 937, 326);
 
         print_btn.setText("Print");
+        print_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                print_btnActionPerformed(evt);
+            }
+        });
         getContentPane().add(print_btn);
         print_btn.setBounds(887, 542, 102, 44);
 
@@ -336,9 +347,9 @@ public class ReportForm extends javax.swing.JFrame {
                 filter_txt.setVisible(false);
             }
         }
-        
+
         if (receptionMenuForm != null) {
-            
+
         }
     }//GEN-LAST:event_filter_cmboItemStateChanged
 
@@ -415,12 +426,12 @@ public class ReportForm extends javax.swing.JFrame {
             }
             if (filter_cmbo.getSelectedItem().equals("Spare Parts")) {
                 try {
-                        GenerateStock generateStock = new GenerateStock("", new Date(), control.GenerateStock());
-                        File odir = new File("Reports/Spare Parts");
-                        listFilesFromDirectory(odir);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+                    GenerateStock generateStock = new GenerateStock("", new Date(), control.GenerateStock());
+                    File odir = new File("Reports/Spare Parts");
+                    listFilesFromDirectory(odir);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -451,17 +462,17 @@ public class ReportForm extends javax.swing.JFrame {
             fpMenuForm = new ForepersonMenuForm(control);
             fpMenuForm.setVisible(true);
         }
-        
+
         if (franchiseeMenuForm != null) {
             franchiseeMenuForm = new FranchiseeMenuForm(control);
             franchiseeMenuForm.setVisible(true);
         }
-        
+
         if (receptionMenuForm != null) {
             receptionMenuForm = new ReceptionistMenuForm(control);
             receptionMenuForm.setVisible(true);
         }
-        
+
         this.dispose();
     }//GEN-LAST:event_back_btnActionPerformed
 
@@ -469,6 +480,25 @@ public class ReportForm extends javax.swing.JFrame {
         control.logout();
         this.dispose();
     }//GEN-LAST:event_logout_btnActionPerformed
+
+    private void print_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_print_btnActionPerformed
+        if (!report_tbl.getSelectionModel().isSelectionEmpty()) {
+            int selectedRow = report_tbl.getSelectedRow();
+
+            for (int i = 0; i < fileList.size(); i++) {
+                if (fileList.get(i).getFileName().equals(report_tbl.getValueAt(selectedRow, 0))) {
+                    try {
+                        File reportFile = new File(fileList.get(i).getFilePath());
+                        Desktop.getDesktop().open(reportFile);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            }
+        }
+
+    }//GEN-LAST:event_print_btnActionPerformed
 
     public void listFilesFromDirectory(final File folder) {
         String fileName = null;
@@ -615,12 +645,12 @@ public class ReportForm extends javax.swing.JFrame {
                 }
 
             }
-            
+
             if (filter_cmbo.getSelectedItem().equals("Spare Parts")) {
                 if (!f.exists()) {
                     f.mkdir();
                 }
-                
+
                 File vdir = new File("Reports/Spare Parts");
                 vdir.mkdir();
             }

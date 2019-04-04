@@ -111,6 +111,7 @@ public class MotRemindersForm extends javax.swing.JFrame {
     public void dispose() {
         super.dispose();
         control.terminateThread();
+        control.OpenMenu();
     }
 
     public void initMotTable() {
