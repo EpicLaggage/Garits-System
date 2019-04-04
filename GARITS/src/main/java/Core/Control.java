@@ -33,6 +33,7 @@ public class Control {
     List<JFrame> windowList;
     
     Thread getTime;
+    Thread getMot;
 
     public Control() {
         dbConnect = new DBConnect();
@@ -1079,6 +1080,8 @@ public class Control {
                 //Starting thread which checks for late payments
                 getTime = new DetectLatePayment(this);
                 getTime.start();
+                getMot = new DetectMOTDue(this);
+                getMot.start();
                 franchiseeMenuForm = new FranchiseeMenuForm(this);
                 franchiseeMenuForm.setVisible(true);
                 break;
