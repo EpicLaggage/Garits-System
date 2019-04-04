@@ -786,6 +786,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         } else {
             JOptionPane.showMessageDialog(UpdateJobForm.this, "Job details updated!");
         }
+        control.OpenMenu();
         this.dispose();
     }//GEN-LAST:event_jButton5ActionPerformed
 
@@ -943,6 +944,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        control.OpenMenu();
         this.dispose();
     }//GEN-LAST:event_jButton8ActionPerformed
 

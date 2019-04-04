@@ -162,7 +162,7 @@ public class AlertForm extends javax.swing.JFrame {
     private void replenishOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replenishOrderButtonActionPerformed
         int selectedRow = lowStockTable.getSelectedRow();
         Part selectedPart = tableModel.getLowStock().get(lowStockTable.convertRowIndexToModel(selectedRow));
-        ReplenishmentOrderForm orderForm = new ReplenishmentOrderForm(selectedPart);
+        ReplenishmentOrderForm orderForm = new ReplenishmentOrderForm(control, selectedPart);
         orderForm.setVisible(true);
         this.dispose();
 

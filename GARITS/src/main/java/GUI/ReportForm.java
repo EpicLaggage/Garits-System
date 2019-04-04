@@ -458,21 +458,7 @@ public class ReportForm extends javax.swing.JFrame {
     }//GEN-LAST:event_open_btnActionPerformed
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
-        if (fpMenuForm != null) {
-            fpMenuForm = new ForepersonMenuForm(control);
-            fpMenuForm.setVisible(true);
-        }
-
-        if (franchiseeMenuForm != null) {
-            franchiseeMenuForm = new FranchiseeMenuForm(control);
-            franchiseeMenuForm.setVisible(true);
-        }
-
-        if (receptionMenuForm != null) {
-            receptionMenuForm = new ReceptionistMenuForm(control);
-            receptionMenuForm.setVisible(true);
-        }
-
+        control.OpenMenu();
         this.dispose();
     }//GEN-LAST:event_back_btnActionPerformed
 

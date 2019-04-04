@@ -338,26 +338,7 @@ public class JobForm extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowOpened
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
-        if (fpMenuForm != null) {
-            fpMenuForm = new ForepersonMenuForm(control);
-            fpMenuForm.setVisible(true);
-        }
-        
-        if (franchiseeMenuForm != null) {
-            franchiseeMenuForm = new FranchiseeMenuForm(control);
-            franchiseeMenuForm.setVisible(true);
-        }
-        
-        if (receptionMenuForm != null) {
-            receptionMenuForm = new ReceptionistMenuForm(control);
-            receptionMenuForm.setVisible(true);
-        }
-        
-        if (mechanicMenuForm != null) {
-            mechanicMenuForm = new MechanicMenuForm(control);
-            mechanicMenuForm.setVisible(true);
-        }
-        
+        control.OpenMenu();
         this.dispose();
     }//GEN-LAST:event_back_btnActionPerformed
 

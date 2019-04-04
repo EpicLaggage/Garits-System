@@ -5,6 +5,7 @@
  */
 package GUI;
 
+import Core.Control;
 import StockControl.Part;
 import javax.swing.JOptionPane;
 
@@ -13,7 +14,10 @@ import javax.swing.JOptionPane;
  * @author jorda
  */
 public class ReplenishmentOrderForm extends javax.swing.JFrame {
+
     private static Part part;
+    Control control;
+
     /**
      * Creates new form ReplenishmentOrderForm
      */
@@ -22,17 +26,28 @@ public class ReplenishmentOrderForm extends javax.swing.JFrame {
         initComponents();
         populateFields();
     }
+    
+    public ReplenishmentOrderForm(Control c, Part part) {
+        control = c;
+        this.part = part;
+        initComponents();
+        populateFields();
+    }
 
-    
-    
     private void populateFields() {
         partIDLabel.setText(Integer.toString(part.getPartId()));
         partNameLabel.setText(part.getName());
         partThreshold.setText(Integer.toString(part.getThreshold()));
         partQuantity.setText(Integer.toString(part.getQty()));
     }
-    
-    
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        control.terminateThread();
+        control.OpenMenu();
+    }
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -156,8 +171,7 @@ public class ReplenishmentOrderForm extends javax.swing.JFrame {
         String columnName = "";
         int intToUpdate = 0;
         boolean fieldUpdated = false;
-        
-        
+
         if (quantity != part.getQty()) {
             columnName = "part_quantity";
             intToUpdate = quantity;
@@ -172,13 +186,11 @@ public class ReplenishmentOrderForm extends javax.swing.JFrame {
             part.setThreshold(threshold);
             fieldUpdated = true;
         }
-        
-        
+
         if (fieldUpdated) {
             JOptionPane.showMessageDialog(this, "Part: " + part.getName() + " successfully updated");
             this.dispose();
-            
-            
+
         }
     }//GEN-LAST:event_updateButtonActionPerformed
 

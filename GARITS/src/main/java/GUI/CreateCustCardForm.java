@@ -569,8 +569,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
         reset();
-        franchiseeMenuForm = new FranchiseeMenuForm(control);
-        franchiseeMenuForm.setVisible(true);
+        control.OpenMenu();
         this.dispose();
     }//GEN-LAST:event_back_btnActionPerformed
 

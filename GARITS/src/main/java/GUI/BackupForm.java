@@ -136,7 +136,7 @@ public class BackupForm extends javax.swing.JFrame {
         if (backup.createBackup()) {
             JOptionPane.showMessageDialog(this, "Backup successfully created");
             this.dispose(); // close window after backup has been created
-            adminMenuForm.setVisible(true);
+            control.OpenMenu();
         }
     }//GEN-LAST:event_backupButtonActionPerformed
 
