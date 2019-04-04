@@ -362,7 +362,7 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     }//GEN-LAST:event_customer_suad_btnActionPerformed
 
     private void addParts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addParts_btnActionPerformed
-        addPartForm = new AddPartForm();
+        addPartForm = new AddPartForm(control, this);
         addPartForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_addParts_btnActionPerformed
