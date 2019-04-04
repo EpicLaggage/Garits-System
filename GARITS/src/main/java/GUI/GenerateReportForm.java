@@ -104,6 +104,11 @@ public class GenerateReportForm extends javax.swing.JFrame {
         print_btn.setBounds(819, 542, 102, 44);
 
         back_btn.setText("Back");
+        back_btn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                back_btnActionPerformed(evt);
+            }
+        });
         getContentPane().add(back_btn);
         back_btn.setBounds(814, 13, 59, 25);
 
@@ -249,6 +254,10 @@ public class GenerateReportForm extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_ext_filter_cmboActionPerformed
+
+    private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_back_btnActionPerformed
 
     /**
      * @param args the command line arguments

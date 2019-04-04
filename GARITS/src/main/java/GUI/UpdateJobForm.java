@@ -128,17 +128,17 @@ public class UpdateJobForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jComboBox2 = new javax.swing.JComboBox<String>();
+        jComboBox2 = new javax.swing.JComboBox<>();
         jButton6 = new javax.swing.JButton();
-        jComboBox4 = new javax.swing.JComboBox<String>();
+        jComboBox4 = new javax.swing.JComboBox<>();
         jButton7 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         jButton8 = new javax.swing.JButton();
         jTextField3 = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<String>();
+        jComboBox1 = new javax.swing.JComboBox<>();
         jLabel11 = new javax.swing.JLabel();
-        jComboBox6 = new javax.swing.JComboBox<String>();
+        jComboBox6 = new javax.swing.JComboBox<>();
         jLabel10 = new javax.swing.JLabel();
         jScrollPane5 = new javax.swing.JScrollPane();
         jTable3 = new javax.swing.JTable();
@@ -312,7 +312,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         jLabel8.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel8.setText("Work required");
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Pending", "Done" }));
+        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pending", "Done" }));
 
         jButton6.setText("Add Parts");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -347,7 +347,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         jLabel9.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
         jLabel9.setText("Type");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "MOT", "Annual Service", "Repair" }));
+        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "MOT", "Annual Service", "Repair" }));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -395,10 +395,10 @@ public class UpdateJobForm extends javax.swing.JFrame {
             }
         });
         jTable4.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 jTable4InputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         jTable4.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
