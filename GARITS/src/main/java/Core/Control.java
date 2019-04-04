@@ -1243,7 +1243,7 @@ public class Control {
                     getMot.start();
                 }
                 
-
+                alert.start();
                 franchiseeMenuForm = new FranchiseeMenuForm(this);
                 franchiseeMenuForm.setVisible(true);
                 break;
@@ -1253,7 +1253,6 @@ public class Control {
                 receptionMenuForm.setVisible(true);
                 break;
             case "Mechanic":
-                alert.start();
                 mechanicMenuForm = new MechanicMenuForm(this);
                 mechanicMenuForm.setVisible(true);
                 break;

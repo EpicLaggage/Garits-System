@@ -9,6 +9,8 @@ import Account.Customer;
 import Account.Vehicle;
 import DatabaseConnect.DBConnect;
 import GUI.MotRemindersForm;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.sql.ResultSet;
 import java.text.DateFormat;
@@ -30,8 +32,12 @@ public class DetectMOTDue extends Thread {
     Control control;
 
     public DetectMOTDue(Control c) {
+        control = c;
+        dbConnect = control.getDatabaseConnector();
+    }
+    
+    public DetectMOTDue() {
         dbConnect = new DBConnect();
-        this.control = c;
     }
     
     
@@ -63,19 +69,23 @@ public class DetectMOTDue extends Thread {
                 motDate = dateFormat.format(date);
                 
                 
-                String motDueQuery = "SELECT * FROM garitsdb.Vehicle, "
-                        + "garitsdb.Customer WHERE garitsdb.Customer.customer_account_holder = '1' \n" +
-                        "AND garitsdb.Vehicle.customer_id =  garitsdb.Customer.customer_id\n" +
-                        "AND garitsdb.Vehicle.purchase_date LIKE '____-"+motDate.substring(5) + "';";
+                String motDueQuery = "SELECT * FROM garitsdb.vehicle, "
+                        + "garitsdb.customer WHERE garitsdb.customer.customer_account_holder = '1' \n" +
+                        "AND garitsdb.vehicle.customer_id =  garitsdb.customer.customer_id\n" +
+                        "AND garitsdb.vehicle.purchase_date LIKE '____-%"+motDate.substring(5) + "';";
                 ResultSet rs; 
                 try {
-                    rs = dbConnect.read(motDueQuery);
-
+                    Connection conn = dbConnect.connect();
+                    conn.setAutoCommit(false);
+                    PreparedStatement statement = conn.prepareStatement(motDueQuery);
+                    rs = statement.executeQuery();
                     while(rs.next()) {
+                        System.out.println(motDate.substring(5));
                         Customer customer = new Customer();
                         Vehicle vehicle = new Vehicle();
                         List<Vehicle> vehicles = new ArrayList<Vehicle>();
                         vehicle.setReg_num(rs.getString("reg_no"));
+                        
                         customer.setName(rs.getString("customer_name"));
                         customer.setAddress(rs.getString("customer_address"));
                         customer.setPostcode(rs.getString("customer_postcode"));
@@ -84,6 +94,8 @@ public class DetectMOTDue extends Thread {
                         motReminders.add(customer);
                         
                     }
+                    conn.commit();
+                    conn.setAutoCommit(true);
 
                 }
                 catch (Exception exc) {
@@ -100,7 +112,7 @@ public class DetectMOTDue extends Thread {
                         "MOT reminder", JOptionPane.YES_NO_OPTION);
                 if (reply == JOptionPane.YES_OPTION) {
                   MotRemindersForm reminders = new MotRemindersForm(
-                          motReminders, motDate);
+                          motReminders, motDate,control);
                   reminders.setVisible(true);
                   motReminders.clear();
                   reminderSnoozed = false;
