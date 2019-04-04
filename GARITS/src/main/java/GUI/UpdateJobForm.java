@@ -766,7 +766,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
         updatedJob.setStatus(job_status);
         updatedJob.setType(job_type);
         updatedJob.setJobId(selectedJob.getJobId());
-
+        System.out.println(updatedJob.getMechanicId()+ "MECHANIC ID + " + jComboBox6.getSelectedItem());
         String insertJobQuery = "UPDATE garitsdb.Job SET"
                 + " mechanic_assigned = '" + updatedJob.getMechanicId()
                 + "', job_duration = '" + updatedJob.getDuration() + "', job_status = '"
@@ -895,7 +895,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
 
         //Getting all mechanics from db and selecting the correct one
         String mechanicNamesQuery = "SELECT username, user_id FROM garitsdb.User "
-                + "WHERE user_role = 'Mechanic'";
+                + "WHERE user_role = 'Mechanic' OR user_role = 'Foreperson';";
         ResultSet rs;
 
         try {
@@ -1547,7 +1547,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
                 selectedMechanic.setName(mechanic.getName());
             }
         }
-        String wageQuery = "SELECT hourly_rate FROM garitsdb.Mechanic"
+        String wageQuery = "SELECT user_pay FROM garitsdb.user"
                 + " WHERE user_id = " + selectedMechanic.getId();
         try {
             Connection conn = dbConnect.connect();
@@ -1555,7 +1555,7 @@ public class UpdateJobForm extends javax.swing.JFrame {
             PreparedStatement statement = conn.prepareStatement(wageQuery);
             ResultSet resultWage = statement.executeQuery();
             resultWage.next();
-            float hourlyRate = resultWage.getFloat("hourly_rate");
+            float hourlyRate = resultWage.getFloat("user_pay");
             invoice.setMechanicWage(hourlyRate);
             invoice.setJobDuration(Float.parseFloat(jTextField3.getText()));
             labourCost = invoice.calcLabourCost(
