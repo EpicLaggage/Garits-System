@@ -6,13 +6,16 @@ import StockControl.*;
 import GUI.*;
 
 import DatabaseConnect.DBConnect;
+import Report.GenerateStock;
+import java.io.File;
 import java.sql.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class Control {
 
@@ -40,16 +43,15 @@ public class Control {
 
         windowList = new ArrayList<>();
 
-        /*adminMenuForm = new AdminMenuForm(this);
-        fpMenuForm = new ForepersonMenuForm(this);
-        franchiseeMenuForm = new FranchiseeMenuForm(this);
-        mechanicMenuForm = new MechanicMenuForm(this);
-        receptionMenuForm = new ReceptionistMenuForm(this);*/
-        //loginForm = new LoginForm(this);
-        // loginForm.setVisible(true);
-        staff = new Staff("Jack", "1", "Franchisee", "Jack");
+        loginForm = new LoginForm(this);
+        loginForm.setVisible(true);
 
-        OpenMenu();
+        if (checkEndOfMonth()) {
+            if (AutomaticReportGenerated()) {
+
+            }
+        }
+
     }
 
     /**
@@ -1036,6 +1038,19 @@ public class Control {
         return vehicleList;
     }
 
+    public boolean checkEndOfMonth() {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int noOfLastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+
+        if (cal.get(Calendar.DAY_OF_MONTH) == noOfLastDay) {
+            return true;
+        }
+
+        return false;
+    }
+
     /**
      *
      * @param type
@@ -1061,19 +1076,77 @@ public class Control {
         try {
             PreparedStatement ps = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT * FROM parts");
             ResultSet rs = dbConnect.executeReadQuery(ps);
-            
+
             if (rs != null) {
                 while (rs.next()) {
                     partsList.add(new Part(rs.getString("part_name"), rs.getString("part_manufacturer"), rs.getString("vehicle_type"), rs.getInt("year"), rs.getFloat("part_price"), rs.getInt("part_quantity"), rs.getInt("part_threshold")));
                 }
             }
-            
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        
+
         return partsList;
+    }
+
+    public boolean AutomaticReportGenerated() {
+        Date date = new Date();
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        int noOfLastDay = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
+        int counter = 0;
+
+        date.setDate(noOfLastDay);
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+
+        try {
+            java.sql.Date sqlDate = new java.sql.Date(date.getTime());
+
+            PreparedStatement ps = dbConnect.setPreparedStatement(dbConnect.connect(), "SELECT COUNT(*) AS total FROM automated_report WHERE report_date=?");
+            ps.setDate(1, sqlDate);
+
+            ResultSet rs = dbConnect.executeReadQuery(ps);
+
+            if (rs != null) {
+                while (rs.next()) {
+                    counter = rs.getInt("total");
+                }
+            }
+
+            ps.close();
+
+            if (counter < 1) {
+                File f = new File("Reports");
+                if (!f.exists()) {
+                    f.mkdir();
+                }
+
+                File vdir = new File("Reports/Spare Parts");
+                if (!vdir.exists()) {
+                    vdir.mkdir();
+                }
+
+                GenerateStock generateStock = new GenerateStock("", date, GenerateStock());
+
+                PreparedStatement ps2 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO automated_report (report_name,report_date) VALUES (?,?)");
+                ps2.setString(1, "Spare Parts");
+                ps2.setDate(2, sqlDate);
+
+                dbConnect.executeWriteQuery(ps2);
+                ps2.close();
+
+                JOptionPane.showMessageDialog(new JFrame("Automated Reports"), "Automated Reports generated");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        System.out.println(dateFormat.format(date));
+        return false;
     }
 
     public void DisplayAlerts() {
@@ -1116,6 +1189,7 @@ public class Control {
 
     //Opens the menu and delegates which menu buttons are available by checking the role
     public void OpenMenu() {
+        Alert alert = new Alert();
         //disposeForms();
         switch (CheckRole()) {
             case "Administrator":
@@ -1133,14 +1207,17 @@ public class Control {
                 franchiseeMenuForm.setVisible(true);
                 break;
             case "Receptionist":
+                alert.start();
                 receptionMenuForm = new ReceptionistMenuForm(this);
                 receptionMenuForm.setVisible(true);
                 break;
             case "Mechanic":
+                alert.start();
                 mechanicMenuForm = new MechanicMenuForm(this);
                 mechanicMenuForm.setVisible(true);
                 break;
             case "Foreperson":
+                alert.start();
                 fpMenuForm = new ForepersonMenuForm(this);
                 fpMenuForm.setVisible(true);
                 break;

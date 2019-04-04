@@ -411,6 +411,7 @@ public class FranchiseeMenuForm extends javax.swing.JFrame {
     private void displayPrintInvoice_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayPrintInvoice_btnActionPerformed
         displayInvoiceForm = new DisplayInvoiceForm(control, this);
         displayInvoiceForm.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_displayPrintInvoice_btnActionPerformed
 
     private void displayAlerts_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_displayAlerts_btnActionPerformed

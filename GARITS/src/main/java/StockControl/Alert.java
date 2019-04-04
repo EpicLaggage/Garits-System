@@ -32,7 +32,7 @@ public class Alert extends Thread {
     }
     @Override
     public void run() {
-        List<Part> lowStockParts = lowStockParts();
+        ArrayList<Part> lowStockParts = lowStockParts();
         
         while (true) {
             
@@ -69,11 +69,7 @@ public class Alert extends Thread {
         }
     }
     }
-    
-    public static void main(String[] args) {
-        Alert alert = new Alert();
-        alert.run();
-    }
+
     
     
 }

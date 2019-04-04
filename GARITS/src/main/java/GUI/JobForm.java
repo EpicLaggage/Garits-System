@@ -274,7 +274,7 @@ public class JobForm extends javax.swing.JFrame {
             selectedJob.setJobId((int) jobTable.getValueAt(selectedRow[0], 5));
             selectedJob.setMechanicId((int) jobTable.getValueAt(selectedRow[0], 6));
             selectedJob.setCustomerId((int) jobTable.getValueAt(selectedRow[0], 7));
-            UpdateJobForm jobView = new UpdateJobForm(selectedJob,
+            UpdateJobForm jobView = new UpdateJobForm(control, selectedJob,
                     searchedText, searchFilter, this);
             jobView.setVisible(true);
         }
@@ -331,7 +331,6 @@ public class JobForm extends javax.swing.JFrame {
         TableColumn jobIdColumn = jTable1.getColumnModel().getColumn(5);
         TableColumn mechanicIdColumn = jTable1.getColumnModel().getColumn(6);
         TableColumn customerIdColumn = jTable1.getColumnModel().getColumn(7);
-        
         
         jTable1.getColumnModel().removeColumn(jobIdColumn);        
         jTable1.getColumnModel().removeColumn(mechanicIdColumn);
