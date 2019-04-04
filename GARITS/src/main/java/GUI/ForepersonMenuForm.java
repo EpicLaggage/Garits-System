@@ -33,8 +33,8 @@ public class ForepersonMenuForm extends javax.swing.JFrame {
     public ForepersonMenuForm() {
         initComponents();
         
-        this.setSize(new Dimension(1350, 850));
-        this.setPreferredSize(new Dimension(1350, 850));
+        this.setSize(new Dimension(1520, 850));
+        this.setPreferredSize(new Dimension(1520, 850));
         
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -43,8 +43,8 @@ public class ForepersonMenuForm extends javax.swing.JFrame {
     public ForepersonMenuForm(Control c) {
         initComponents();
         
-        this.setSize(new Dimension(1350, 850));
-        this.setPreferredSize(new Dimension(1350, 850));
+        this.setSize(new Dimension(1520, 850));
+        this.setPreferredSize(new Dimension(1520, 850));
         
         control = c;
         control.getWindowList().add(this);
