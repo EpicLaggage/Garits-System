@@ -29,7 +29,8 @@ public class AddVehicleForm extends javax.swing.JFrame {
      */
     public AddVehicleForm() {
         initComponents();
-
+        
+        //restrict text field length
         regNum_txt.setDocument(new LengthRestrictedDocument(8));
         engine_serial_no_txt.setDocument(new LengthRestrictedDocument(10));
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
@@ -44,6 +45,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
         control = c;
         control.getWindowList().add(this);
         
+        //restrict text field length
         regNum_txt.setDocument(new LengthRestrictedDocument(8));
         engine_serial_no_txt.setDocument(new LengthRestrictedDocument(10));
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
@@ -64,7 +66,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
         control = c;
         custForm = cForm;
 
-        control = c;
+        //restrict text field length
         regNum_txt.setDocument(new LengthRestrictedDocument(8));
         engine_serial_no_txt.setDocument(new LengthRestrictedDocument(10));
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
@@ -79,7 +81,7 @@ public class AddVehicleForm extends javax.swing.JFrame {
         control = c;
         updateCustForm = cForm;
 
-        control = c;
+        //restrict text field length
         regNum_txt.setDocument(new LengthRestrictedDocument(8));
         engine_serial_no_txt.setDocument(new LengthRestrictedDocument(10));
         chassisNo_txt.setDocument(new LengthRestrictedDocument(9));
@@ -96,10 +98,6 @@ public class AddVehicleForm extends javax.swing.JFrame {
 
     public void setControl(Control c) {
         control = c;
-    }
-
-    public void setCustForm(CreateCustCardForm cForm) {
-        custForm = cForm;
     }
 
     /**

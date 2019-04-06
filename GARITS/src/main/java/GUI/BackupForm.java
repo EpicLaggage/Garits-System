@@ -130,7 +130,8 @@ public class BackupForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //backup database on click
     private void backupButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backupButtonActionPerformed
         Backup backup = new Backup();
         if (backup.createBackup()) {
@@ -140,6 +141,7 @@ public class BackupForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_backupButtonActionPerformed
 
+    //cancel button
     private void cancel_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cancel_btnActionPerformed
         this.dispose();
         adminMenuForm.setVisible(true);

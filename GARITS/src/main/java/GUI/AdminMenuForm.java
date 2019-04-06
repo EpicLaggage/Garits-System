@@ -183,6 +183,7 @@ public class AdminMenuForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //back button
     private void backup_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_backup_btnActionPerformed
         backupForm = new BackupForm(control, this);
         backupForm.setVisible(true);
@@ -193,18 +194,21 @@ public class AdminMenuForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_user_sud_btnActionPerformed
 
+    //open restore form
     private void restore_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_restore_btnActionPerformed
         restoreForm = new RestoreForm(control, this);
         restoreForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_restore_btnActionPerformed
 
+    //open add user form
     private void addUser_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_addUser_btnActionPerformed
         createEmployeeForm = new CreateEmpAccForm(control, this);
         createEmployeeForm.setVisible(true);
         this.dispose();
     }//GEN-LAST:event_addUser_btnActionPerformed
 
+    //logout
     private void logout_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logout_btnActionPerformed
         control.logout();
         this.dispose();

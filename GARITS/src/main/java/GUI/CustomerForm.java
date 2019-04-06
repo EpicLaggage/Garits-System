@@ -359,7 +359,7 @@ public class CustomerForm extends javax.swing.JFrame {
         customerLookup_txt.setText("");
 
         customer_tbl.removeAll();
-        updateCustomerForm.setVisible(false);
+        //updateCustomerForm.setVisible(false);
     }
 
     @Override

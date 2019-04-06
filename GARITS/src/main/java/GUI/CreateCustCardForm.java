@@ -53,15 +53,18 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        //add listeners for combobox change
         customerType_cmbo.addItemListener(new CustomerTypeItemListener());
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
         vehicleList = new ArrayList<Vehicle>();
         fdContainerList = new ArrayList<>();
+        
+        //restrict field input length
         phone_txt.setDocument(new LengthRestrictedDocument(11));
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
 
-        customerType_cmbo.setSelectedItem("Casual");
+        customerType_cmbo.setSelectedItem("Casual"); //set default valaue
     }
 
     public CreateCustCardForm(Control c, FranchiseeMenuForm fmf) {
@@ -71,6 +74,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        //add listeners to combobox change
         customerType_cmbo.addItemListener(new CustomerTypeItemListener());
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
@@ -81,10 +85,12 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
         vehicleList = new ArrayList<Vehicle>();
         fdContainerList = new ArrayList<>();
+        
+        //restrict text field inpunt length
         phone_txt.setDocument(new LengthRestrictedDocument(11));
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
 
-        customerType_cmbo.setSelectedItem("Casual");
+        customerType_cmbo.setSelectedItem("Casual"); //set default value
         this.setLocationRelativeTo(null);
     }
     
@@ -95,6 +101,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        //add listeners to combobox for item change
         customerType_cmbo.addItemListener(new CustomerTypeItemListener());
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
@@ -105,6 +112,8 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
         vehicleList = new ArrayList<Vehicle>();
         fdContainerList = new ArrayList<>();
+        
+        //restrict textfield input length
         phone_txt.setDocument(new LengthRestrictedDocument(11));
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
 
@@ -119,6 +128,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
+        //add listeners for combobox changes
         customerType_cmbo.addItemListener(new CustomerTypeItemListener());
         discountType_cmbo.addItemListener(new DiscountTypeItemListener());
 
@@ -129,6 +139,8 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
         vehicleList = new ArrayList<Vehicle>();
         fdContainerList = new ArrayList<>();
+        
+        //restrict length of text field
         phone_txt.setDocument(new LengthRestrictedDocument(11));
         postcode_txt.setDocument(new LengthRestrictedDocument(8));
 
@@ -480,11 +492,13 @@ public class CreateCustCardForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_discountType_cmboItemStateChanged
 
+    //add vehicle to list and combobox
     private void vehicle_add_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicle_add_btnActionPerformed
         addVehicleForm = new AddVehicleForm(control, this);
         addVehicleForm.setVisible(true);
     }//GEN-LAST:event_vehicle_add_btnActionPerformed
 
+    //delete vehicle from list and combobox
     private void vehicle_delete_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_vehicle_delete_btnActionPerformed
         if (vehicle_cmbo.getSelectedItem() != null) {
             String[] vehicleString = null;
@@ -503,8 +517,9 @@ public class CreateCustCardForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_vehicle_delete_btnActionPerformed
 
+    //create customer on click
     private void create_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_create_btnActionPerformed
-
+        //validation
         if (name_txt.getText() == ""
                 || email_txt.getText() == ""
                 || !phone_txt.getText().matches("[0-9]{11}")
@@ -512,6 +527,7 @@ public class CreateCustCardForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(new JFrame("Error"), "Incorrect format for text fields.");
         } else {
             try {
+                //check customer type
                 if (customerType_cmbo.getSelectedItem().equals("Account Holder")) {
                     System.out.println("Account Holder");
                     if (accHolder == null) {

@@ -27,7 +27,7 @@ public class DBConnect implements DBConnectivity {
      */
     public Connection connect() {
         try {
-            return dbConnect = DriverManager.getConnection("jdbc:mysql://localhost:3306/garitsdb", "garitsuser", "garitsdb");
+            return dbConnect = DriverManager.getConnection("jdbc:mysql://46.69.175.133:3306/garitsdb", "garitsuser", "garitsdb");
         } catch (SQLException ex) {
             ex.printStackTrace();
         }

@@ -38,6 +38,7 @@ public class Control {
 
     Thread getTime;
     Thread getMot;
+    Alert alert;
 
     public Control() {
         dbConnect = new DBConnect();
@@ -245,7 +246,7 @@ public class Control {
 
                 ps3.setString(1, "Variable Discount");
                 ps3.setInt(2, id);
-                
+
                 if (cust.getPay_later()) {
                     ps3.setInt(3, 1);
                 } else {
@@ -254,17 +255,16 @@ public class Control {
                 dbConnect.executeWriteQuery(ps3);
                 ps3.close();
 
-
                 ps4.setString(1, "Variable Discount");
                 ps4.setInt(2, id);
-                
+
                 ResultSet dRS = dbConnect.executeGetIDQuery(ps4);
 
                 if (dRS != null) {
                     while (dRS.next()) {
                         discountID = dRS.getInt(1);
                     }
-                    
+
                 }
 
                 PreparedStatement ps5 = dbConnect.setPreparedStatement(dbConnect.connect(), "INSERT INTO variable_discount (discount_id,discount_type,customer_id,business_type,discount_percentage) VALUES (?,?,?,?,?)");
@@ -282,7 +282,7 @@ public class Control {
                     while (eRS.next()) {
                         discountID = eRS.getInt(1);
                     }
-                    
+
                 }
 
                 ps5.setInt(1, discountID);
@@ -299,7 +299,7 @@ public class Control {
                     while (fRS.next()) {
                         discountID = fRS.getInt(1);
                     }
-                    
+
                 }
 
                 ps5.setInt(1, discountID);
@@ -316,7 +316,7 @@ public class Control {
                     while (gRS.next()) {
                         discountID = gRS.getInt(1);
                     }
-                    
+
                 }
 
                 ps5.setInt(1, discountID);
@@ -1204,10 +1204,15 @@ public class Control {
             getTime.stop();
             getTime = null;
         }
-        
+
         if (getMot != null) {
             getMot.stop();
             getMot = null;
+        }
+        
+        if (alert != null) {
+            alert.stop();
+            alert = null;
         }
 
         loginForm = new LoginForm(this);
@@ -1224,7 +1229,7 @@ public class Control {
 
     //Opens the menu and delegates which menu buttons are available by checking the role
     public void OpenMenu() {
-        Alert alert = new Alert();
+
         //disposeForms();
         switch (CheckRole()) {
             case "Administrator":
@@ -1242,13 +1247,21 @@ public class Control {
                     getMot = new DetectMOTDue(this);
                     getMot.start();
                 }
-                
-                alert.start();
+
+                if (alert == null) {
+                    alert = new Alert(this);
+                    alert.start();
+                }
+
                 franchiseeMenuForm = new FranchiseeMenuForm(this);
                 franchiseeMenuForm.setVisible(true);
                 break;
             case "Receptionist":
-                alert.start();
+                if (alert == null) {
+                    alert = new Alert(this);
+                    alert.start();
+                }
+
                 receptionMenuForm = new ReceptionistMenuForm(this);
                 receptionMenuForm.setVisible(true);
                 break;
@@ -1257,7 +1270,10 @@ public class Control {
                 mechanicMenuForm.setVisible(true);
                 break;
             case "Foreperson":
-                alert.start();
+                if (alert == null) {
+                    alert = new Alert(this);
+                    alert.start();
+                }
                 fpMenuForm = new ForepersonMenuForm(this);
                 fpMenuForm.setVisible(true);
                 break;
@@ -1308,7 +1324,7 @@ public class Control {
                     getTime.stop();
                     getTime = null;
                 }
-                
+
                 if (getMot != null) {
                     getMot.stop();
                     getMot = null;

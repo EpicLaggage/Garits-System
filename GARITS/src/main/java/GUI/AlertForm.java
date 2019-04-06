@@ -158,7 +158,8 @@ public class AlertForm extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    //select from list of low stock items and replenish them
     private void replenishOrderButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_replenishOrderButtonActionPerformed
         int selectedRow = lowStockTable.getSelectedRow();
         Part selectedPart = tableModel.getLowStock().get(lowStockTable.convertRowIndexToModel(selectedRow));

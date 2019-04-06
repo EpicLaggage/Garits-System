@@ -241,6 +241,7 @@ public class AddSupplierForm extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_supplierAddressActionPerformed
 
+    //Perform supplier add to database
     private void supplierAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_supplierAddButtonActionPerformed
         
         String name = supplierName.getText();

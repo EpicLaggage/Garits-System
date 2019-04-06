@@ -232,12 +232,14 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
             fdContainer.setEndPrice(Integer.parseInt(endPrice_txt.getText()));
             fdContainer.setPercentage(Float.parseFloat(percent_txt.getText()));
             
+            //add values to customer creation
             if (custForm != null && fdContainer != null) {
                 custForm.getFDContainerList().add(fdContainer);
                 custForm.getFDContainerComboBox().addItem(fdContainer.getStartPrice() + "," + fdContainer.getEndPrice() + "," + fdContainer.getPercentage());
                 this.dispose();
             }
 
+            //add values to update customer
             if (updateCustForm != null && fdContainer != null) {
                 updateCustForm.getFDContainerList().add(fdContainer);
                 updateCustForm.getFDContainerComboBox().addItem(fdContainer.getStartPrice() + "," + fdContainer.getEndPrice() + "," + fdContainer.getPercentage());
@@ -248,20 +250,13 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
 
     }//GEN-LAST:event_add_btnActionPerformed
 
+    //back button
     private void back_btnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_back_btnActionPerformed
         this.dispose();
         fdContainer = null;
     }//GEN-LAST:event_back_btnActionPerformed
-
-    @Override
-    public void setVisible(boolean visible) {
-        super.setVisible(visible);
-
-        if (visible) {
-            resetText();
-        }
-    }
-
+    
+    
     public FlexibleDiscountContainer getFlexibleDiscountContainer() {
         if (fdContainer != null) {
             return fdContainer;
@@ -269,10 +264,6 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
         return null;
     }
 
-    public void resetText() {
-        startPrice_txt.setText("");
-        endPrice_txt.setText("");
-    }
 
     /**
      * @param args the command line arguments
@@ -384,7 +375,8 @@ public class AddFlexibleDiscountForm extends javax.swing.JFrame {
     private javax.swing.JLabel regNum_lbl;
     private javax.swing.JTextField startPrice_txt;
     // End of variables declaration//GEN-END:variables
-
+    
+    //PlainDocument restricts the input size
     public final class LengthRestrictedDocument extends PlainDocument {
 
         private final int limit;

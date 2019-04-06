@@ -106,6 +106,7 @@ public class AddPartForm extends javax.swing.JFrame {
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
     }
     
+    //On dispose terminate threads
     @Override
     public void dispose() {
         super.dispose();
@@ -301,12 +302,14 @@ public class AddPartForm extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    //back button
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
         control.OpenMenu();
         this.dispose(); // closes the window
     }//GEN-LAST:event_jButton6ActionPerformed
 
+    //Perform Add Part when button click
     private void partAddButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_partAddButtonActionPerformed
         String name = partName.getText();
         String manufacturer = partManufacturer.getText();
@@ -329,8 +332,10 @@ public class AddPartForm extends javax.swing.JFrame {
             }
         }
 
+        //create new part
         Part part = new Part(name, manufacturer, formSupplier, vehicleType, price, year, quantity, threshold);
 
+        //reset all values
         try {
             if (part.addPart()) {
                 System.out.println("Part " + part.getName() + " successfully added to the database");
